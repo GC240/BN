@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Negative External News — Maybank CRM</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap%22 rel="stylesheet">
+<style>
+
+  :root {
+
+    --maybank-yellow: #F5A800;
+
+    --maybank-red: #CC0001;
+
+    --danger-high: #C0392B;
+
+    --danger-high-bg: #FDF2F2;
+
+    --danger-high-border: #F5C6C6;
+
+    --danger-mod: #D35400;
+
+    --danger-mod-bg: #FEF6F0;
+
+    --danger-mod-border: #FAD7B8;
+
+    --danger-low: #7D6608;
+
+    --danger-low-bg: #FEFCE8;
+
+    --danger-low-border: #F9E79F;
+
+    --text-primary: #1A1A2E;
+
+    --text-secondary: #4A5568;
+
+    --text-muted: #718096;
+
+    --surface: #FFFFFF;
+
+    --surface-2: #F8F9FC;
+
+    --border: #E2E8F0;
+
+    --action-link: #1A56DB;
+
+  }
+ 
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+  body {
+
+    font-family: 'IBM Plex Sans', sans-serif;
+
+    background: #EEF1F8;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: flex-start;
+
+    padding: 40px 20px;
+
+    min-height: 100vh;
+
+  }
+ 
+  .widget {
+
+    background: var(--surface);
+
+    border-radius: 12px;
+
+    border: 1px solid var(--border);
+
+    width: 100%;
+
+    max-width: 1060px;
+
+    overflow: hidden;
+
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+
+  }
+ 
+  .widget-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 16px 20px 14px;
+
+    border-bottom: 1px solid var(--border);
+
+    background: var(--surface);
+
+  }
+ 
+  .header-icon {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 28px;
+
+    height: 28px;
+
+    background: #FEF2F2;
+
+    border-radius: 6px;
+
+  }
+ 
+  .header-icon svg {
+
+    width: 15px;
+
+    height: 15px;
+
+    color: var(--danger-high);
+
+  }
+ 
+  .widget-title {
+
+    font-size: 13.5px;
+
+    font-weight: 600;
+
+    color: var(--text-primary);
+
+    letter-spacing: -0.01em;
+
+  }
+ 
+  .widget-subtitle {
+
+    font-size: 11.5px;
+
+    color: var(--text-muted);
+
+    font-weight: 400;
+
+    margin-left: auto;
+
+    font-family: 'IBM Plex Mono', monospace;
+
+  }
+ 
+  .news-grid {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 1px;
+
+    background: var(--border);
+
+  }
+ 
+  .news-card {
+
+    background: var(--surface);
+
+    padding: 16px 18px;
+
+    transition: background 0.15s;
+
+    position: relative;
+
+  }
+ 
+  .news-card:hover {
+
+    background: #FAFBFF;
+
+  }
+ 
+  /* Bottom row spans full width */
+
+  .news-card.full-row {
+
+    grid-column: 1 / -1;
+
+  }
+ 
+  .card-header {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    margin-bottom: 8px;
+
+    gap: 10px;
+
+  }
+ 
+  .entity-row {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    flex: 1;
+
+  }
+ 
+  .news-icon {
+
+    font-size: 13px;
+
+    line-height: 1;
+
+    flex-shrink: 0;
+
+  }
+ 
+  .entity-name {
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: var(--text-primary);
+
+    letter-spacing: -0.01em;
+
+  }
+ 
+  .region-tag {
+
+    font-size: 10.5px;
+
+    font-weight: 500;
+
+    color: var(--text-muted);
+
+    background: var(--surface-2);
+
+    border: 1px solid var(--border);
+
+    border-radius: 4px;
+
+    padding: 1px 6px;
+
+    font-family: 'IBM Plex Mono', monospace;
+
+    flex-shrink: 0;
+
+  }
+ 
+  .sentiment-badge {
+
+    font-size: 10.5px;
+
+    font-weight: 600;
+
+    padding: 2px 9px;
+
+    border-radius: 20px;
+
+    letter-spacing: 0.01em;
+
+    white-space: nowrap;
+
+    flex-shrink: 0;
+
+  }
+ 
+  .sentiment-high {
+
+    background: var(--danger-high-bg);
+
+    color: var(--danger-high);
+
+    border: 1px solid var(--danger-high-border);
+
+  }
+ 
+  .sentiment-moderate {
+
+    background: var(--danger-mod-bg);
+
+    color: var(--danger-mod);
+
+    border: 1px solid var(--danger-mod-border);
+
+  }
+ 
+  .sentiment-low {
+
+    background: var(--danger-low-bg);
+
+    color: var(--danger-low);
+
+    border: 1px solid var(--danger-low-border);
+
+  }
+ 
+  .news-trigger {
+
+    font-size: 11.5px;
+
+    color: var(--text-secondary);
+
+    font-style: italic;
+
+    margin-bottom: 9px;
+
+    line-height: 1.5;
+
+  }
+ 
+  .exposure-row {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin-bottom: 9px;
+
+  }
+ 
+  .exposure-label {
+
+    font-size: 10.5px;
+
+    font-weight: 500;
+
+    color: var(--text-muted);
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.05em;
+
+    font-family: 'IBM Plex Mono', monospace;
+
+  }
+ 
+  .exposure-value {
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    color: var(--text-primary);
+
+    font-family: 'IBM Plex Mono', monospace;
+
+  }
+ 
+  .divider-line {
+
+    height: 1px;
+
+    background: var(--border);
+
+    margin: 9px 0;
+
+  }
+ 
+  .observation-row {
+
+    margin-bottom: 7px;
+
+  }
+ 
+  .row-label {
+
+    font-size: 10.5px;
+
+    font-weight: 600;
+
+    color: var(--text-muted);
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.05em;
+
+    display: inline;
+
+  }
+ 
+  .row-text {
+
+    font-size: 12px;
+
+    color: var(--text-secondary);
+
+    line-height: 1.55;
+
+    display: inline;
+
+  }
+ 
+  .action-row {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 5px;
+
+  }
+ 
+  .action-link {
+
+    font-size: 12px;
+
+    color: var(--action-link);
+
+    font-weight: 500;
+
+    text-decoration: none;
+
+    line-height: 1.55;
+
+    display: inline;
+
+    cursor: pointer;
+
+  }
+ 
+  .action-link:hover {
+
+    text-decoration: underline;
+
+  }
+ 
+  .severity-bar {
+
+    position: absolute;
+
+    left: 0;
+
+    top: 0;
+
+    bottom: 0;
+
+    width: 3px;
+
+    border-radius: 0;
+
+  }
+
+  .severity-bar.high { background: var(--danger-high); }
+
+  .severity-bar.moderate { background: var(--danger-mod); }
+
+  .severity-bar.low { background: var(--danger-low); }
+ 
+  .news-card { padding-left: 21px; }
+ 
+  @media (max-width: 680px) {
+
+    .news-grid { grid-template-columns: 1fr; }
+
+    .news-card.full-row { grid-column: unset; }
+
+  }
+</style>
+</head>
+<body>
+ 
+<div class="widget">
+<div class="widget-header">
+<div class="header-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+<line x1="12" y1="9" x2="12" y2="13"/>
+<line x1="12" y1="17" x2="12.01" y2="17"/>
+</svg>
+</div>
+<span class="widget-title">Negative External News — Attention Required</span>
+<span class="widget-subtitle">Global Head View · Malaysia Portfolio</span>
+</div>
+ 
+  <div class="news-grid">
+ 
+    <!-- Card 1: EQL Vietnam — HIGH -->
+<div class="news-card">
+<div class="severity-bar high"></div>
+<div class="card-header">
+<div class="entity-row">
+<span class="news-icon">📰</span>
+<span class="entity-name">EQL Vietnam LLC</span>
+<span class="region-tag">ASEAN</span>
+</div>
+<span class="sentiment-badge sentiment-high">⬤ High Impact</span>
+</div>
+<div class="news-trigger">"Regulatory investigation into telecom spectrum allocation"</div>
+<div class="exposure-row">
+<span class="exposure-label">Exposure</span>
+<span class="exposure-value">RM 92,000,000</span>
+</div>
+<div class="divider-line"></div>
+<div class="observation-row">
+<span class="row-label">Observation: </span>
+<span class="row-text">Potential regulatory penalty may impact liquidity and capex pipeline. Increased refinancing risk.</span>
+</div>
+<div class="action-row">
+<span class="row-label">Action: </span>
+<a class="action-link">Escalate to Credit Risk Committee. Review covenant buffers and monitor leverage ratios.</a>
+</div>
+</div>
+ 
+    <!-- Card 2: EQL Thailand — MODERATE -->
+<div class="news-card">
+<div class="severity-bar moderate"></div>
+<div class="card-header">
+<div class="entity-row">
+<span class="news-icon">📰</span>
+<span class="entity-name">EQL Thailand</span>
+<span class="region-tag">Thailand</span>
+</div>
+<span class="sentiment-badge sentiment-moderate">⬤ Moderate Impact</span>
+</div>
+<div class="news-trigger">"Industry-wide export slowdown due to semiconductor demand decline"</div>
+<div class="exposure-row">
+<span class="exposure-label">Exposure</span>
+<span class="exposure-value">$ 165,000,000</span>
+</div>
+<div class="divider-line"></div>
+<div class="observation-row">
+<span class="row-label">Observation: </span>
+<span class="row-text">Trade volumes declining; potential reduction in LC issuance and FX flows.</span>
+</div>
+<div class="action-row">
+<span class="row-label">Action: </span>
+<a class="action-link">Engage regional RM to assess trade pipeline sustainability and adjust revenue forecast.</a>
+</div>
+</div>
+ 
+    <!-- Card 3: Telska Canada — MODERATE -->
+<div class="news-card">
+<div class="severity-bar moderate"></div>
+<div class="card-header">
+<div class="entity-row">
+<span class="news-icon">📰</span>
+<span class="entity-name">Telska</span>
+<span class="region-tag">Canada</span>
+</div>
+<span class="sentiment-badge sentiment-moderate">⬤ Moderate Impact</span>
+</div>
+<div class="news-trigger">"Local currency volatility impacting USD-denominated obligations"</div>
+<div class="exposure-row">
+<span class="exposure-label">Exposure</span>
+<span class="exposure-value">$ 210,000,000</span>
+</div>
+<div class="divider-line"></div>
+<div class="observation-row">
+<span class="row-label">Observation: </span>
+<span class="row-text">Increased FX exposure risk; hedge ratio currently below optimal threshold.</span>
+</div>
+<div class="action-row">
+<span class="row-label">Action: </span>
+<a class="action-link">Treasury desk to propose structured hedging solution.</a>
+</div>
+</div>
+ 
+    <!-- Card 4: QAN Sweden — LOW -->
+<div class="news-card">
+<div class="severity-bar low"></div>
+<div class="card-header">
+<div class="entity-row">
+<span class="news-icon">📰</span>
+<span class="entity-name">QAN</span>
+<span class="region-tag">Sweden</span>
+</div>
+<span class="sentiment-badge sentiment-low">⬤ Low Impact</span>
+</div>
+<div class="news-trigger">"Sector outlook downgraded by regional rating agency"</div>
+<div class="exposure-row">
+<span class="exposure-label">Exposure</span>
+<span class="exposure-value">$ 272,000,000</span>
+</div>
+<div class="divider-line"></div>
+<div class="observation-row">
+<span class="row-label">Observation: </span>
+<span class="row-text">No immediate operational impact; strong domestic transaction engagement continues.</span>
+</div>
+<div class="action-row">
+<span class="row-label">Action: </span>
+<a class="action-link">Monitor industry indicators; no escalation required.</a>
+</div>
+</div>
+ 
+  </div>
+</div>
+ 
+</body>
+</html>
+ 
