@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NewsFeed</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #e8eaed;
+  --white:     #ffffff;
+  --border:    #e2e4e8;
+  --border-lt: #eeeeee;
+  --text:      #1c1c2e;
+  --body:      #444444;
+  --sub:       #666666;
+  --muted:     #999999;
+  --tag-bg:    #f0f0f0;
+  --tag-bd:    #d8d8d8;
+  --font:      'Inter', sans-serif;
+}
+
+html, body {
+  height: 100%;
+  min-height: 100vh;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--body);
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 20px;
+}
+
+/* ── Full-width widget ── */
+.widget {
+  width: 100%;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* ── Header ── */
+.widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-lt);
+}
+
+.widget-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.widget-controls {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.icon-btn {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #aaa;
+  transition: all 0.12s;
+}
+.icon-btn:hover { background: #f5f5f5; color: var(--sub); border-color: #ccc; }
+.icon-btn svg { width: 13px; height: 13px; }
+
+/* ── Subbar ── */
+.subbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 16px;
+  background: #fafafa;
+  border-bottom: 1px solid var(--border-lt);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.subbar-left { display: flex; align-items: center; gap: 5px; }
+.subbar-left svg { width: 11px; height: 11px; flex-shrink: 0; }
+
+/* ── News cards ── */
+.news-card {
+  display: flex;
+  gap: 14px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border-lt);
+  transition: background 0.1s;
+}
+.news-card:last-child { border-bottom: none; }
+.news-card:hover { background: #fafbfc; }
+
+/* Thumbnail */
+.thumb {
+  width: 64px;
+  height: 56px;
+  border-radius: 4px;
+  background: #e8eaed;
+  border: 1px solid var(--border-lt);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  overflow: hidden;
+}
+
+/* Card body — fills remaining width */
+.card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.headline {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.4;
+  margin-bottom: 7px;
+  /* Allow headline to wrap fully */
+  word-break: break-word;
+}
+
+.badge-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.tag-badge {
+  height: 20px;
+  padding: 0 9px;
+  background: var(--tag-bg);
+  border: 1px solid var(--tag-bd);
+  border-radius: 20px;
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--sub);
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  transition: background 0.1s;
+  user-select: none;
+}
+.tag-badge:hover { background: #e3e3e3; }
+
+.country-pill {
+  height: 20px;
+  padding: 0 8px;
+  background: #f5f5f5;
+  border: 1px solid var(--border-lt);
+  border-radius: 20px;
+  font-size: 10px;
+  color: var(--muted);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+}
+
+.meta-row {
+  display: flex;
+  align-items: center;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.meta-source { font-weight: 500; color: var(--sub); }
+.meta-pipe {
+  display: inline-block;
+  width: 1px; height: 10px;
+  background: #d0d0d0;
+  margin: 0 7px;
+  flex-shrink: 0;
+}
+
+.preview {
+  font-size: 12px;
+  color: var(--sub);
+  line-height: 1.65;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.view-more {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--body);
+  cursor: pointer;
+  border-bottom: 1px solid var(--body);
+  padding-bottom: 1px;
+  display: inline;
+  transition: color 0.1s;
+  user-select: none;
+}
+.view-more:hover { color: #111; border-color: #111; }
+
+.no-results {
+  padding: 52px 20px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 2;
+}
+
+/* ════════════════════════
+   FILTER DRAWER
+════════════════════════ */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.2);
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.overlay.open { opacity: 1; pointer-events: auto; }
+
+.drawer {
+  position: fixed;
+  top: 0; right: 0;
+  height: 100vh;
+  width: 280px;
+  background: var(--white);
+  z-index: 101;
+  transform: translateX(100%);
+  transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+  display: flex;
+  flex-direction: column;
+  box-shadow: -2px 0 16px rgba(0,0,0,0.1);
+}
+.drawer.open { transform: translateX(0); }
+
+.drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 16px 13px;
+  border-bottom: 1px solid var(--border);
+}
+.drawer-head h2 { font-size: 14px; font-weight: 600; color: var(--text); }
+
+.drawer-close {
+  width: 24px; height: 24px;
+  border: none; background: none;
+  font-size: 15px; cursor: pointer;
+  color: #aaa; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.1s;
+}
+.drawer-close:hover { background: #f0f0f0; color: var(--body); }
+
+.drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.filter-group { display: flex; flex-direction: column; gap: 4px; }
+.filter-label { font-size: 11px; font-weight: 500; color: var(--sub); }
+
+.sel-wrap { position: relative; }
+.filter-select {
+  width: 100%;
+  height: 34px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0 28px 0 9px;
+  font-family: var(--font);
+  font-size: 12px;
+  color: var(--sub);
+  background: var(--white);
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.12s;
+}
+.filter-select:focus { border-color: #aaa; }
+.sel-wrap::after {
+  content: '';
+  position: absolute;
+  right: 9px; top: 50%;
+  transform: translateY(-50%);
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid #aaa;
+  pointer-events: none;
+}
+
+.drawer-foot {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 8px;
+}
+.btn-apply {
+  flex: 1; height: 34px;
+  background: #444; color: #fff;
+  border: none; border-radius: 4px;
+  font-family: var(--font); font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: background 0.12s;
+}
+.btn-apply:hover { background: #222; }
+.btn-clear {
+  flex: 1; height: 34px;
+  background: var(--white); color: var(--body);
+  border: 1px solid #ccc; border-radius: 4px;
+  font-family: var(--font); font-size: 13px;
+  cursor: pointer; transition: all 0.12s;
+}
+.btn-clear:hover { border-color: #aaa; background: #f7f7f7; }
+
+/* ════════════════════════
+   MODAL
+════════════════════════ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(150,150,150,0.3);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: auto; }
+
+.modal {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 86vh;
+  overflow-y: auto;
+  transform: translateY(8px);
+  transition: transform 0.2s;
+  box-shadow: 0 6px 28px rgba(0,0,0,0.12);
+}
+.modal-overlay.open .modal { transform: translateY(0); }
+
+.modal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 15px 16px 12px;
+  border-bottom: 1px solid var(--border-lt);
+  position: sticky; top: 0;
+  background: var(--white);
+  z-index: 1;
+}
+.modal-headline {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.45;
+  flex: 1;
+}
+.modal-close {
+  width: 24px; height: 24px;
+  border: none; background: none;
+  font-size: 15px; cursor: pointer;
+  color: #aaa; border-radius: 4px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.1s;
+}
+.modal-close:hover { background: #f0f0f0; color: var(--body); }
+
+.modal-meta {
+  padding: 8px 16px;
+  background: #fafafa;
+  border-bottom: 1px solid var(--border-lt);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.modal-meta .m-source { font-weight: 600; color: var(--sub); }
+.modal-meta .m-pill {
+  background: var(--tag-bg);
+  border: 1px solid var(--tag-bd);
+  border-radius: 20px;
+  padding: 1px 7px;
+  font-size: 10px;
+  color: var(--sub);
+}
+
+.modal-body { padding: 16px; }
+
+.section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.modal-text {
+  font-size: 12.5px;
+  color: var(--sub);
+  line-height: 1.75;
+  margin-bottom: 18px;
+}
+
+.highlights {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.highlights li {
+  font-size: 12px;
+  color: var(--body);
+  padding: 7px 10px 7px 11px;
+  background: #f8f8f8;
+  border-left: 2px solid #cccccc;
+  border-radius: 0 4px 4px 0;
+  line-height: 1.55;
+}
+
+/* ── Spin ── */
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinning { animation: spin 0.42s linear; }
+</style>
+</head>
+<body>
+
+<!-- ══ NewsFeed Widget — full width ══ -->
+<div class="widget">
+
+  <div class="widget-header">
+    <span class="widget-title">NewsFeed</span>
+    <div class="widget-controls">
+      <button class="icon-btn" title="Refresh" onclick="refreshFeed()">
+        <svg id="refresh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="23 4 23 10 17 10"/>
+          <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+        </svg>
+      </button>
+      <button class="icon-btn" title="Filter" onclick="openDrawer()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="6" x2="20" y2="6"/>
+          <line x1="8" y1="12" x2="16" y2="12"/>
+          <line x1="11" y1="18" x2="13" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="subbar">
+    <div class="subbar-left">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+      </svg>
+      Last updated:&nbsp;<span id="timestamp">—</span>
+    </div>
+    <span id="results-count"></span>
+  </div>
+
+  <div id="news-container"></div>
+</div>
+
+
+<!-- ══ Filter Drawer ══ -->
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head">
+    <h2>Filters</h2>
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-body">
+
+    <div class="filter-group">
+      <label class="filter-label" for="f-topic">Topic</label>
+      <div class="sel-wrap">
+        <select class="filter-select" id="f-topic">
+          <option value="">All Topics</option>
+          <option>Upstream</option>
+          <option>LNG</option>
+          <option>Refining</option>
+          <option>Trading</option>
+          <option>Regulation</option>
+          <option>ESG</option>
+          <option>OPEC</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <label class="filter-label" for="f-type">Content Type</label>
+      <div class="sel-wrap">
+        <select class="filter-select" id="f-type">
+          <option value="">All Types</option>
+          <option>News Summary</option>
+          <option>Market Alert</option>
+          <option>Regulatory Update</option>
+          <option>Analysis</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <label class="filter-label" for="f-country">Location</label>
+      <div class="sel-wrap">
+        <select class="filter-select" id="f-country">
+          <option value="">All Locations</option>
+          <option>Malaysia</option>
+          <option>Singapore</option>
+          <option>Indonesia</option>
+          <option>Thailand</option>
+          <option>Vietnam</option>
+          <option>Philippines</option>
+          <option>Regional</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <label class="filter-label" for="f-company">Company</label>
+      <div class="sel-wrap">
+        <select class="filter-select" id="f-company">
+          <option value="">All Companies</option>
+          <option>Petronas</option>
+          <option>Pertamina</option>
+          <option>PTT</option>
+          <option>PetroVietnam</option>
+          <option>Shell</option>
+          <option>TotalEnergies</option>
+          <option>Multiple</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <label class="filter-label" for="f-industry">Industry</label>
+      <div class="sel-wrap">
+        <select class="filter-select" id="f-industry">
+          <option value="">All Industries</option>
+          <option value="Oil & Gas">Oil &amp; Gas</option>
+          <option>Energy</option>
+          <option>Petrochemicals</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <label class="filter-label" for="f-source">Source</label>
+      <div class="sel-wrap">
+        <select class="filter-select" id="f-source">
+          <option value="">All Sources</option>
+          <option>Reuters Energy</option>
+          <option>S&amp;P Global Platts</option>
+          <option>Argus Media</option>
+          <option>BERNAMA</option>
+          <option>Bloomberg Energy</option>
+          <option>Upstream Online</option>
+        </select>
+      </div>
+    </div>
+
+  </div>
+  <div class="drawer-foot">
+    <button class="btn-apply" onclick="applyFilters()">Apply</button>
+    <button class="btn-clear" onclick="clearFilters()">Clear</button>
+  </div>
+</aside>
+
+
+<!-- ══ Summary Modal ══ -->
+<div class="modal-overlay" id="modal-overlay" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modal">
+    <div class="modal-head">
+      <div class="modal-headline" id="modal-headline"></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-meta" id="modal-meta"></div>
+    <div class="modal-body">
+      <div class="section-label">Full Summary</div>
+      <p class="modal-text" id="modal-text"></p>
+      <div class="section-label">Key Highlights</div>
+      <ul class="highlights" id="modal-highlights"></ul>
+    </div>
+  </div>
+</div>
+
+
+<script>
+const DATA = [
+  {
+    id:1, emoji:"🛢️",
+    headline:"Petronas Expands Upstream Operations in Sabah Deepwater Blocks",
+    summary:"Petronas has announced a significant capital allocation toward deepwater exploration in Sabah, targeting three new blocks under the latest production sharing contract round. First production from the Kebabangan cluster extension is expected by mid-2026.",
+    fullText:"Petronas has greenlit a RM 4.2 billion capital expenditure program targeting deepwater blocks off the northeast coast of Sabah. The investment covers seismic surveys, exploratory drilling of three prospects, and pipeline infrastructure upgrades. Under the newly awarded production sharing contracts, Petronas retains a 60% operating interest alongside partners Shell and Murphy Oil. Industry analysts expect the program to add approximately 35,000 barrels per day to Malaysia's production base by 2027. The move signals a strategic pivot toward deepwater assets as onshore mature fields continue to decline.",
+    highlights:["RM 4.2 billion capex allocated for Sabah deepwater blocks","First production targeted from Kebabangan extension by mid-2026","Petronas holds 60% operating interest; Shell and Murphy Oil as partners","Expected addition of 35,000 bpd to Malaysia's output by 2027","Strategic pivot away from declining onshore mature fields"],
+    country:"Malaysia", source:"BERNAMA", date:"02/28/2026 9:14 AM",
+    topic:"Upstream", contentType:"News Summary", company:"Petronas", industry:"Oil & Gas"
+  },
+  {
+    id:2, emoji:"⚗️",
+    headline:"Indonesia to Double Bontang LNG Terminal Export Capacity by 2028",
+    summary:"Pertamina has received regulatory clearance from SKK Migas to expand the Bontang LNG facility in East Kalimantan. The expansion adds two new liquefaction trains, increasing throughput from 22 to 38 million tonnes per annum.",
+    fullText:"Indonesia's state energy company Pertamina has secured SKK Migas approval for the Phase III expansion of the Bontang LNG terminal, the world's oldest continuously operating LNG export facility. The project, valued at approximately USD 3.8 billion, involves the construction of two additional liquefaction trains and expanded storage capacity. Long-term offtake agreements with Japan, South Korea, and Taiwan are already in advanced negotiations. The Indonesian government views the project as a key plank of its energy export diversification strategy under the 2025–2029 National Energy Plan.",
+    highlights:["Bontang LNG capacity to increase from 22 to 38 MTPA","USD 3.8 billion project value approved by SKK Migas","Two new liquefaction trains to be commissioned by 2028","Long-term offtake negotiations advanced with Japan, South Korea, Taiwan","Aligns with Indonesia's National Energy Plan 2025–2029"],
+    country:"Indonesia", source:"S&P Global Platts", date:"02/27/2026 2:30 PM",
+    topic:"LNG", contentType:"News Summary", company:"Pertamina", industry:"Oil & Gas"
+  },
+  {
+    id:3, emoji:"📉",
+    headline:"Thailand Refining Margins Under Pressure as Regional Overcapacity Bites",
+    summary:"PTT and IRPC are reporting significant margin compression in Q1 2026, driven by new refinery capacity additions in China and the Middle East flooding the regional market with discounted refined products.",
+    fullText:"PTT and its refining subsidiaries have flagged deteriorating crack spreads across the diesel and jet fuel segments in early 2026. Regional refinery margins have fallen to multi-year lows following the commissioning of approximately 1.2 million bpd of new refining capacity in Shandong and the UAE during late 2025. Thai refiners are increasingly relying on petrochemical integration and specialty lubricant production to protect margins. PTT's Group CEO stated the company is accelerating its downstream transformation program, targeting USD 600 million in savings by end-2026.",
+    highlights:["Thai refinery crack spreads at multi-year lows in Q1 2026","1.2 million bpd new capacity in China and UAE driving oversupply","PTT accelerating downstream transformation to protect margins","USD 600 million operational efficiency target set for 2026","Petrochemical integration flagged as key margin defense strategy"],
+    country:"Thailand", source:"Argus Media", date:"02/26/2026 11:00 AM",
+    topic:"Refining", contentType:"Market Alert", company:"PTT", industry:"Oil & Gas"
+  },
+  {
+    id:4, emoji:"📊",
+    headline:"Singapore Energy Trading Hub Faces Volatility Amid OPEC+ Supply Uncertainty",
+    summary:"Trading volumes on the Singapore Exchange's energy derivatives desk surged 18% in February 2026 as market participants hedged against OPEC+ policy uncertainty following the alliance's delayed production decision.",
+    fullText:"SGX's energy derivatives market has seen a sharp increase in open interest and daily trading volume during February 2026, with crude and refined product contracts reaching record activity levels. Market participants attribute the volatility to unresolved questions around OPEC+ output policy following the postponement of the February Vienna ministerial meeting. Singapore's position as the region's premier price discovery hub for Asia-Pacific crude benchmarks has been reinforced. The Monetary Authority of Singapore also announced new regulatory guidelines for energy commodity trading, effective Q3 2026.",
+    highlights:["SGX energy derivatives volumes up 18% in February 2026","OPEC+ meeting postponement driving regional price uncertainty","Singapore reinforced as Asia-Pacific crude benchmark hub","Major trading firms increasing Singapore desk headcount","MAS new energy commodity trading guidelines effective Q3 2026"],
+    country:"Singapore", source:"Bloomberg Energy", date:"02/25/2026 4:45 PM",
+    topic:"Trading", contentType:"Market Alert", company:"Multiple", industry:"Oil & Gas"
+  },
+  {
+    id:5, emoji:"📋",
+    headline:"Vietnam Launches Offshore Block Licensing Reform to Attract Foreign Investment",
+    summary:"Hanoi has introduced sweeping changes to its offshore petroleum licensing framework, reducing the government's minimum equity stake and offering improved fiscal terms to attract international oil companies after a decade of declining foreign participation.",
+    fullText:"Vietnam's Ministry of Industry and Trade, in coordination with PetroVietnam, has unveiled the New Offshore Licensing Framework 2026. Mandatory state equity participation is reduced from 51% to 30% in deepwater blocks, and a sliding-scale royalty structure tied to well productivity has been introduced. Shell, Repsol, and TotalEnergies are understood to be evaluating re-entry opportunities in the Nam Con Son Basin. The first licensing round under the new framework is scheduled for Q3 2026.",
+    highlights:["State equity stake reduced from 51% to 30% in deepwater blocks","New sliding-scale royalty structure linked to well productivity","Shell, Repsol, TotalEnergies evaluating Nam Con Son Basin re-entry","First licensing round under new framework scheduled Q3 2026","Reform targets reversal of five-year FDI decline in upstream sector"],
+    country:"Vietnam", source:"Upstream Online", date:"02/24/2026 10:20 AM",
+    topic:"Regulation", contentType:"Regulatory Update", company:"PetroVietnam", industry:"Oil & Gas"
+  },
+  {
+    id:6, emoji:"🌍",
+    headline:"OPEC+ Output Cut Extension Reshapes ASEAN Crude Import Economics",
+    summary:"The OPEC+ alliance's decision to extend production cuts through Q2 2026 is creating material cost pressures for ASEAN refiners dependent on Middle Eastern crude grades, prompting renewed interest in West African and US crude alternatives.",
+    fullText:"Following OPEC+'s confirmation of a 900,000 bpd production cut extension into Q2 2026, ASEAN refiners are contending with widening crude differentials for Arab Light and Arab Heavy grades. Several regional refiners have already increased spot crude purchases from West Africa and the US Gulf Coast. Malaysia's Petronas Trading and Indonesia's Pertamina Trading have both increased term contract volumes with US suppliers. Analysts estimate the crude cost impact at approximately USD 1.20–1.80 per barrel for typical ASEAN refinery configurations.",
+    highlights:["OPEC+ extends 900,000 bpd cuts into Q2 2026","ASEAN refiners shifting purchases to West Africa and US Gulf Coast","Petronas Trading and Pertamina Trading increase US term volumes","Longer voyage routes driving VLCC freight rate increases","Crude cost impact: USD 1.20–1.80/bbl for regional refiners"],
+    country:"Regional", source:"S&P Global Platts", date:"02/23/2026 1:00 PM",
+    topic:"OPEC", contentType:"Analysis", company:"Multiple", industry:"Oil & Gas"
+  },
+  {
+    id:7, emoji:"⚖️",
+    headline:"Malaysia's PETRONAS Faces New Upstream Licensing Compliance Requirements",
+    summary:"Malaysia's Petroleum Management Unit has issued updated upstream licensing compliance directives requiring enhanced environmental baseline studies, community impact assessments, and tighter reporting timelines for all PSC operators.",
+    fullText:"The Petroleum Management Unit under Malaysia's Ministry of Natural Resources, Environment and Climate Change has published new compliance directives applicable to all Production Sharing Contract holders in Malaysian waters. The directives, effective 1 April 2026, introduce mandatory pre-drilling environmental baseline studies, quarterly sustainability reporting aligned with GRI standards, and enhanced community benefit-sharing provisions. Petronas has indicated requirements will add approximately 8–12 weeks to exploration planning timelines.",
+    highlights:["New upstream PSC compliance directives effective 1 April 2026","Mandatory pre-drilling environmental baseline studies required","Quarterly sustainability reporting aligned with GRI standards","Petronas estimates 8–12 week impact on exploration planning","Industry-regulator consultation scheduled for 10 March"],
+    country:"Malaysia", source:"Reuters Energy", date:"02/22/2026 8:55 AM",
+    topic:"Regulation", contentType:"Regulatory Update", company:"Petronas", industry:"Oil & Gas"
+  },
+  {
+    id:8, emoji:"🌱",
+    headline:"ASEAN Oil Majors Accelerate ESG Transition as Investor Pressure Mounts",
+    summary:"A coalition of institutional investors overseeing USD 2.4 trillion has written to six ASEAN-listed oil and gas companies demanding credible net-zero roadmaps and independently verified Scope 3 emissions data by end of 2026.",
+    fullText:"The ASEAN Sustainable Investment Coalition, representing 14 institutional investors including sovereign wealth funds and major asset managers, has issued formal engagement letters to Petronas, Pertamina, PTT, PetroVietnam, Shell Philippines, and Pilipinas Shell. The letters demand independently audited Scope 3 emissions inventories, science-based interim emissions reduction targets aligned with a 1.5°C pathway, and board-level sustainability committees. Companies that fail to respond satisfactorily by Q3 2026 risk being placed on the coalition's restricted investment list.",
+    highlights:["14 institutional investors managing USD 2.4 trillion issue ESG demands","Six ASEAN oil companies targeted including Petronas, Pertamina, PTT","Independently audited Scope 3 emissions required by end of 2026","Science-based targets aligned with 1.5°C pathway demanded","PTT leads regionally with published 2050 net-zero roadmap"],
+    country:"Regional", source:"Reuters Energy", date:"02/21/2026 3:30 PM",
+    topic:"ESG", contentType:"Analysis", company:"Multiple", industry:"Oil & Gas"
+  },
+  {
+    id:9, emoji:"🏭",
+    headline:"Philippines Eyes First Domestic LNG Import Terminal Amid Energy Security Push",
+    summary:"The Philippine government has approved a consortium led by First Gen Corporation and TotalEnergies to build the country's first onshore LNG import terminal in Batangas Bay, Luzon, targeting first cargo in Q4 2027.",
+    fullText:"Manila has formally approved the Batangas LNG Import Terminal project, a 3 MTPA regasification facility expected to receive its first LNG cargo in Q4 2027. The USD 1.1 billion facility will supply gas-fired power plants currently dependent on the Malampaya field, which is in terminal decline. The approval is critical for Philippines' energy security as Malampaya gas output is expected to cease entirely by 2028. TotalEnergies will supply foundation LNG volumes under a 15-year SPA while First Gen will operate the terminal.",
+    highlights:["Batangas LNG Import Terminal receives final investment decision","USD 1.1 billion, 3 MTPA facility — first cargo Q4 2027","Critical as Malampaya field enters terminal decline","TotalEnergies supplies foundation volumes under 15-year SPA","Expansion provision to 5 MTPA included in design"],
+    country:"Philippines", source:"Upstream Online", date:"02/20/2026 12:10 PM",
+    topic:"LNG", contentType:"News Summary", company:"TotalEnergies", industry:"Oil & Gas"
+  },
+  {
+    id:10, emoji:"📈",
+    headline:"ASEAN Crude Demand Outlook Revised Upward on Industrial Recovery",
+    summary:"The IEA has revised its ASEAN crude oil demand forecast for 2026 upward by 180,000 bpd, citing stronger-than-expected industrial output growth in Indonesia, Vietnam, and the Philippines alongside recovering aviation fuel demand.",
+    fullText:"The IEA's February 2026 Oil Market Report has revised ASEAN crude oil demand growth to 1.3 million bpd year-on-year for 2026, an increase of 180,000 bpd above the January estimate. The revision is driven by better-than-expected industrial production data from Indonesia, Vietnam, and the Philippines, where manufacturing PMI readings have beaten consensus forecasts for four consecutive months. Aviation fuel demand across ASEAN has recovered to 96% of pre-pandemic levels, up from 88% in mid-2025.",
+    highlights:["ASEAN crude demand revised up 180,000 bpd to 1.3 million bpd YoY","Indonesia, Vietnam, Philippines manufacturing PMI beating forecasts","Aviation fuel demand at 96% of pre-pandemic levels","Downstream utilization rates forecast to rise to 86% by Q4 2026","IEA upgrade partially offsets regional refinery margin pressure"],
+    country:"Regional", source:"Bloomberg Energy", date:"02/19/2026 9:45 AM",
+    topic:"Upstream", contentType:"Analysis", company:"Multiple", industry:"Oil & Gas"
+  }
+];
+
+let filtered = [...DATA];
+
+function ts(d) {
+  return d.toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'})
+    + ' ' + d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
+}
+
+function renderNews(data) {
+  const c = document.getElementById('news-container');
+  document.getElementById('results-count').textContent =
+    data.length + ' result' + (data.length !== 1 ? 's' : '');
+
+  if (!data.length) {
+    c.innerHTML = '<div class="no-results">No items match the selected filters.<br>Try adjusting or clearing your criteria.</div>';
+    return;
+  }
+
+  c.innerHTML = data.map(item => `
+    <div class="news-card">
+      <div class="thumb">${item.emoji}</div>
+      <div class="card-body">
+        <div class="headline">${item.headline}</div>
+        <div class="badge-row">
+          <span class="tag-badge" onclick="openModal(${item.id})">${item.contentType}</span>
+          <span class="country-pill">${item.country}</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-source">${item.source}</span>
+          <span class="meta-pipe"></span>
+          <span>${item.date}</span>
+        </div>
+        <div class="preview">${item.summary}</div>
+        <span class="view-more" onclick="openModal(${item.id})">View More</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function applyFilters() {
+  const v = id => document.getElementById(id).value;
+  const topic=v('f-topic'), type=v('f-type'), country=v('f-country'),
+        company=v('f-company'), industry=v('f-industry'), source=v('f-source');
+  filtered = DATA.filter(i => {
+    if (topic   && i.topic       !== topic)   return false;
+    if (type    && i.contentType !== type)    return false;
+    if (country && i.country     !== country) return false;
+    if (company && i.company     !== company) return false;
+    if (industry && i.industry   !== industry) return false;
+    if (source  && i.source      !== source)  return false;
+    return true;
+  });
+  renderNews(filtered);
+  closeDrawer();
+}
+
+function clearFilters() {
+  ['f-topic','f-type','f-country','f-company','f-industry','f-source']
+    .forEach(id => document.getElementById(id).value = '');
+  filtered = [...DATA];
+  renderNews(filtered);
+  closeDrawer();
+}
+
+function refreshFeed() {
+  const icon = document.getElementById('refresh-icon');
+  icon.classList.add('spinning');
+  setTimeout(() => icon.classList.remove('spinning'), 420);
+  document.getElementById('timestamp').textContent = ts(new Date());
+  renderNews(filtered);
+}
+
+function openDrawer() {
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+}
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+
+function openModal(id) {
+  const item = DATA.find(n => n.id === id);
+  if (!item) return;
+  document.getElementById('modal-headline').textContent = item.headline;
+  document.getElementById('modal-meta').innerHTML =
+    `<span class="m-source">${item.source}</span>
+     <span style="width:1px;height:10px;background:#ddd;display:inline-block;margin:0 6px;vertical-align:middle;"></span>
+     <span>${item.date}</span>
+     <span style="width:1px;height:10px;background:#ddd;display:inline-block;margin:0 6px;vertical-align:middle;"></span>
+     <span class="m-pill">${item.country}</span>
+     <span class="m-pill">${item.topic}</span>`;
+  document.getElementById('modal-text').textContent = item.fullText;
+  document.getElementById('modal-highlights').innerHTML =
+    item.highlights.map(h => `<li>${h}</li>`).join('');
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeModal(); closeDrawer(); }
+});
+
+document.getElementById('timestamp').textContent = ts(new Date());
+renderNews(DATA);
+</script>
+</body>
+</html>
