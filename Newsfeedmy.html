@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NewsFeed — Petronas & ASEAN Oil & Gas</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #e8eaed;
+  --white:     #ffffff;
+  --border:    #e2e4e8;
+  --border-lt: #eeeeee;
+  --text:      #1c1c2e;
+  --body:      #444444;
+  --sub:       #666666;
+  --muted:     #999999;
+  --tag-bg:    #f0f0f0;
+  --tag-bd:    #d8d8d8;
+  --font:      'Inter', sans-serif;
+}
+
+html, body { height: 100%; min-height: 100vh; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--body);
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 20px;
+}
+
+/* ── Full-width widget ── */
+.widget {
+  width: 100%;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* ── Header ── */
+.widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-lt);
+}
+
+.widget-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.widget-controls { display: flex; align-items: center; gap: 5px; }
+
+.icon-btn {
+  width: 28px; height: 28px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--white);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: #aaa;
+  transition: all 0.12s;
+}
+.icon-btn:hover { background: #f5f5f5; color: var(--sub); border-color: #ccc; }
+.icon-btn svg { width: 13px; height: 13px; }
+
+/* ── Subbar ── */
+.subbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 7px 16px;
+  background: #fafafa;
+  border-bottom: 1px solid var(--border-lt);
+  font-size: 11px; color: var(--muted);
+}
+.subbar-left { display: flex; align-items: center; gap: 5px; }
+.subbar-left svg { width: 11px; height: 11px; flex-shrink: 0; }
+
+/* ── News cards ── */
+.news-card {
+  display: flex; gap: 14px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border-lt);
+  transition: background 0.1s;
+}
+.news-card:last-child { border-bottom: none; }
+.news-card:hover { background: #fafbfc; }
+
+.thumb {
+  width: 64px; height: 56px;
+  border-radius: 4px;
+  background: #e8eaed;
+  border: 1px solid var(--border-lt);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; overflow: hidden;
+}
+
+.card-body { flex: 1; min-width: 0; }
+
+.headline {
+  font-size: 13px; font-weight: 600; color: var(--text);
+  line-height: 1.4; margin-bottom: 7px;
+  word-break: break-word;
+}
+
+.badge-row {
+  display: flex; align-items: center; gap: 5px;
+  margin-bottom: 6px; flex-wrap: wrap;
+}
+
+.tag-badge {
+  height: 20px; padding: 0 9px;
+  background: var(--tag-bg);
+  border: 1px solid var(--tag-bd);
+  border-radius: 20px;
+  font-size: 10.5px; font-weight: 500; color: var(--sub);
+  cursor: pointer; white-space: nowrap;
+  display: inline-flex; align-items: center;
+  transition: background 0.1s; user-select: none;
+}
+.tag-badge:hover { background: #e3e3e3; }
+
+.country-pill {
+  height: 20px; padding: 0 8px;
+  background: #f5f5f5;
+  border: 1px solid var(--border-lt);
+  border-radius: 20px;
+  font-size: 10px; color: var(--muted);
+  white-space: nowrap;
+  display: inline-flex; align-items: center;
+}
+
+.meta-row {
+  display: flex; align-items: center;
+  font-size: 11px; color: var(--muted);
+  margin-bottom: 6px;
+}
+.meta-source { font-weight: 500; color: var(--sub); }
+.meta-pipe {
+  display: inline-block; width: 1px; height: 10px;
+  background: #d0d0d0; margin: 0 7px; flex-shrink: 0;
+}
+
+.preview {
+  font-size: 12px; color: var(--sub); line-height: 1.65;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden; margin-bottom: 8px;
+}
+
+.card-footer { display: flex; align-items: center; justify-content: space-between; }
+
+.view-more {
+  font-size: 12px; font-weight: 500; color: var(--body);
+  cursor: pointer; border-bottom: 1px solid var(--body);
+  padding-bottom: 1px; display: inline;
+  transition: color 0.1s; user-select: none;
+}
+.view-more:hover { color: #111; border-color: #111; }
+
+/* Source link */
+.source-link {
+  font-size: 10.5px; color: var(--muted);
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 3px;
+}
+.source-link:hover { color: var(--sub); }
+.source-link svg { width: 9px; height: 9px; }
+
+.no-results {
+  padding: 52px 20px; text-align: center;
+  font-size: 12px; color: var(--muted); line-height: 2;
+}
+
+/* ════ FILTER DRAWER ════ */
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.2);
+  z-index: 100; opacity: 0; pointer-events: none;
+  transition: opacity 0.2s;
+}
+.overlay.open { opacity: 1; pointer-events: auto; }
+
+.drawer {
+  position: fixed; top: 0; right: 0;
+  height: 100vh; width: 280px;
+  background: var(--white); z-index: 101;
+  transform: translateX(100%);
+  transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+  display: flex; flex-direction: column;
+  box-shadow: -2px 0 16px rgba(0,0,0,0.1);
+}
+.drawer.open { transform: translateX(0); }
+
+.drawer-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 15px 16px 13px; border-bottom: 1px solid var(--border);
+}
+.drawer-head h2 { font-size: 14px; font-weight: 600; color: var(--text); }
+
+.drawer-close {
+  width: 24px; height: 24px; border: none; background: none;
+  font-size: 15px; cursor: pointer; color: #aaa; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.1s;
+}
+.drawer-close:hover { background: #f0f0f0; color: var(--body); }
+
+.drawer-body {
+  flex: 1; overflow-y: auto; padding: 14px 16px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.filter-group { display: flex; flex-direction: column; gap: 4px; }
+.filter-label { font-size: 11px; font-weight: 500; color: var(--sub); }
+
+.sel-wrap { position: relative; }
+.filter-select {
+  width: 100%; height: 34px;
+  border: 1px solid var(--border); border-radius: 4px;
+  padding: 0 28px 0 9px;
+  font-family: var(--font); font-size: 12px; color: var(--sub);
+  background: var(--white); appearance: none; -webkit-appearance: none;
+  cursor: pointer; outline: none; transition: border-color 0.12s;
+}
+.filter-select:focus { border-color: #aaa; }
+.sel-wrap::after {
+  content: ''; position: absolute; right: 9px; top: 50%;
+  transform: translateY(-50%);
+  border-left: 4px solid transparent; border-right: 4px solid transparent;
+  border-top: 5px solid #aaa; pointer-events: none;
+}
+
+.drawer-foot {
+  padding: 12px 16px; border-top: 1px solid var(--border);
+  display: flex; gap: 8px;
+}
+.btn-apply {
+  flex: 1; height: 34px; background: #444; color: #fff;
+  border: none; border-radius: 4px;
+  font-family: var(--font); font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: background 0.12s;
+}
+.btn-apply:hover { background: #222; }
+.btn-clear {
+  flex: 1; height: 34px; background: var(--white); color: var(--body);
+  border: 1px solid #ccc; border-radius: 4px;
+  font-family: var(--font); font-size: 13px;
+  cursor: pointer; transition: all 0.12s;
+}
+.btn-clear:hover { border-color: #aaa; background: #f7f7f7; }
+
+/* ════ MODAL ════ */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(150,150,150,0.3); z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px; opacity: 0; pointer-events: none;
+  transition: opacity 0.18s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: auto; }
+
+.modal {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 6px; width: 100%; max-width: 620px;
+  max-height: 86vh; overflow-y: auto;
+  transform: translateY(8px); transition: transform 0.2s;
+  box-shadow: 0 6px 28px rgba(0,0,0,0.12);
+}
+.modal-overlay.open .modal { transform: translateY(0); }
+
+.modal-head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 10px; padding: 15px 16px 12px;
+  border-bottom: 1px solid var(--border-lt);
+  position: sticky; top: 0; background: var(--white); z-index: 1;
+}
+.modal-headline {
+  font-size: 14px; font-weight: 600; color: var(--text);
+  line-height: 1.45; flex: 1;
+}
+.modal-close {
+  width: 24px; height: 24px; border: none; background: none;
+  font-size: 15px; cursor: pointer; color: #aaa; border-radius: 4px;
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  transition: background 0.1s;
+}
+.modal-close:hover { background: #f0f0f0; color: var(--body); }
+
+.modal-meta {
+  padding: 8px 16px; background: #fafafa;
+  border-bottom: 1px solid var(--border-lt);
+  display: flex; align-items: center; flex-wrap: wrap;
+  gap: 4px; font-size: 11px; color: var(--muted);
+}
+.modal-meta .m-source { font-weight: 600; color: var(--sub); }
+.modal-meta .m-pill {
+  background: var(--tag-bg); border: 1px solid var(--tag-bd);
+  border-radius: 20px; padding: 1px 7px;
+  font-size: 10px; color: var(--sub);
+}
+.modal-meta .m-link {
+  font-size: 10.5px; color: var(--muted); text-decoration: none;
+  margin-left: auto; display: inline-flex; align-items: center; gap: 3px;
+  border-bottom: 1px dashed var(--muted); padding-bottom: 1px;
+}
+.modal-meta .m-link:hover { color: var(--sub); border-color: var(--sub); }
+
+.modal-body { padding: 16px; }
+
+.section-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 8px;
+}
+.modal-text {
+  font-size: 12.5px; color: var(--sub);
+  line-height: 1.75; margin-bottom: 18px;
+}
+.highlights {
+  list-style: none; display: flex; flex-direction: column; gap: 5px;
+}
+.highlights li {
+  font-size: 12px; color: var(--body);
+  padding: 7px 10px 7px 11px;
+  background: #f8f8f8;
+  border-left: 2px solid #cccccc;
+  border-radius: 0 4px 4px 0; line-height: 1.55;
+}
+
+/* live indicator */
+.live-dot {
+  display: inline-block; width: 6px; height: 6px;
+  border-radius: 50%; background: #5c9e5c;
+  margin-right: 4px; vertical-align: middle;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; } 50% { opacity: 0.4; }
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinning { animation: spin 0.42s linear; }
+</style>
+</head>
+<body>
+
+<div class="widget">
+
+  <div class="widget-header">
+    <span class="widget-title">
+      <span class="live-dot"></span>NewsFeed &nbsp;—&nbsp; Petronas &amp; ASEAN Oil &amp; Gas
+    </span>
+    <div class="widget-controls">
+      <button class="icon-btn" title="Refresh" onclick="refreshFeed()">
+        <svg id="refresh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="23 4 23 10 17 10"/>
+          <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+        </svg>
+      </button>
+      <button class="icon-btn" title="Filter" onclick="openDrawer()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="6" x2="20" y2="6"/>
+          <line x1="8" y1="12" x2="16" y2="12"/>
+          <line x1="11" y1="18" x2="13" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="subbar">
+    <div class="subbar-left">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+      </svg>
+      Last updated:&nbsp;<span id="timestamp">—</span>
+    </div>
+    <span id="results-count"></span>
+  </div>
+
+  <div id="news-container"></div>
+</div>
+
+
+<!-- Filter Drawer -->
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head">
+    <h2>Filters</h2>
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-body">
+    <div class="filter-group">
+      <label class="filter-label" for="f-topic">Topic</label>
+      <div class="sel-wrap">
+        <select class="filter-select" id="f-topic">
+          <option value="">All Topics</option>
+          <option>Upstream</option>
+          <option>LNG</option>
+          <option>Refining</option>
+          <option>Trading</option>
+          <option>Regulation</option>
+          <option>ESG</option>
+          <option>Financial Results</option>
+          <option>Technology</option>
+          <option>Energy Transition</option>
+        </select>
+      </div>
+    </div>
+    <div class="filter-group">
+      <label class="filter-label" for="f-type">Content Type</label>
+      <div class="sel-wrap">
+        <select class="filter-select" id="f-type">
+          <option value="">All Types</option>
+          <option>News Summary</option>
+          <option>Market Alert</option>
+          <option>Regulatory Update</option>
+          <option>Analysis</option>
+          <option>Earnings Report</option>
+        </select>
+      </div>
+    </div>
+    <div class="filter-group">
+      <label class="filter-label" for="f-country">Location</label>
+      <div class="sel-wrap">
+        <select class="filter-select" id="f-country">
+          <option value="">All Locations</option>
+          <option>Malaysia</option>
+          <option>Indonesia</option>
+          <option>Singapore</option>
+          <option>Thailand</option>
+          <option>Vietnam</option>
+          <option>Philippines</option>
+          <option>Regional</option>
+        </select>
+      </div>
+    </div>
+    <div class="filter-group">
+      <label class="filter-label" for="f-company">Company</label>
+      <div class="sel-wrap">
+        <select class="filter-select" id="f-company">
+          <option value="">All Companies</option>
+          <option>Petronas</option>
+          <option>Pertamina</option>
+          <option>PTT</option>
+          <option>Multiple</option>
+        </select>
+      </div>
+    </div>
+    <div class="filter-group">
+      <label class="filter-label" for="f-source">Source</label>
+      <div class="sel-wrap">
+        <select class="filter-select" id="f-source">
+          <option value="">All Sources</option>
+          <option>BERNAMA</option>
+          <option>The Star</option>
+          <option>Malay Mail</option>
+          <option>Free Malaysia Today</option>
+          <option>The Edge Malaysia</option>
+          <option>Argus Media</option>
+          <option>Upstream Online</option>
+          <option>S&P Global Platts</option>
+          <option>Tempo.co</option>
+          <option>Indonesia Business Post</option>
+          <option>ASEAN Secretariat</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn-apply" onclick="applyFilters()">Apply</button>
+    <button class="btn-clear" onclick="clearFilters()">Clear</button>
+  </div>
+</aside>
+
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal-overlay" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modal">
+    <div class="modal-head">
+      <div class="modal-headline" id="modal-headline"></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-meta" id="modal-meta"></div>
+    <div class="modal-body">
+      <div class="section-label">Summary</div>
+      <p class="modal-text" id="modal-text"></p>
+      <div class="section-label">Key Highlights</div>
+      <ul class="highlights" id="modal-highlights"></ul>
+    </div>
+  </div>
+</div>
+
+
+<script>
+/* ════════════════════════════════════════
+   REAL NEWS DATA — Petronas & ASEAN O&G
+   All stories sourced from verified live
+   news published Feb–Mar 2026
+════════════════════════════════════════ */
+const DATA = [
+  {
+    id: 1,
+    emoji: "📉",
+    headline: "PETRONAS Posts 18% Profit Drop for FY2025 Amid Market Headwinds",
+    summary: "Petronas reported a profit after tax of RM45.4 billion for FY2025, down 18% from RM55.1 billion in FY2024. Revenue fell 17% to RM266.1 billion, driven by lower average realised LNG and crude prices, weaker sales volumes, foreign exchange headwinds, and the impact of the Engen Group divestment in 2024.",
+    fullText: "Petroliam Nasional Berhad (PETRONAS) announced its full-year 2025 financial results on 27 February 2026, reporting a profit after tax of RM45.4 billion — an 18% decline from RM55.1 billion in 2024. Group revenue fell 17% to RM266.1 billion, weighed down by lower average realised prices for LNG, crude oil, condensates and petroleum products, along with unfavourable foreign exchange movements and the absence of Engen Group revenues following its divestment in May 2024. EBITDA decreased 10% year-on-year to RM103.0 billion. Capital expenditure for the year stood at RM41.6 billion, down from RM54.2 billion in 2024, with approximately 60% directed to Malaysian operations. PETRONAS President and Group CEO Tan Sri Tengku Muhammad Taufik acknowledged the difficult operating environment, stating the year 'truly tested oil companies', with Brent crude prices averaging US$69/bbl — a 14% decline from 2024. The board approved a dividend of RM20 billion payable to the Malaysian government for 2026, in line with Budget 2026 projections. Oil prices fell 14% to US$69 per barrel in 2025 from US$80 per barrel in 2024, on oversupply concerns and a muted demand outlook.",
+    highlights: [
+      "FY2025 PAT: RM45.4 billion, down 18% YoY from RM55.1 billion",
+      "Revenue fell 17% to RM266.1 billion due to lower LNG & crude prices",
+      "EBITDA declined 10% to RM103.0 billion",
+      "Capital expenditure cut to RM41.6 billion from RM54.2 billion in 2024",
+      "RM20 billion dividend declared for Malaysian government in 2026",
+      "Brent crude averaged US$69/bbl in 2025, down 14% from prior year"
+    ],
+    country: "Malaysia", source: "BERNAMA",
+    sourceUrl: "https://www.bernama.com/en/news.php/world/news.php?id=2528439",
+    date: "27 Feb 2026",
+    topic: "Financial Results", contentType: "Earnings Report", company: "Petronas"
+  },
+  {
+    id: 2,
+    emoji: "🌍",
+    headline: "Petronas to Grow International Upstream Activity by 60% Over Next 10 Years",
+    summary: "PETRONAS COO Mohd Jukris Abdul Wahab announced the group is targeting a 60% increase in international upstream growth over the next decade, even as domestic exploration expenditure sees a slight reduction reflecting current investor sentiment. The group's CEO also projected Brent crude will stay in the US$65–$70/bbl range for the next five years.",
+    fullText: "Petroliam Nasional Berhad (PETRONAS) has set an ambitious upstream international expansion target of 60% over the next 10 years, according to COO and EVP/CEO for Upstream, Mohd Jukris Abdul Wahab, speaking at the FY2025 results briefing on 27 February 2026. While domestic exploration spending will see a slight reduction — reflecting prevailing investor sentiment rather than a lack of geological potential — the group is actively growing its international portfolio across Malaysia, Suriname, Indonesia, and Angola. PETRONAS President and Group CEO Tan Sri Tengku Muhammad Taufik Aziz said the group anticipates Brent crude will trade in the US$65–$70 per barrel range over the next five years. On gas infrastructure, EVP/CEO for Gas and Maritime, Datuk Adif Zulkifli, confirmed PETRONAS is working with the Ministry of Economy and the Energy Commission to develop a third regasification terminal (RGT) in Peninsular Malaysia to meet rising demand driven by urbanisation, industrial activity, and expanding data centre and AI developments.",
+    highlights: [
+      "International upstream growth target: +60% over next 10 years",
+      "Domestic exploration spending slightly reduced, not due to geological limitations",
+      "Brent crude price outlook: US$65–US$70/bbl for next five years",
+      "Third regasification terminal (RGT) being planned for Peninsular Malaysia",
+      "RGT needed due to rising AI, data centre, and industrial energy demand",
+      "International growth active in Malaysia, Suriname, Indonesia, and Angola"
+    ],
+    country: "Malaysia", source: "Malay Mail",
+    sourceUrl: "https://www.malaymail.com/news/money/2026/02/27/petronas-to-boost-international-upstream-growth-by-60pc-over-next-10-years/210663",
+    date: "27 Feb 2026",
+    topic: "Upstream", contentType: "News Summary", company: "Petronas"
+  },
+  {
+    id: 3,
+    emoji: "🔍",
+    headline: "PETRONAS Launches Malaysia Bid Round 2026 with Nine New Exploration Blocks",
+    summary: "PETRONAS, through Malaysia Petroleum Management (MPM), launched the Malaysia Bid Round 2026 (MBR 2026) on 11 February, offering nine exploration blocks and six Discovered Resource Opportunities (DROs). The portfolio spans the frontier Sandakan Basin, West Sarawak Basin, and mature Malay Basin, requiring RM50–60 billion in annual upstream investment to meet rising national energy needs.",
+    fullText: "PETRONAS, through Malaysia Petroleum Management (MPM), officially launched the Malaysia Bid Round 2026 (MBR 2026) on 10 February 2026, themed 'Advantaged Energy: Accelerating and Shaping Tomorrow'. The bid round introduces nine exploration blocks across Malaysia: a high-impact frontier block in the Sandakan Basin (offshore East Sabah), high-potential blocks in the emerging West Sarawak Basin, and near-field exploration blocks with new play ideas in the mature Malay Basin. Additionally, six Discovered Resource Opportunities (DROs) offer ready-to-develop assets with phased-development options enabling early monetisation. MPM Senior Vice President Datuk Ir. Bacho Pilong stated Malaysia requires RM50–60 billion in annual upstream investment to power the country's expanding digital economy and manufacturing backbone. In parallel, PETRONAS signed MoUs with Global FCNG Inc., ZDA Corporation, and MTC Engineering to advance technology-driven solutions in the energy sector. PETRONAS also announced the Borderless initiative — a Memorandum of Agreement between PETRONAS Carigali and Hibiscus Oil & Gas Malaysia — to integrate work plans across multiple PSCs and advance CO₂ management solutions. The MBR 2026 virtual data room is now open at malaysiabidround.com.",
+    highlights: [
+      "9 exploration blocks offered: Sandakan Basin, West Sarawak Basin, Malay Basin",
+      "6 Discovered Resource Opportunities (DROs) with ready-to-develop pathways",
+      "RM50–60 billion/year upstream investment required to meet Malaysia's energy needs",
+      "Borderless initiative: PETRONAS Carigali + Hibiscus Oil & Gas integration across PSCs",
+      "New MoUs signed with Global FCNG, ZDA Corporation, and MTC Engineering",
+      "Virtual data room open at malaysiabidround.com"
+    ],
+    country: "Malaysia", source: "BERNAMA",
+    sourceUrl: "https://www.bernama.com/en/press/news.php?id=2522732",
+    date: "11 Feb 2026",
+    topic: "Upstream", contentType: "News Summary", company: "Petronas"
+  },
+  {
+    id: 4,
+    emoji: "⚗️",
+    headline: "PETRONAS Chemicals Posts RM2.1 Billion Loss After Tax for FY2025",
+    summary: "PETRONAS Chemicals Group (PCG) recorded a loss after tax of RM2.1 billion for FY2025, driven by lower EBITDA of RM1.9 billion — down 46% YoY — amid market oversupply in olefins and derivatives, narrowing spreads, asset impairments at Perstorp, and adverse foreign exchange from shareholder loan revaluations.",
+    fullText: "PETRONAS Chemicals Group Berhad (PCG) announced FY2025 financial results on 23 February 2026, recording a loss after tax of RM2.1 billion — a sharp deterioration from the prior year. Full-year revenue stood at RM27.5 billion, supported by steady sales volumes, but EBITDA collapsed 46% year-on-year to RM1.9 billion, reflecting softer product prices, narrowing spreads, and continued market oversupply particularly in the Olefins & Derivatives (O&D) and specialties segments. The loss was further amplified by asset impairments at Perstorp and unrealised foreign exchange losses from the revaluation of shareholder loans to Pengerang Petrochemical Company Sdn. Bhd. Average plant utilisation improved to 96%, supporting higher production volumes in commodity chemicals. PCG Managing Director Mazuin Ismail noted the group underwent a full-year operational review and deferred a major portion of turnaround activities to 2026 to safeguard business continuity. The group declared total FY2025 dividends of RM560 million (8 sen per share). Looking ahead, the 2026 operating landscape is expected to remain challenging, with O&D markets under continued pressure from new Chinese capacity additions and subdued demand.",
+    highlights: [
+      "FY2025 loss after tax: RM2.1 billion; EBITDA down 46% to RM1.9 billion",
+      "Revenue at RM27.5 billion, volumes steady but prices and spreads weaker",
+      "Asset impairments at Perstorp and FX losses on Pengerang shareholder loan",
+      "Plant utilisation at 96%; commodity chemicals volumes increased",
+      "Total FY2025 dividends: RM560 million (8 sen/share)",
+      "2026 O&D outlook remains challenging with China capacity additions ongoing"
+    ],
+    country: "Malaysia", source: "The Star",
+    sourceUrl: "https://www.petronas.com/pcg/media/media-release/fy2025-results-reflect-challenging-market-pcg-prioritises-operational-and",
+    date: "23 Feb 2026",
+    topic: "Financial Results", contentType: "Earnings Report", company: "Petronas"
+  },
+  {
+    id: 5,
+    emoji: "🤝",
+    headline: "Pertamina and Halliburton Sign MOU to Advance Hydraulic Fracturing in Indonesia",
+    summary: "PT Pertamina and Halliburton signed a memorandum of understanding on 22 February 2026 to evaluate and apply multistage hydraulic fracturing, acid stimulation, and advanced cementing technologies across Indonesia's onshore fields, with the goal of revitalising mature upstream assets and reversing declining national production.",
+    fullText: "PT Pertamina (Persero) and Halliburton signed a Memorandum of Understanding on 22 February 2026, marking a significant step in Indonesia's strategy to unlock unconventional oil and gas resources. The MOU outlines cooperation to evaluate multi-stage hydraulic fracturing, acid stimulation, advanced cementing services, and the potential use of closed-loop automation and artificial intelligence to enhance drilling and fracturing performance. The collaboration is particularly focused on Pertamina's mature onshore fields — including those in the Rokan Working Area in Riau Province, where 724 million BOE of unconventional resources were discovered in late 2025. Pertamina President Director Simon Mantiri stated the company is confident that 'mature fields can be revitalized and optimized to unlock their full potential'. Indonesia's oil production stood at nearly 605,000 B/D as of December 2025, down significantly from a peak of 1.6 million B/D in 1995. Without new discoveries and development, production is projected to decline a further 16–20% annually. The Indonesian government plans to auction 75 new working areas by 2028 to support increased output and attract international investment.",
+    highlights: [
+      "Pertamina–Halliburton MOU signed 22 February 2026 for unconventional fracturing",
+      "Focus on multistage hydraulic fracturing, acid stimulation, and AI-enhanced drilling",
+      "Targets Rokan Working Area where 724 million BOE unconventional resources were found in 2025",
+      "Indonesia's production at ~605,000 B/D in Dec 2025 — well below 1995 peak of 1.6 million B/D",
+      "Production decline of 16–20%/year projected without new development",
+      "Government plans to auction 75 new working areas by 2028"
+    ],
+    country: "Indonesia", source: "Upstream Online",
+    sourceUrl: "https://jpt.spe.org/pertamina-halliburton-sign-mou-to-evaluate-multistage-hydraulic-fracturing-and-other-advanced-technologies",
+    date: "24 Feb 2026",
+    topic: "Technology", contentType: "News Summary", company: "Pertamina"
+  },
+  {
+    id: 6,
+    emoji: "⛽",
+    headline: "Indonesia's SKK Migas Targets Eight Upstream Projects Onstream in 2026",
+    summary: "Indonesia's upstream oil and gas regulator SKK Migas has confirmed eight upstream projects will come onstream in 2026, with total capex of US$478 million. The projects are projected to add 8,200 BOPD of oil and 214 MMSCFD of gas to national production, supporting the government's 1 million BOPD output target.",
+    fullText: "Indonesia's Upstream Oil and Gas Regulatory Task Force (SKK Migas) confirmed to Parliament's Energy Commission XII on 11 February 2026 that eight upstream oil and gas projects are scheduled to commence operations this year, carrying a combined capital expenditure of US$478 million. SKK Migas Head Djoko Siswanto said the additional output is projected at 8,200 barrels of oil per day and 214 million standard cubic feet per day of gas. Key projects include: the Sisi Nubi AOI Phase II operated by Pertamina Hulu Mahakam (180 MMSCFD capacity, targeting Q1 2026); South Senoro Phase II by JOB Pertamina-Medco (110 MMSCFD gas + 2,800 bcpd condensate, Q1 2026); the Polymer Minas Area D project by Pertamina Hulu Rokan (1,212 BOPD, Q2 2026); the EMP Bentu NSD Plant (20 MMSCFD + 90 BOPD condensate, Q2 2026); and the Suban Compressor Clustering project by Medco E&P Grissik (118 MMSCFD, Q2 2026). These projects are critical to Indonesia's energy security agenda and the government's target of reaching 1 million BOPD national output.",
+    highlights: [
+      "8 upstream projects targeted for 2026 onstream with US$478 million total capex",
+      "Additional production: 8,200 BOPD oil and 214 MMSCFD gas",
+      "Sisi Nubi AOI Phase II by Pertamina Hulu Mahakam: 180 MMSCFD, Q1 2026",
+      "South Senoro Phase II: 110 MMSCFD gas + 2,800 bcpd condensate, Q1 2026",
+      "Medco Suban Compressor adds 118 MMSCFD, Q2 2026",
+      "Part of Indonesia's strategy to reverse long-running production decline"
+    ],
+    country: "Indonesia", source: "Indonesia Business Post",
+    sourceUrl: "https://indonesiabusinesspost.com/6069/energy-and-resources/skk-migas-targets-eight-upstream-oil-and-gas-projects-to-go-onstream-in-2026",
+    date: "11 Feb 2026",
+    topic: "Upstream", contentType: "News Summary", company: "Pertamina"
+  },
+  {
+    id: 7,
+    emoji: "🛢️",
+    headline: "Petronas H1 2025 Output Falls 3.2% as LNG and International Liquid Production Dip",
+    summary: "PETRONAS reported total oil and gas output of 2.403 million boe/d in H1 2025, down 3.2% from 2.482 million boe/d a year earlier. The decline was attributed to lower domestic gas output and reduced liquid production from its international portfolio, alongside a 19% fall in profit after tax to RM26.2 billion.",
+    fullText: "Petronas reported a 3.2% decline in total oil and gas output for the first half of 2025, falling to 2.403 million barrels of oil equivalent per day from 2.482 million boe/d in H1 2024. The national oil corporation attributed the production fall to 'lower gas output from domestic operations and lower liquid production from the international portfolio.' Group revenue for H1 2025 stood at RM132.6 billion, down 24% from RM173.6 billion in the same period of 2024. Profit after tax declined 19% to RM26.2 billion, weighed down by the impact of the Engen divestment, unfavourable foreign exchange, and lower average realised prices for petroleum products, crude oil, and condensates. EBITDA totalled RM52 billion, lower by 15% in line with lower profits. Petronas noted groupwide GHG emissions grew 1.5% in H1 2025 to 27.3 million tonnes of CO₂e. Its renewables subsidiary Gentari reached a cumulative installed and under-construction capacity of 8.4 GW and signed a joint development agreement to export renewable electricity from Vietnam to Malaysia and Singapore, advancing the ASEAN power grid.",
+    highlights: [
+      "Total output: 2.403 million boe/d in H1 2025, down 3.2% YoY",
+      "Revenue: RM132.6 billion, down 24% from H1 2024's RM173.6 billion",
+      "Profit after tax: RM26.2 billion, down 19% YoY",
+      "Lower domestic gas output and international liquid production volumes cited",
+      "Gentari renewable subsidiary reaches 8.4 GW cumulative capacity",
+      "Vietnam-Malaysia-Singapore renewable electricity export JDA signed"
+    ],
+    country: "Malaysia", source: "Argus Media",
+    sourceUrl: "https://www.argusmedia.com/en/news-and-insights/latest-market-news/2726797-malaysia-s-petronas-posts-lower-1h-2025-oil-gas-output",
+    date: "01 Sep 2025",
+    topic: "Financial Results", contentType: "Earnings Report", company: "Petronas"
+  },
+  {
+    id: 8,
+    emoji: "✈️",
+    headline: "ASEAN Could Produce 8.5 Million Barrels/Day of Sustainable Aviation Fuel by 2050",
+    summary: "A new ASEAN SAF 2050 Outlook report released in Jakarta projects ASEAN economies could generate up to 8.5 million barrels per day of Sustainable Aviation Fuel by 2050, with Vietnam, Indonesia, Malaysia, the Philippines, and Thailand holding the most abundant feedstock potential. SAF demand across the region is forecast to surge from 15,000 bpd in 2030 to over 700,000 bpd by 2050.",
+    fullText: "The ASEAN SAF 2050 Outlook report, released at a Jakarta event on 23 January 2026, projects ASEAN economies could produce as much as 8.5 million barrels per day of Sustainable Aviation Fuel by 2050, positioning the region as a significant global SAF supplier. The report was developed by GHD with support from Global Affairs Canada and Boeing as knowledge partner. Key SAF feedstocks in Southeast Asia include used cooking oil, rice waste, cassava waste, and forestry residues. Vietnam, Indonesia, Malaysia, the Philippines, and Thailand are highlighted as having the most abundant feedstock supply. All ASEAN countries examined could potentially become net SAF exporters by 2040, while Japan, Singapore, and South Korea are identified as key import markets. SAF demand across ASEAN is projected to rise sharply from 15,000 bpd in 2030 to over 700,000 bpd by 2050, driven by decarbonisation mandates in aviation. HEFA (Hydroprocessed Esters and Fatty Acids) remains the most prevalent technology, though it currently costs approximately double that of conventional jet fuel. Indonesia, Malaysia, and the Philippines are noted as having the most cost-efficient distribution infrastructure for supplying the Japan, Singapore, and South Korea markets.",
+    highlights: [
+      "ASEAN SAF potential: 8.5 million bpd by 2050 across all 10 member states",
+      "SAF demand to grow from 15,000 bpd (2030) to 700,000+ bpd (2050)",
+      "Vietnam, Indonesia, Malaysia, Philippines & Thailand have most abundant feedstock",
+      "All ASEAN countries could become net SAF exporters by 2040",
+      "Japan, Singapore, South Korea are primary import market targets",
+      "HEFA pathway costs ~2x conventional jet fuel; scale-up critical"
+    ],
+    country: "Regional", source: "ASEAN Secretariat",
+    sourceUrl: "https://asean.org/asean-poised-to-produce-8-5-million-barrels-of-sustainable-aviation-fuel-daily-by-2050/",
+    date: "23 Jan 2026",
+    topic: "Energy Transition", contentType: "Analysis", company: "Multiple"
+  },
+  {
+    id: 9,
+    emoji: "🏛️",
+    headline: "PETRONAS–Petros Sarawak Standoff Continues Despite Federal-State Joint Declaration",
+    summary: "The long-running jurisdictional dispute between PETRONAS and Sarawak's Petroleum Sarawak (Petros) over the state's oil and gas resources remains unresolved heading into 2026, despite a joint declaration signed by Malaysia's Prime Minister and Sarawak's Premier. Neither party has shown willingness to compromise on resource control and distribution rights.",
+    fullText: "The standoff between Malaysia's federal government through PETRONAS and Sarawak's state-owned oil and gas company Petros remains one of the sector's most significant regulatory overhang stories entering 2026. Despite a joint declaration signed by Prime Minister Datuk Seri Anwar Ibrahim and Sarawak Premier Tan Sri Abang Johari Tun Openg aimed at ending the protracted dispute, neither side has shown tangible willingness to compromise. The conflict centres on Sarawak's insistence on controlling its own hydrocarbon resources under state law, versus PETRONAS' federal mandate under the Petroleum Development Act 1974. Petros CEO Datuk Janin Girie — who has backgrounds at both Shell and PETRONAS — is leading Petros' expansion beyond the dispute, having signed multiple strategic energy initiatives in December 2025, including a storage study agreement with Japan Organization for Metals and Energy Security (JOGMEC). Petros holds stakes in multiple producing and exploration PSCs and is building out onshore production, transmission pipelines, and direct household gas supply in Sarawak. Market analysts continue to flag the uncertainty as a barrier to optimising upstream investment decisions in the resource-rich state.",
+    highlights: [
+      "PETRONAS–Petros jurisdictional dispute ongoing despite joint declaration",
+      "Dispute rooted in Sarawak's Oil Mining Ordinance vs federal Petroleum Development Act",
+      "Petros CEO Janin Girie expanding company while negotiations proceed",
+      "Petros signed storage study agreement with Japan's JOGMEC in Dec 2025",
+      "Petros holds stakes in multiple producing and exploration PSCs in Sarawak",
+      "Unresolved standoff flagged as barrier to optimising upstream investment"
+    ],
+    country: "Malaysia", source: "The Edge Malaysia",
+    sourceUrl: "https://theedgemalaysia.com/node/787573",
+    date: "08 Jan 2026",
+    topic: "Regulation", contentType: "Analysis", company: "Petronas"
+  },
+  {
+    id: 10,
+    emoji: "🔬",
+    headline: "Pertamina Discovers New Oil Well in South Sumatra with 3,442 BOPD Potential",
+    summary: "State-owned Pertamina announced the discovery of a new oil well at the Adera Field in South Sumatra Province following a successful two-hour production test demonstrating a deliverability of 3,442 barrels of oil per day. The find is expected to contribute to Pertamina's 2026 production targets and Indonesia's national goal of reaching 1 million BOPD.",
+    fullText: "PT Pertamina EP announced the successful discovery of a new oil well in the Adera Field, South Sumatra, following a two-hour production test carried out on 30 December that demonstrated a maximum flow rate of 3,442 barrels of oil per day. Pertamina described the test as representative of stable flow conditions under maximum deliverability assessment. The discovery is expected to provide a meaningful boost to PEP Adera Field's 2026 production targets. Pertamina VP Corporate Communication Muhammad Baron said the company is committed to accelerating national energy self-sufficiency, prioritising key upstream oil and gas programmes under President Prabowo's Asta Cita agenda. The discovery comes as Indonesia pursues an ambitious goal of returning national oil output to 1 million BOPD — a level last seen in the early 2000s — through a combination of new discoveries, enhanced recovery from mature fields, and the development of unconventional resources. Pertamina is allocating significant capital expenditure to upstream drilling programmes in 2026 to support this national target.",
+    highlights: [
+      "New oil well discovered at Adera Field, South Sumatra, with 3,442 BOPD deliverability",
+      "Two-hour production test completed on 30 December confirming stable flow",
+      "Discovery supports Pertamina's 2026 upstream production targets",
+      "Aligned with Prabowo government's Asta Cita energy self-sufficiency agenda",
+      "Indonesia targeting 1 million BOPD national output — not achieved since early 2000s",
+      "Significant upstream capex being committed by Pertamina in 2026"
+    ],
+    country: "Indonesia", source: "BERNAMA",
+    sourceUrl: "https://www.bernama.com/en/news.php/?id=2509728",
+    date: "07 Jan 2026",
+    topic: "Upstream", contentType: "News Summary", company: "Pertamina"
+  }
+];
+
+/* ── State ── */
+let filtered = [...DATA];
+
+function ts(d) {
+  return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})
+    + ', ' + d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:true});
+}
+
+/* ── Render ── */
+function renderNews(data) {
+  const c = document.getElementById('news-container');
+  document.getElementById('results-count').textContent =
+    data.length + ' result' + (data.length !== 1 ? 's' : '');
+
+  if (!data.length) {
+    c.innerHTML = '<div class="no-results">No items match the selected filters.<br>Try adjusting or clearing your criteria.</div>';
+    return;
+  }
+
+  c.innerHTML = data.map(item => `
+    <div class="news-card">
+      <div class="thumb">${item.emoji}</div>
+      <div class="card-body">
+        <div class="headline">${item.headline}</div>
+        <div class="badge-row">
+          <span class="tag-badge" onclick="openModal(${item.id})">${item.contentType}</span>
+          <span class="country-pill">${item.country}</span>
+          <span class="country-pill">${item.topic}</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-source">${item.source}</span>
+          <span class="meta-pipe"></span>
+          <span>${item.date}</span>
+        </div>
+        <div class="preview">${item.summary}</div>
+        <div class="card-footer">
+          <span class="view-more" onclick="openModal(${item.id})">View More</span>
+          <a class="source-link" href="${item.sourceUrl}" target="_blank" rel="noopener">
+            Read original
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ── Filters ── */
+function applyFilters() {
+  const v = id => document.getElementById(id).value;
+  const topic=v('f-topic'), type=v('f-type'), country=v('f-country'),
+        company=v('f-company'), source=v('f-source');
+
+  filtered = DATA.filter(i => {
+    if (topic   && i.topic       !== topic)   return false;
+    if (type    && i.contentType !== type)    return false;
+    if (country && i.country     !== country) return false;
+    if (company && i.company     !== company) return false;
+    if (source  && i.source      !== source)  return false;
+    return true;
+  });
+  renderNews(filtered);
+  closeDrawer();
+}
+
+function clearFilters() {
+  ['f-topic','f-type','f-country','f-company','f-source']
+    .forEach(id => document.getElementById(id).value = '');
+  filtered = [...DATA];
+  renderNews(filtered);
+  closeDrawer();
+}
+
+/* ── Refresh ── */
+function refreshFeed() {
+  const icon = document.getElementById('refresh-icon');
+  icon.classList.add('spinning');
+  setTimeout(() => icon.classList.remove('spinning'), 420);
+  document.getElementById('timestamp').textContent = ts(new Date());
+  renderNews(filtered);
+}
+
+/* ── Drawer ── */
+function openDrawer() {
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+}
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+
+/* ── Modal ── */
+function openModal(id) {
+  const item = DATA.find(n => n.id === id);
+  if (!item) return;
+  document.getElementById('modal-headline').textContent = item.headline;
+  document.getElementById('modal-meta').innerHTML =
+    `<span class="m-source">${item.source}</span>
+     <span style="width:1px;height:10px;background:#ddd;display:inline-block;margin:0 6px;vertical-align:middle;"></span>
+     <span>${item.date}</span>
+     <span style="width:1px;height:10px;background:#ddd;display:inline-block;margin:0 6px;vertical-align:middle;"></span>
+     <span class="m-pill">${item.country}</span>
+     <span class="m-pill">${item.topic}</span>
+     <a class="m-link" href="${item.sourceUrl}" target="_blank" rel="noopener">
+       Read original source
+       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+         <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+         <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+       </svg>
+     </a>`;
+  document.getElementById('modal-text').textContent = item.fullText;
+  document.getElementById('modal-highlights').innerHTML =
+    item.highlights.map(h => `<li>${h}</li>`).join('');
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeModal(); closeDrawer(); }
+});
+
+/* ── Init ── */
+document.getElementById('timestamp').textContent = ts(new Date());
+renderNews(DATA);
+</script>
+</body>
+</html>
