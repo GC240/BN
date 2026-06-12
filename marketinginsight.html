@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Maybank CIO Desk — Live Market Watch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --mb-yellow:#FFC400;
+    --mb-gold:#F2A900;
+    --ink:#141414;
+    --ink-soft:#2a2a28;
+    --paper:#F3F2EE;
+    --card:#FFFFFF;
+    --line:#E7E4DC;
+    --muted:#71706B;
+    --up:#18935A;
+    --down:#D23E3E;
+    --urgent:#E2453C;
+    --radius:14px;
+    --shadow:0 1px 2px rgba(20,20,20,.04), 0 8px 28px rgba(20,20,20,.06);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Inter",system-ui,-apple-system,sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    padding:18px 14px 48px;
+  }
+  .num{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;}
+
+  /* ---------- shell ---------- */
+  .shell{
+    max-width:880px;
+    margin:0 auto;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:20px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  /* tiger-stripe signature accent */
+  .stripe{
+    height:5px;
+    background:repeating-linear-gradient(
+      115deg,
+      var(--ink) 0 13px,
+      var(--mb-yellow) 13px 30px
+    );
+  }
+
+  /* ---------- header ---------- */
+  .head{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:12px;flex-wrap:wrap;
+    padding:18px 20px 14px;
+  }
+  .head-left{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .brand-tiger{
+    width:30px;height:30px;border-radius:7px;flex:none;
+    background:var(--ink);
+    display:grid;place-items:center;
+  }
+  .brand-tiger span{
+    font-family:"Space Grotesk";font-weight:700;font-size:15px;color:var(--mb-yellow);
+  }
+  h1{
+    font-family:"Space Grotesk";font-weight:700;
+    font-size:clamp(17px,4.5vw,21px);
+    letter-spacing:-.01em;margin:0;line-height:1.1;
+  }
+  .desk-badge{
+    font-family:"Space Grotesk";font-weight:600;font-size:10.5px;letter-spacing:.13em;
+    background:var(--ink);color:var(--mb-yellow);
+    padding:4px 9px;border-radius:6px;text-transform:uppercase;
+  }
+  .head-right{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:12.5px;}
+  .dot-live{width:7px;height:7px;border-radius:50%;background:var(--up);box-shadow:0 0 0 0 rgba(24,147,90,.5);}
+  #updated{font-weight:500;}
+  .refresh{
+    border:1px solid var(--line);background:#fff;border-radius:8px;
+    width:30px;height:30px;display:grid;place-items:center;cursor:pointer;
+    color:var(--ink-soft);transition:background .15s,transform .4s;
+  }
+  .refresh:hover{background:var(--paper);}
+  .refresh.spin svg{animation:spin .6s ease;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  /* ---------- live ticker tape ---------- */
+  .tape{
+    background:var(--ink);color:#fff;
+    margin:0 14px;border-radius:12px;overflow:hidden;
+    display:flex;align-items:center;
+    position:relative;
+  }
+  .live-pill{
+    flex:none;display:flex;align-items:center;gap:6px;
+    background:var(--urgent);color:#fff;
+    font-family:"Space Grotesk";font-weight:600;font-size:11px;letter-spacing:.08em;
+    padding:7px 12px;margin:7px 0 7px 9px;border-radius:8px;z-index:2;
+  }
+  .live-pill .blip{width:7px;height:7px;border-radius:50%;background:#fff;animation:blink 1.2s infinite;}
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:.25;}}
+  .tape-fade{position:absolute;top:0;bottom:0;width:34px;z-index:1;pointer-events:none;}
+  .tape-fade.l{left:84px;background:linear-gradient(90deg,var(--ink),transparent);}
+  .tape-fade.r{right:0;background:linear-gradient(270deg,var(--ink),transparent);}
+  .tape-window{overflow:hidden;flex:1;}
+  .tape-track{display:flex;width:max-content;animation:scroll 32s linear infinite;}
+  .tape:hover .tape-track{animation-play-state:paused;}
+  @keyframes scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+  .tick{
+    display:flex;align-items:baseline;gap:7px;padding:11px 22px;
+    border-right:1px solid rgba(255,255,255,.08);white-space:nowrap;
+  }
+  .tick .lbl{font-size:11px;letter-spacing:.06em;color:#bdbcb6;text-transform:uppercase;}
+  .tick .val{font-size:13.5px;font-weight:600;}
+  .tick .chg{font-size:11.5px;font-weight:600;}
+  .up{color:#3fd585;}
+  .down{color:#ff7a72;}
+
+  /* ---------- currency mix ---------- */
+  .section-lead{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:20px 20px 0;
+  }
+  .section-lead h2{
+    font-family:"Space Grotesk";font-weight:600;font-size:13px;letter-spacing:.04em;
+    text-transform:uppercase;margin:0;color:var(--ink-soft);
+  }
+  .section-lead .meta{font-size:11.5px;color:var(--muted);}
+  .fx-grid{
+    display:grid;grid-template-columns:repeat(6,1fr);gap:8px;
+    padding:12px 20px 4px;
+  }
+  .fx{
+    border:1px solid var(--line);border-radius:11px;padding:10px 11px;background:#fff;
+    transition:border-color .15s, box-shadow .15s;
+  }
+  .fx:hover{border-color:var(--mb-gold);box-shadow:0 4px 14px rgba(242,169,0,.10);}
+  .fx .pair{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.02em;}
+  .fx .rate{font-size:16px;font-weight:600;margin-top:3px;}
+  .fx .delta{font-size:11px;font-weight:600;margin-top:1px;}
+  .flash{animation:flash .7s ease;}
+  @keyframes flash{0%{background:#FFF7DD;}100%{background:#fff;}}
+
+  /* ---------- insight cards ---------- */
+  .cards{display:flex;flex-direction:column;gap:14px;padding:18px 20px 22px;}
+  .card{
+    border:1px solid var(--line);border-radius:var(--radius);
+    padding:17px 18px;position:relative;overflow:hidden;
+    transition:border-color .15s, box-shadow .15s, transform .15s;
+  }
+  .card:hover{box-shadow:var(--shadow);transform:translateY(-1px);}
+  .card.urgent{border-color:#F4D2CF;}
+  .card.urgent::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
+    background:repeating-linear-gradient(180deg,var(--ink) 0 9px,var(--mb-yellow) 9px 18px);
+  }
+  .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+  .badges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:9px;}
+  .badge{
+    font-family:"Space Grotesk";font-weight:600;font-size:10px;letter-spacing:.1em;
+    text-transform:uppercase;padding:4px 8px;border-radius:5px;
+  }
+  .badge.fi{background:#EFEDE6;color:var(--ink-soft);}
+  .badge.sukuk{background:#FFF1C2;color:#7a5a00;}
+  .badge.urgent{background:var(--urgent);color:#fff;}
+  .badge.ai{background:var(--ink);color:var(--mb-yellow);display:flex;align-items:center;gap:5px;}
+  .badge.ai .ai-dot{width:6px;height:6px;border-radius:50%;background:var(--mb-yellow);}
+  .badge.new{background:transparent;color:var(--mb-gold);border:1px solid var(--mb-gold);}
+  .sub{font-size:11.5px;color:var(--muted);display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:9px;}
+  .sub .sep{color:var(--line);}
+  .card h3{
+    font-family:"Space Grotesk";font-weight:700;
+    font-size:clamp(16px,4vw,18.5px);letter-spacing:-.01em;
+    margin:0 0 8px;line-height:1.2;
+  }
+  .card p{margin:0;font-size:13.5px;color:#3b3b38;max-width:60ch;}
+
+  /* CTAs */
+  .cta{
+    flex:none;border:none;cursor:pointer;border-radius:10px;
+    font-family:"Space Grotesk";font-weight:600;font-size:13px;
+    padding:10px 15px;display:inline-flex;align-items:center;gap:7px;
+    transition:transform .12s, box-shadow .15s, background .15s;
+  }
+  .cta:active{transform:scale(.97);}
+  .cta.ghost{background:#fff;border:1px solid var(--line);color:var(--ink);}
+  .cta.ghost:hover{border-color:var(--ink);}
+  .cta.solid{background:var(--mb-yellow);color:var(--ink);box-shadow:0 4px 14px rgba(255,196,0,.35);}
+  .cta.solid:hover{background:var(--mb-gold);}
+  .cta.dark{background:var(--ink);color:var(--mb-yellow);}
+  .cta.dark:hover{background:#000;}
+  .cta .arr{transition:transform .15s;}
+  .cta:hover .arr{transform:translateX(3px);}
+  .card-foot{margin-top:12px;font-size:11.5px;color:var(--muted);font-weight:500;}
+  .card-foot .hot{color:var(--urgent);font-weight:600;}
+  .impact-line{font-size:11.5px;color:var(--muted);margin-top:7px;text-align:right;}
+  .impact-line b{color:var(--ink);}
+
+  .disclaimer{
+    max-width:880px;margin:14px auto 0;padding:0 6px;
+    font-size:11px;color:var(--muted);line-height:1.5;text-align:center;
+  }
+
+  /* ---------- toast ---------- */
+  #toast{
+    position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);
+    background:var(--ink);color:#fff;font-size:13px;font-weight:500;
+    padding:11px 18px;border-radius:10px;opacity:0;pointer-events:none;
+    transition:opacity .25s, transform .25s;z-index:50;
+    box-shadow:0 8px 30px rgba(0,0,0,.25);
+  }
+  #toast b{color:var(--mb-yellow);}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:760px){
+    .fx-grid{grid-template-columns:repeat(3,1fr);}
+  }
+  @media (max-width:520px){
+    body{padding:10px 8px 36px;}
+    .shell{border-radius:16px;}
+    .fx-grid{grid-template-columns:repeat(2,1fr);}
+    .tape-fade.l{left:72px;}
+    .card-top{flex-direction:column;}
+    .cta{width:100%;justify-content:center;}
+    .impact-line{text-align:left;}
+    .head-right{order:3;width:100%;justify-content:flex-start;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .tape-track{animation:none;}
+    .live-pill .blip{animation:none;}
+    .flash{animation:none;}
+  }
+</style>
+</head>
+<body>
+
+  <div class="shell">
+    <div class="stripe"></div>
+
+    <!-- Header -->
+    <div class="head">
+      <div class="head-left">
+        <div class="brand-tiger"><span>M</span></div>
+        <h1>Live Market Watch</h1>
+        <span class="desk-badge">CIO Desk</span>
+      </div>
+      <div class="head-right">
+        <span class="dot-live"></span>
+        <span>Last updated <span id="updated">09:14 AM</span></span>
+        <button class="refresh" id="refreshBtn" aria-label="Refresh market data" title="Refresh">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Live moving ticker tape -->
+    <div class="tape" aria-label="Live market ticker">
+      <div class="live-pill"><span class="blip"></span>LIVE</div>
+      <div class="tape-fade l"></div>
+      <div class="tape-fade r"></div>
+      <div class="tape-window">
+        <div class="tape-track" id="tapeTrack"><!-- filled by JS --></div>
+      </div>
+    </div>
+
+    <!-- Currency mix -->
+    <div class="section-lead">
+      <h2>Currency Mix · MYR</h2>
+      <span class="meta">Spot vs. previous close · Kuala Lumpur</span>
+    </div>
+    <div class="fx-grid" id="fxGrid"><!-- filled by JS --></div>
+
+    <!-- Insight cards -->
+    <div class="cards">
+
+      <!-- Fixed income -->
+      <article class="card">
+        <div class="card-top">
+          <div>
+            <div class="badges"><span class="badge fi">Fixed Income</span></div>
+            <div class="sub">Published today · 09:02 <span class="sep">•</span> Wong Wei Loon, CIO</div>
+            <h3>CIO House View — June 2026</h3>
+            <p>With BNM holding the OPR at 2.75% and the Fed expected to ease, the environment favours duration extension. Recommend increasing allocation to 5–7Y MGS and AAA-rated sukuk, underweighting USD short-duration credit, and rotating into MYR investment-grade.</p>
+          </div>
+          <button class="cta ghost" data-toast="Opening the full CIO note">View Full Note <span class="arr">→</span></button>
+        </div>
+      </article>
+
+      <!-- Urgent / AI -->
+      <article class="card urgent">
+        <div class="card-top">
+          <div>
+            <div class="badges">
+              <span class="badge urgent">Urgent</span>
+              <span class="badge ai"><span class="ai-dot"></span>AI Generated</span>
+              <span class="sub" style="margin:0">· AI flagged · 14 clients identified</span>
+            </div>
+            <h3>Fed Impact Analysis — USD Bond Holders</h3>
+            <p>14 Maybank Private clients hold USD-denominated bonds totalling MYR 28M. A softer USD/MYR puts estimated mark-to-market gains at MYR 340K. Recommend locking gains or extending duration before the next FOMC on 18 Jun.</p>
+          </div>
+          <div>
+            <button class="cta solid" data-toast="Loading 14 impacted client profiles">View Impacted Clients <span class="arr">→</span></button>
+            <div class="impact-line">14 clients · <b>MYR 28M</b> exposure</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Sukuk new product -->
+      <article class="card">
+        <div class="card-top">
+          <div>
+            <div class="badges">
+              <span class="badge sukuk">Sukuk</span>
+              <span class="badge new">New Product</span>
+              <span class="sub" style="margin:0">· 5.25% p.a. · 7-year tenor · Min MYR 10,000</span>
+            </div>
+            <h3>Retail Bond IPO — Prasarana Sukuk 2026</h3>
+            <p>AA-rated quasi-sovereign sukuk. A strong fit for income-focused Premier &amp; Private Wealth clients holding idle MYR cash positions seeking stable, Shariah-compliant yield.</p>
+          </div>
+          <div>
+            <button class="cta dark" data-toast="Screening eligible clients">Find Eligible Clients <span class="arr">→</span></button>
+            <div class="card-foot">Closes <span class="hot">27 Jun</span></div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+
+  <p class="disclaimer">
+    Demo dashboard. Market levels are illustrative, anchored to June 2026 reference values (USD/MYR ≈ 4.07, Gold ≈ USD 4,200/oz, Brent ≈ USD 92, MGS 10Y ≈ 3.58%, OPR 2.75%) and tick on a simulated feed — not live trading data.
+  </p>
+
+  <div id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---- base instruments (June 2026 reference levels) ---- */
+  var tickers = [
+    {lbl:"GOLD",     val:4201.40, dp:2, suffix:"/oz", base:4201.40, vol:6},
+    {lbl:"BRENT",    val:92.29,   dp:2, suffix:"",     base:92.29,   vol:0.4},
+    {lbl:"USD/MYR",  val:4.0671,  dp:4, suffix:"",     base:4.0671,  vol:0.004},
+    {lbl:"FBM KLCI", val:1742.6,  dp:1, suffix:"",     base:1742.6,  vol:2.5},
+    {lbl:"MGS 10Y",  val:3.58,    dp:2, suffix:"%",    base:3.58,    vol:0.02, bps:true},
+    {lbl:"OPR",      val:2.75,    dp:2, suffix:"%",    base:2.75,    vol:0,    bps:true},
+    {lbl:"CPO",      val:4185,    dp:0, suffix:"/t",   base:4185,    vol:18}
+  ];
+
+  var fx = [
+    {pair:"USD/MYR", val:4.0671, base:4.0671, dp:4, vol:0.004},
+    {pair:"EUR/MYR", val:4.6985, base:4.6985, dp:4, vol:0.005},
+    {pair:"SGD/MYR", val:3.1620, base:3.1620, dp:4, vol:0.003},
+    {pair:"GBP/MYR", val:5.4410, base:5.4410, dp:4, vol:0.006},
+    {pair:"JPY/MYR", val:0.0277, base:0.0277, dp:4, vol:0.0002},
+    {pair:"CNY/MYR", val:0.5705, base:0.5705, dp:4, vol:0.001}
+  ];
+
+  function fmt(n, dp){
+    return n.toLocaleString("en-MY",{minimumFractionDigits:dp, maximumFractionDigits:dp});
+  }
+
+  /* ---- build ticker tape (duplicated for seamless loop) ---- */
+  var track = document.getElementById("tapeTrack");
+  function tickHTML(t){
+    var diff = t.val - t.base;
+    var dir = diff >= 0 ? "up" : "down";
+    var arrow = diff >= 0 ? "▲" : "▼";
+    var chg;
+    if(t.bps){
+      chg = (diff>=0?"+":"") + Math.round(diff*100) + " bps";
+    } else {
+      var pct = t.base ? (diff/t.base*100) : 0;
+      chg = (pct>=0?"+":"") + pct.toFixed(1) + "%";
+    }
+    return '<div class="tick">'
+      + '<span class="lbl">'+t.lbl+'</span>'
+      + '<span class="val num">'+fmt(t.val,t.dp)+t.suffix+'</span>'
+      + '<span class="chg '+dir+'">'+arrow+' '+chg+'</span>'
+      + '</div>';
+  }
+  function renderTape(){
+    var one = tickers.map(tickHTML).join("");
+    track.innerHTML = one + one; // duplicate
+  }
+
+  /* ---- build currency mix grid ---- */
+  var grid = document.getElementById("fxGrid");
+  function fxHTML(f){
+    var diff = f.val - f.base;
+    var dir = diff >= 0 ? "up" : "down";
+    var arrow = diff >= 0 ? "▲" : "▼";
+    var pct = f.base ? (diff/f.base*100) : 0;
+    return '<div class="fx" data-pair="'+f.pair+'">'
+      + '<div class="pair">'+f.pair+'</div>'
+      + '<div class="rate num">'+fmt(f.val,f.dp)+'</div>'
+      + '<div class="delta '+dir+'">'+arrow+' '+(pct>=0?"+":"")+pct.toFixed(2)+'%</div>'
+      + '</div>';
+  }
+  function renderFx(flash){
+    grid.innerHTML = fx.map(fxHTML).join("");
+    if(flash){
+      [].forEach.call(grid.children, function(el){
+        el.classList.add("flash");
+        setTimeout(function(){el.classList.remove("flash");}, 700);
+      });
+    }
+  }
+
+  /* ---- simulated live tick ---- */
+  function nudge(list){
+    list.forEach(function(t){
+      if(t.vol === 0) return; // policy rates stay put
+      var move = (Math.random()-0.5) * 2 * t.vol;
+      t.val = Math.max(0, t.val + move);
+    });
+  }
+  function ticAll(flash){
+    nudge(tickers); renderTape();
+    nudge(fx); renderFx(flash);
+  }
+
+  /* ---- clock ---- */
+  function pad(n){return n<10?"0"+n:n;}
+  function updateClock(){
+    var d = new Date();
+    var h = d.getHours(), m = pad(d.getMinutes());
+    var ampm = h>=12 ? "PM":"AM";
+    h = h%12; if(h===0)h=12;
+    document.getElementById("updated").textContent = pad(h)+":"+m+" "+ampm;
+  }
+
+  /* ---- toast ---- */
+  var toast = document.getElementById("toast"), toastT;
+  function showToast(msg){
+    toast.innerHTML = msg;
+    toast.classList.add("show");
+    clearTimeout(toastT);
+    toastT = setTimeout(function(){toast.classList.remove("show");}, 1900);
+  }
+  document.querySelectorAll("[data-toast]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      showToast("<b>•</b> " + btn.getAttribute("data-toast") + "…");
+    });
+  });
+
+  /* ---- refresh ---- */
+  var rBtn = document.getElementById("refreshBtn");
+  rBtn.addEventListener("click", function(){
+    rBtn.classList.remove("spin"); void rBtn.offsetWidth; rBtn.classList.add("spin");
+    updateClock(); ticAll(true);
+    showToast("<b>•</b> Market data refreshed");
+  });
+
+  /* ---- init ---- */
+  renderTape();
+  renderFx(false);
+  updateClock();
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(!reduce){
+    setInterval(function(){ ticAll(false); }, 4000);
+  }
+  setInterval(updateClock, 30000);
+})();
+</script>
+</body>
+</html>
