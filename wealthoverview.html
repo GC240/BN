@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Client Wealth Profile</title>
+<style>
+  :root{
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --yellow:#F5C518;
+    --blue:#2f6fd6;
+    --blue-deep:#2E4A9E;
+    --green:#17A865;
+    --ink:#313742;
+    --ink-strong:#2b3140;
+    --muted:#71778a;
+    --eyebrow:#9097a3;
+    --line:#e8eaee;
+    --track:#edeef2;
+    --risk:#dd3b30;
+    --ok:#2e9e5b;
+    --shadow:0 1px 2px rgba(20,25,40,.04);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:transparent;color:var(--ink);
+    font-family:var(--font);
+    font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased;
+    padding:8px;
+  }
+  .eyebrow{
+    font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
+    color:var(--eyebrow);margin:0 0 12px;
+  }
+  .wrap{width:100%;max-width:100%;margin:0;display:flex;flex-direction:column;gap:14px;}
+
+  .top{display:grid;grid-template-columns:320px 1fr;gap:16px;align-items:start;}
+  .col-right{padding-left:24px;border-left:1px solid var(--line);min-width:0;}
+
+  .card{
+    background:#fff;border:1px solid var(--line);border-radius:10px;
+    box-shadow:var(--shadow);padding:16px 16px 14px;min-width:0;
+  }
+
+  .row{
+    display:flex;justify-content:space-between;align-items:flex-start;gap:12px;
+    padding:11px 0;border-bottom:1px solid var(--line);
+  }
+  .row:last-child{border-bottom:none;}
+  .row .lbl{color:var(--muted);flex:none;max-width:48%;}
+  .row .val{text-align:right;font-weight:600;color:var(--ink-strong);overflow-wrap:anywhere;}
+  .val.risk{color:var(--risk);font-weight:600;font-size:12px;letter-spacing:.01em;}
+  .val.ok{color:var(--ok);font-weight:600;}
+  .val.ok .tick{font-weight:700;margin-right:3px;}
+
+  .mandate p{margin:0;color:#5b616b;max-width:66ch;}
+
+  .goals{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:4px;}
+  .goal{background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:15px 15px 13px;min-width:0;}
+  .goal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+  .goal-head h4{
+    margin:0;font-size:12.5px;font-weight:600;color:var(--ink-strong);
+    text-transform:uppercase;letter-spacing:.01em;line-height:1.3;
+  }
+  .goal-date{font-size:10px;color:var(--muted);text-align:right;line-height:1.3;flex:none;font-weight:500;}
+  .goal-target{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin:14px 0 9px;}
+  .goal-target span{color:var(--muted);}
+  .goal-target b{font-size:15px;font-weight:700;color:var(--ink-strong);white-space:nowrap;}
+  .bar{height:7px;background:var(--track);border-radius:20px;overflow:hidden;}
+  .bar .fill{height:100%;background:var(--yellow);border-radius:20px;}
+  .goal-foot{display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--muted);}
+
+  .charts{display:grid;grid-template-columns:0.95fr 1.05fr;gap:20px;align-items:start;}
+  .chart-block{min-width:0;}
+  .chart-cap{font-size:11px;color:var(--muted);font-weight:500;margin:0 0 10px;}
+  .chart-cap b{color:var(--ink-strong);font-weight:600;}
+
+  .donut-area{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+  .donut{
+    width:116px;height:116px;border-radius:50%;flex:none;
+    background:conic-gradient(
+      var(--yellow) 0 45%,
+      var(--blue-deep) 45% 75%,
+      var(--green) 75% 100%
+    );
+    -webkit-mask:radial-gradient(circle 33px at 50% 50%,transparent 98%,#000 100%);
+            mask:radial-gradient(circle 33px at 50% 50%,transparent 98%,#000 100%);
+  }
+  .legend{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px;min-width:120px;}
+  .legend li{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink);}
+  .legend .dot{width:9px;height:9px;border-radius:3px;flex:none;}
+  .legend .pct{margin-left:auto;font-weight:600;color:var(--muted);padding-left:10px;}
+
+  .area-chart{width:100%;height:auto;display:block;}
+  .yoy{font-size:11.5px;color:var(--ok);font-weight:600;margin:6px 0 0;}
+  .yoy span{color:var(--muted);font-weight:500;}
+
+  @media (max-width:860px){
+    .top{grid-template-columns:1fr;}
+    .col-right{padding-left:0;border-left:none;border-top:1px solid var(--line);padding-top:20px;}
+  }
+  @media (max-width:560px){
+    .charts{grid-template-columns:1fr;gap:18px;}
+  }
+  @media (max-width:480px){
+    .goals{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="top">
+      <div class="card">
+        <h3 class="eyebrow">Risk &amp; KYC Profile</h3>
+        <div class="row">
+          <span class="lbl">Assessed Risk tolerance</span>
+          <span class="val risk">AGGRESSIVE GROWTH</span>
+        </div>
+        <div class="row">
+          <span class="lbl">KYC Verification Status</span>
+          <span class="val ok"><span class="tick">&#10003;</span>Verified / Active</span>
+        </div>
+        <div class="row">
+          <span class="lbl">Wealth Source Group</span>
+          <span class="val">Inheritance &amp; Business Dividends</span>
+        </div>
+        <div class="row">
+          <span class="lbl">Model Drift Margin</span>
+          <span class="val ok">3.2% (Within Limit)</span>
+        </div>
+      </div>
+
+      <div class="col-right">
+        <div class="mandate">
+          <h3 class="eyebrow">Core Financial Planning Mandate</h3>
+          <p>Focusing primarily on capital preservation and tax restructuring ahead of children's foreign higher education. Requires diversification away from private businesses into steady liquid instruments.</p>
+        </div>
+
+        <h3 class="eyebrow" style="margin-top:22px">Linked Financial Goals</h3>
+        <div class="goals">
+          <div class="goal">
+            <div class="goal-head">
+              <h4>Foreign Higher Education Funding</h4>
+              <span class="goal-date">Sept<br>2028</span>
+            </div>
+            <div class="goal-target"><span>Target Volume:</span><b>RM 2.5M</b></div>
+            <div class="bar"><div class="fill" style="width:75%"></div></div>
+            <div class="goal-foot"><span>Funding Progress</span><span>75%</span></div>
+          </div>
+          <div class="goal">
+            <div class="goal-head">
+              <h4>Offshore Shariah Capital Growth</h4>
+              <span class="goal-date">Dec<br>2030</span>
+            </div>
+            <div class="goal-target"><span>Target Volume:</span><b>RM 5.0M</b></div>
+            <div class="bar"><div class="fill" style="width:40%"></div></div>
+            <div class="goal-foot"><span>Funding Progress</span><span>40%</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="eyebrow">Current Portfolio Allocation &amp; Value Trend</h3>
+      <div class="charts">
+
+        <div class="chart-block">
+          <p class="chart-cap">Allocation by <b>asset class</b></p>
+          <div class="donut-area">
+            <div class="donut"></div>
+            <ul class="legend">
+              <li><span class="dot" style="background:var(--yellow)"></span> Equities <span class="pct">45%</span></li>
+              <li><span class="dot" style="background:var(--blue-deep)"></span> Fixed Income / Sukuk <span class="pct">30%</span></li>
+              <li><span class="dot" style="background:var(--green)"></span> Cash &amp; Liquid <span class="pct">25%</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="chart-block">
+          <p class="chart-cap">Portfolio value &middot; <b>last 12 months</b></p>
+          <svg class="area-chart" viewBox="0 0 320 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Portfolio value trend, last 12 months">
+            <defs>
+              <linearGradient id="fillGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#2f6fd6" stop-opacity="0.28"/>
+                <stop offset="100%" stop-color="#2f6fd6" stop-opacity="0.02"/>
+              </linearGradient>
+            </defs>
+            <line x1="8" y1="40" x2="316" y2="40" stroke="#eef0f4" stroke-width="1"/>
+            <line x1="8" y1="80" x2="316" y2="80" stroke="#eef0f4" stroke-width="1"/>
+            <line x1="8" y1="120" x2="316" y2="120" stroke="#eef0f4" stroke-width="1"/>
+            <path d="M12,102 L39,96 L67,99 L94,84 L121,79 L148,71 L176,74 L203,60 L230,55 L257,47 L285,39 L312,29 L312,140 L12,140 Z" fill="url(#fillGrad)"/>
+            <path d="M12,102 L39,96 L67,99 L94,84 L121,79 L148,71 L176,74 L203,60 L230,55 L257,47 L285,39 L312,29" fill="none" stroke="#2f6fd6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="312" cy="29" r="4" fill="#2f6fd6" stroke="#fff" stroke-width="2"/>
+          </svg>
+          <p class="yoy">RM 8.4M total <span>&middot; +12.6% YoY</span></p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
