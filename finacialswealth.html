@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Assets & Net Worth Snapshot</title>
+<style>
+  :root{
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --yellow:#F5C518;
+    --green:#13b886;
+    --red:#e8554b;
+    --purple:#4f46e5;
+    --ink:#313742;
+    --ink-strong:#2b3140;
+    --muted:#71778a;
+    --eyebrow:#9097a3;
+    --line:#e8eaee;
+    --dash:#d9dce2;
+    --dot-grey:#b9bdc6;
+    --badge-bg:#eef0f3;
+    --badge-text:#838a95;
+    --shadow:0 1px 2px rgba(20,25,40,.04);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:transparent;color:var(--ink);
+    font-family:var(--font);
+    font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased;
+    padding:8px;
+  }
+  .wrap{width:100%;max-width:100%;margin:0;}
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start;}
+
+  .card{
+    background:#fff;border:1px solid var(--line);border-radius:12px;
+    box-shadow:var(--shadow);padding:18px 20px 16px;min-width:0;
+  }
+  .card-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px;}
+  .card-head h3{
+    font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+    color:var(--eyebrow);margin:0;
+  }
+  .badge{
+    flex:none;font-size:9.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--badge-text);background:var(--badge-bg);padding:5px 10px;border-radius:6px;white-space:nowrap;
+  }
+
+  .row{display:flex;align-items:center;gap:12px;padding:11px 0;}
+  .row .dot{width:9px;height:9px;border-radius:50%;flex:none;}
+  .row .name{font-weight:500;color:var(--ink-strong);min-width:0;}
+  .row .amt{margin-left:auto;font-weight:700;color:var(--ink-strong);white-space:nowrap;padding-left:12px;}
+  .row .amt.pos{color:var(--green);}
+  .row .amt.neg{color:var(--red);}
+
+  .dot-y{background:var(--yellow);}
+  .dot-g{background:var(--dot-grey);}
+  .dot-green{background:var(--green);}
+  .dot-red{background:var(--red);}
+
+  .total{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    margin-top:8px;padding-top:16px;border-top:1px dashed var(--dash);
+  }
+  .total .tlabel{font-size:12px;font-weight:700;letter-spacing:.02em;color:var(--ink-strong);text-transform:uppercase;}
+  .total .tval{font-size:22px;font-weight:800;letter-spacing:-.01em;white-space:nowrap;}
+  .tval.green{color:var(--green);}
+  .tval.purple{color:var(--purple);}
+
+  @media (max-width:560px){
+    .duo{grid-template-columns:1fr;gap:14px;}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="duo">
+
+      <div class="card">
+        <div class="card-head">
+          <h3>Assets &amp; Net Worth Snapshot</h3>
+          <span class="badge">Annual Estimate</span>
+        </div>
+
+        <div class="row">
+          <span class="dot dot-y"></span>
+          <span class="name">Maybank Investment &amp; Deposit Portfolio</span>
+          <span class="amt">RM 6.80M</span>
+        </div>
+        <div class="row">
+          <span class="dot dot-g"></span>
+          <span class="name">Family Business Equity (Seri Enterprises)</span>
+          <span class="amt">RM 3.50M</span>
+        </div>
+        <div class="row">
+          <span class="dot dot-y"></span>
+          <span class="name">Investment Property &mdash; Kuala Lumpur</span>
+          <span class="amt">RM 2.50M</span>
+        </div>
+        <div class="row">
+          <span class="dot dot-g"></span>
+          <span class="name">Offshore Property &mdash; London</span>
+          <span class="amt">RM 1.50M</span>
+        </div>
+
+        <div class="total">
+          <span class="tlabel">Computed Total Assets</span>
+          <span class="tval green">RM 14.30M</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h3>Inflows, Expenses &amp; Liabilities</h3>
+          <span class="badge">Self-Declared</span>
+        </div>
+
+        <div class="row">
+          <span class="dot dot-green"></span>
+          <span class="name">Annual Income (Salary + Business Dividends)</span>
+          <span class="amt pos">RM 4,500,000</span>
+        </div>
+        <div class="row">
+          <span class="dot dot-red"></span>
+          <span class="name">Living &amp; Lifestyle Expenses</span>
+          <span class="amt neg">RM 1,500,000</span>
+        </div>
+        <div class="row">
+          <span class="dot dot-red"></span>
+          <span class="name">Loan &amp; Financing Servicing</span>
+          <span class="amt neg">RM 345,600</span>
+        </div>
+
+        <div class="total">
+          <span class="tlabel">Annual Surplus Cash</span>
+          <span class="tval purple">RM 2,654,400</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>
