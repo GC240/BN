@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Family Structure Unit — Household Hierarchy</title>
+<style>
+  :root{
+    --font:-"Poppins",BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --yellow:#F5C518; --yellow-deep:#E0AD00;
+    --indigo:#4f46e5; --indigo-bg:#e9eafb;
+    --yellow-bg:#FFF1C2; --yellow-text:#7a5a00;
+    --ink:#313742; --ink-strong:#1a1a1a; --muted:#71778a; --eyebrow:#9097a3;
+    --line:#e8eaee; --conn:#cdd2da; --shadow:0 1px 2px rgba(20,25,40,.04);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:transparent;color:var(--ink);font-family:var(--font);font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased;padding:8px;}
+  .wrap{width:100%;max-width:100%;margin:0;}
+  .section-title{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--eyebrow);margin:0 0 4px;}
+  .section-sub{font-size:12.5px;color:var(--muted);margin:0 0 6px;max-width:80ch;}
+
+  .tree-scroll{overflow-x:auto;padding:16px 4px 6px;}
+  .tree{display:inline-block;min-width:100%;}
+  .tree ul{position:relative;padding:28px 0 0;display:flex;justify-content:center;margin:0;}
+  .tree > ul{padding-top:0;}
+  .tree li{list-style:none;position:relative;padding:28px 18px 0;text-align:center;}
+  .tree li::before,.tree li::after{content:'';position:absolute;top:0;width:50%;height:28px;border-top:2px solid var(--conn);}
+  .tree li::before{right:50%;border-right:2px solid var(--conn);}
+  .tree li::after{left:50%;}
+  .tree li:only-child{padding-top:0;}
+  .tree li:only-child::before,.tree li:only-child::after{display:none;}
+  .tree li:first-child::before{border:0 none;}
+  .tree li:last-child::after{border:0 none;}
+  .tree li:last-child::before{border-right:2px solid var(--conn);}
+  .tree ul ul::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-1px);width:2px;height:28px;background:var(--conn);}
+
+  .couple{display:inline-flex;align-items:center;justify-content:center;}
+  .mlink{width:30px;height:2px;background:var(--conn);flex:none;}
+
+  .node{display:inline-block;text-align:left;vertical-align:top;width:262px;background:#fff;border:1px solid var(--line);border-radius:13px;box-shadow:var(--shadow);padding:15px 16px 16px;}
+  .node.primary{background:linear-gradient(180deg,#FFFBEC,#fff);border-color:#F2E2A8;}
+  .node.spouse{background:linear-gradient(180deg,#FFFCF1,#fff);}
+
+  .node-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px;}
+  .badge{font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;padding:5px 9px;border-radius:6px;white-space:nowrap;}
+  .badge.primary{background:var(--ink-strong);color:var(--yellow);}
+  .badge.spouse{background:var(--yellow-bg);color:var(--yellow-text);}
+  .badge.dependent{background:var(--indigo-bg);color:var(--indigo);}
+  .age{font-size:11.5px;color:var(--muted);font-weight:500;white-space:nowrap;}
+  .age b{color:var(--ink-strong);font-weight:700;}
+
+  .node-name{font-size:14px;font-weight:700;color:var(--ink-strong);margin:0 0 5px;line-height:1.3;}
+  .node-desc{font-size:12px;color:var(--muted);margin:0;}
+  .node-desc b{color:var(--ink-strong);font-weight:600;}
+
+  /* improved View Contact button — yellow gradient, soft shadow, lift on hover */
+  .btn360{
+    display:inline-flex;align-items:center;gap:7px;margin-top:14px;
+    background:linear-gradient(135deg,#F7CE2E 0%,#E8B400 100%);
+    color:#1a1a1a;font-weight:700;font-size:12px;letter-spacing:.01em;
+    padding:9px 16px;border-radius:9px;text-decoration:none;border:none;cursor:pointer;
+    box-shadow:0 3px 8px rgba(224,173,0,.35);
+    transition:transform .15s,box-shadow .15s,filter .15s;
+  }
+  .btn360:hover{filter:brightness(.97);box-shadow:0 6px 16px rgba(224,173,0,.48);transform:translateY(-1px);}
+  .btn360:active{transform:translateY(0);}
+  .btn360 .arr{transition:transform .15s;}
+  .btn360:hover .arr{transform:translateX(3px);}
+
+  .current-tag{display:inline-block;margin-top:14px;font-size:11px;font-weight:600;color:var(--muted);background:#f1f2f4;padding:8px 13px;border-radius:9px;}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h3 class="section-title">Family Structure Unit</h3>
+    <p class="section-sub">Critical details for intergenerational wealth planning, legacy, estate execution, and joint-accounts authorization.</p>
+
+    <div class="tree-scroll">
+      <div class="tree">
+        <ul>
+          <li>
+            <div class="couple">
+              <div class="node primary">
+                <div class="node-top"><span class="badge primary">Account Holder</span><span class="age">Age: <b>54</b></span></div>
+                <h4 class="node-name">Datin Aishah Roslan</h4>
+                <p class="node-desc">Primary account holder &middot; Maybank Private Banking.</p>
+                <span class="current-tag">Current 360 record</span>
+              </div>
+
+              <span class="mlink"></span>
+
+              <div class="node spouse">
+                <div class="node-top"><span class="badge spouse">Spouse Unit</span><span class="age">Age: <b>56</b></span></div>
+                <h4 class="node-name">Mustapha Kok Leong</h4>
+                <p class="node-desc">Authorized for joint-account holdings under internal parameters.</p>
+                <a class="btn360" target="_top" href="https://presales.businessbywire.com/appgb8/businessnext/detail/Contact?x=hk84u4dpaa5cmpgylmr9wtdxay8bal3v2d64aewgxg77xuhbppkggsrztazkknghp3my2wafxmkl2rr76x5yrq6ttleqwcgk3b2suv667vkvfvwgasrnupcu5ghxrr5s4tp2s7hcvubr8hf2msppgraznznajfu6q2tmyjff8refxq73ynaj6n4q7lu3g4mdpn32mqzk4vxg4sph6ncgq48bjke2b69nx947h82">View Contact <span class="arr">&rarr;</span></a>
+              </div>
+            </div>
+
+            <ul>
+              <li>
+                <div class="node">
+                  <div class="node-top"><span class="badge dependent">Dependent</span><span class="age">Age: <b>21</b></span></div>
+                  <h4 class="node-name">Sophia Liza</h4>
+                  <p class="node-desc">Relationship status: <b>Daughter</b>.</p>
+                  <a class="btn360" target="_top" href="https://presales.businessbywire.com/appgb8/businessnext/detail/Contact?x=hk84u4dpaa5cmpgylmr9wtdxay8bal3v2d64aewgxg77xuhbppkggsrztazkknghp3my2wafxmkl2rr76x5yrq6ttleqwcgk3b2suv667vkvfvwgasrnupcu5ghxrr5s4tp2s7hcvubr8hf2msppgraznznajfu6q2tmyjff8refxq73ynaj6n4q7lu3g4mdb46thchg7vtwh8gxyyv93g4b5qlanm4832gmrv2">View Contact <span class="arr">&rarr;</span></a>
+                </div>
+              </li>
+              <li>
+                <div class="node">
+                  <div class="node-top"><span class="badge dependent">Dependent</span><span class="age">Age: <b>18</b></span></div>
+                  <h4 class="node-name">Mustafa Ahmed</h4>
+                  <p class="node-desc">Relationship status: <b>Son</b>.</p>
+                  <a class="btn360" target="_top" href="https://presales.businessbywire.com/appgb8/businessnext/detail/Contact?x=hk84u4dpaa5cmpgylmr9wtdxay8bal3v2d64aewgxg77xuhbppkggsrztazkknghp3my2wafxmkl2rr76x5yrq6ttleqwcgk3b2suv667vkvfvwgasrnupcu5ghxrr5s4tp2s7hcvubr8hf2msppgraznznajfu6q2tmyjff8refxq73ynaj6n4q7lu3g4md8q5zzl9l38n47r9kl9veed82neb5hnpppebfdla">View Contact <span class="arr">&rarr;</span></a>
+                </div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
