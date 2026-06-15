@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Financial Goal Planner — Maybank Private</title>
+<style>
+  :root{
+    --font:-Poppins,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --yellow:#F5C518; --yellow-deep:#E0AD00;
+    --blue:#2f6fd6; --ink:#313742; --ink-strong:#1a1a1a; --amt:#3a3f48;
+    --muted:#71778a; --eyebrow:#9097a3;
+    --line:#e8eaee; --track:#edeef2;
+    --green:#17A865; --ok:#2e9e5b; --shadow:0 1px 2px rgba(20,25,40,.04),0 8px 22px rgba(20,25,40,.05);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:transparent;color:var(--ink);font-family:var(--font);font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased;padding:10px;}
+  .wrap{max-width:980px;margin:0 auto;}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:18px 20px;}
+  .eyebrow{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--eyebrow);margin:0;}
+
+  /* ---- summary dashlets (upgraded) ---- */
+  .sumr{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px;}
+  .sum{display:flex;align-items:center;gap:13px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:15px 16px;position:relative;overflow:hidden;}
+  .sum::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;}
+  .sum.s1::before{background:var(--yellow);} .sum.s2::before{background:var(--green);}
+  .sum.s3::before{background:var(--blue);} .sum.s4::before{background:#6366f1;}
+  .sicon{width:42px;height:42px;border-radius:11px;flex:none;display:grid;place-items:center;}
+  .sicon svg{width:20px;height:20px;}
+  .s1 .sicon{background:#FFF7DA;color:#9a6b00;} .s2 .sicon{background:#e7f6ec;color:#1c7a44;}
+  .s4 .sicon{background:#ececfb;color:#4f46e5;}
+  .ring{width:46px;height:46px;border-radius:50%;flex:none;display:grid;place-items:center;position:relative;}
+  .ring::after{content:"";position:absolute;inset:5px;background:#fff;border-radius:50%;}
+  .ring span{position:relative;z-index:1;font-size:12px;font-weight:800;color:var(--ink-strong);}
+  .sum .sl{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:0;}
+  .sum .sv{font-size:20px;font-weight:800;color:var(--ink-strong);margin:2px 0 0;letter-spacing:-.01em;}
+  .sum .sv.amt{color:var(--amt);}
+
+  /* ---- journey ---- */
+  .jhead{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:18px;}
+  .jhead .sub{font-size:12.5px;color:var(--muted);margin:5px 0 0;}
+  .create-btn{flex:none;display:inline-flex;align-items:center;gap:8px;cursor:pointer;border:none;background:var(--yellow);color:var(--ink-strong);font-family:var(--font);font-weight:700;font-size:13px;padding:10px 17px;border-radius:22px;transition:background .15s;}
+  .create-btn:hover{background:var(--yellow-deep);}
+
+  .stages{display:grid;grid-template-columns:repeat(5,1fr);gap:13px;}
+  .stage{position:relative;border:1px solid var(--line);border-radius:13px;background:#fcfcfd;padding:20px 11px 15px;text-align:center;cursor:pointer;transition:.15s;}
+  .stage:hover{border-color:var(--yellow);background:#fff;}
+  .stage .num{width:36px;height:36px;border-radius:50%;background:#edeef1;color:#a9adb6;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 11px;}
+  .stage .sn{font-size:13px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:#a9adb6;margin:0 0 4px;}
+  .stage .sd{font-size:10.5px;color:#b3b7bf;margin:0;line-height:1.35;}
+  .stage.active{border:2px solid var(--yellow);background:linear-gradient(180deg,#FFFBEB,#fff);box-shadow:0 6px 18px rgba(245,197,24,.16);}
+  .stage.active .num{background:var(--yellow);color:var(--ink-strong);}
+  .stage.active .sn{color:var(--ink-strong);} .stage.active .sd{color:var(--ink);}
+  .sbadge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--yellow);color:var(--ink-strong);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:6px;display:none;white-space:nowrap;}
+  .stage.active .sbadge{display:block;}
+
+  /* ---- goal plan ---- */
+  .goal{border-bottom:1px solid var(--line);padding:18px 0;}
+  .goal:first-of-type{padding-top:6px;} .goal:last-child{border-bottom:none;padding-bottom:4px;}
+  .goal-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px;}
+  .goal-title{font-size:14.5px;font-weight:600;color:var(--blue);margin:0;}
+  .goal-stage{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8a6300;background:#FFF4CC;padding:3px 9px;border-radius:5px;margin-left:9px;vertical-align:middle;}
+  .goal-edit{flex:none;border:1px solid var(--line);background:#fff;color:var(--ink-strong);font-weight:600;font-size:12px;padding:7px 16px;border-radius:18px;cursor:pointer;}
+  .goal-edit:hover{border-color:var(--ink-strong);background:#fafafa;}
+  .goal-grid{display:grid;grid-template-columns:1fr 1fr 1fr 150px;gap:16px;align-items:center;}
+  .gcell .gl{font-size:10.5px;color:var(--muted);margin:0 0 3px;}
+  .gcell .gv{font-size:14px;font-weight:700;color:var(--amt);margin:0;}
+  .gprog .bar{height:8px;background:var(--track);border-radius:20px;overflow:hidden;}
+  .gprog .bar .fill{height:100%;background:var(--yellow);border-radius:20px;transition:width .4s;}
+  .gprog .pf{text-align:right;font-size:11px;color:var(--muted);font-weight:700;margin:6px 0 0;}
+  .funded-via{margin-top:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .fv-label{font-size:10px;color:var(--eyebrow);text-transform:uppercase;letter-spacing:.05em;margin:0;}
+  .sol-tag{font-size:11px;font-weight:600;color:#3a3f48;background:#FFF7DA;border:1px solid #F2E2A8;padding:4px 11px;border-radius:16px;}
+
+  /* ---- modal ---- */
+  .overlay{position:fixed;inset:0;background:rgba(20,22,30,.45);display:none;align-items:center;justify-content:center;z-index:100;padding:16px;}
+  .overlay.show{display:flex;}
+  .modal{background:#fff;border-radius:16px;width:100%;max-width:500px;max-height:92vh;overflow-y:auto;padding:24px 26px 22px;box-shadow:0 24px 60px rgba(0,0,0,.3);}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:16px;}
+  .modal-head h3{font-size:15px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin:0;color:var(--ink-strong);}
+  .modal-head .x{color:var(--blue);cursor:pointer;font-weight:500;}
+  .field{margin-bottom:14px;} .field label{display:block;font-size:12px;font-weight:700;margin-bottom:6px;color:var(--ink-strong);}
+  .field input{width:100%;font-family:var(--font);font-size:13.5px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fcfcfd;}
+  .field input:focus{outline:none;border-color:var(--yellow);background:#fff;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .sol-pick{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .sol-opt{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:12px;cursor:pointer;background:#fcfcfd;}
+  .sol-opt input{width:auto;} .sol-opt.on{border-color:var(--yellow-deep);background:#FFFBEC;}
+  .map-note{font-size:11.5px;color:var(--muted);margin:4px 0 14px;} .map-note b{color:var(--yellow-deep);}
+  .modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:8px;}
+  .btn{border:none;border-radius:22px;font-family:var(--font);font-weight:700;font-size:13px;padding:10px 18px;cursor:pointer;}
+  .btn-y{background:var(--yellow);color:var(--ink-strong);} .btn-y:hover{background:var(--yellow-deep);}
+  .btn-ghost{background:#fff;border:1px solid var(--line);color:var(--ink);font-weight:600;}
+  #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--ink-strong);color:#fff;font-size:13px;padding:11px 18px;border-radius:10px;opacity:0;pointer-events:none;transition:.25s;z-index:200;}
+  #toast b{color:var(--yellow);} #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  @media (max-width:820px){ .sumr{grid-template-columns:1fr 1fr;} .stages{grid-template-columns:repeat(3,1fr);} }
+  @media (max-width:620px){ .goal-grid{grid-template-columns:1fr 1fr;} .gprog{grid-column:1/-1;} }
+  @media (max-width:520px){ .stages{grid-template-columns:repeat(2,1fr);} .sol-pick{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- upgraded summary dashlets -->
+    <div class="sumr" id="summary"></div>
+
+    <!-- journey -->
+    <div class="card" style="margin-bottom:16px;">
+      <div class="jhead">
+        <div>
+          <p class="eyebrow">Interactive Financial Journey Stage &amp; Goals</p>
+          <p class="sub">Click on any financial stage to mark progress, automatically update risk models, and map goals.</p>
+        </div>
+        <button class="create-btn" id="createBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+          Create Custom Financial Goal
+        </button>
+      </div>
+      <div class="stages" id="stages"></div>
+    </div>
+
+    <!-- goal plan -->
+    <div class="card">
+      <p class="eyebrow" style="margin-bottom:6px;">Goal Plan</p>
+      <div id="goalsList"></div>
+    </div>
+
+  </div>
+
+  <!-- modal -->
+  <div class="overlay" id="overlay"><div class="modal">
+    <div class="modal-head"><h3 id="mTitle">Map Custom Goal Target</h3><span class="x" id="mClose">Close</span></div>
+    <div class="field"><label>Goal Metric Target Title</label><input id="fTitle" placeholder="e.g. Foreign Higher Education Funding" /></div>
+    <div class="field"><label>Target Amount Value</label><input id="fAmt" placeholder="e.g. RM 2.5M" /></div>
+    <div class="row2">
+      <div class="field"><label>Target Maturity</label><input id="fMat" placeholder="e.g. Sept 2028" /></div>
+      <div class="field"><label>Funding Progress %</label><input id="fFund" type="number" min="0" max="100" value="10" /></div>
+    </div>
+    <div class="field"><label>Funded via — Maybank Private Solutions</label><div class="sol-pick" id="solPick"></div></div>
+    <p class="map-note">Life-stage: <b id="mapStage">PROTECTION</b></p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="mDel" style="margin-right:auto;display:none;color:#d23e3e;">Delete</button>
+      <button class="btn btn-ghost" id="mCancel">Cancel</button>
+      <button class="btn btn-y" id="mSave">Save &amp; Propagate</button>
+    </div>
+  </div></div>
+  <div id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+  var SOLUTIONS=["Structured Investments","Unit Trust Funds","Fixed Income — Bonds / Sukuk","Dual-Currency Investments","Equity / Commodity-Linked","Initial Public Offerings","Succession Planning","Smart Wealth","Islamic Wealth Management"];
+
+  var stages=[
+    {n:"01",name:"Accumulation",desc:"Growth & Capital Inception"},
+    {n:"02",name:"Protection",desc:"Insurance & Tax Shielding"},
+    {n:"03",name:"Education",desc:"Offshore Funding Strategy"},
+    {n:"04",name:"Retirement",desc:"Sustained Annuity Inflows"},
+    {n:"05",name:"Legacy",desc:"Intergenerational Estates"}
+  ];
+  var active=1; // Protection active (per reference)
+
+  var goals=[
+    {id:1,title:"Foreign Higher Education Funding",amount:2500000,maturity:"Sept 2028",funding:75,stage:"Education",sols:["Unit Trust Funds","Fixed Income — Bonds / Sukuk"]},
+    {id:2,title:"Offshore Shariah Capital Growth",amount:5000000,maturity:"Dec 2030",funding:40,stage:"Accumulation",sols:["Islamic Wealth Management","Structured Investments","Equity / Commodity-Linked"]},
+    {id:3,title:"Retirement Wealth Fund",amount:12000000,maturity:"2034",funding:55,stage:"Retirement",sols:["Structured Investments","Fixed Income — Bonds / Sukuk","Dual-Currency Investments"]},
+    {id:4,title:"Legacy & Estate Planning",amount:8000000,maturity:"2038",funding:30,stage:"Legacy",sols:["Succession Planning","Smart Wealth"]}
+  ];
+  var nextId=5, editId=null;
+
+  function fmtM(n){var m=n/1e6;return "RM "+(m%1===0?m.toFixed(0):m.toFixed(2))+"M";}
+  function fmt(n){return "RM "+Math.round(n).toLocaleString("en-MY");}
+  function parseAmt(s){if(!s)return null;s=String(s).toUpperCase().replace(/[^0-9.MK]/g,"");var m=1;if(s.slice(-1)==="M"){m=1e6;s=s.slice(0,-1);}else if(s.slice(-1)==="K"){m=1e3;s=s.slice(0,-1);}var n=parseFloat(s);return isNaN(n)||n<=0?null:Math.round(n*m);}
+
+  var stagesEl=document.getElementById("stages"),goalsEl=document.getElementById("goalsList"),sumEl=document.getElementById("summary");
+
+  function renderSummary(){
+    var tt=0,tf=0;goals.forEach(function(g){tt+=g.amount;tf+=g.amount*g.funding/100;});
+    var pct=tt?Math.round(tf/tt*100):0;
+    sumEl.innerHTML=
+      '<div class="sum s1"><div class="sicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg></div><div><p class="sl">Total Goal Value</p><p class="sv amt">'+fmtM(tt)+'</p></div></div>'
+     +'<div class="sum s2"><div class="sicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></div><div><p class="sl">Total Funded</p><p class="sv amt">'+fmtM(tf)+'</p></div></div>'
+     +'<div class="sum s3"><div class="ring" style="background:conic-gradient(var(--yellow) 0 '+pct+'%, var(--track) '+pct+'% 100%)"><span>'+pct+'%</span></div><div><p class="sl">Overall Progress</p><p class="sv">'+pct+'%</p></div></div>'
+     +'<div class="sum s4"><div class="sicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg></div><div><p class="sl">Active Goals</p><p class="sv">'+goals.length+'</p></div></div>';
+  }
+  function renderStages(){
+    stagesEl.innerHTML=stages.map(function(s,i){
+      return '<div class="stage'+(i===active?" active":"")+'" data-i="'+i+'"><span class="sbadge">Active Stage</span><div class="num">'+s.n+'</div><p class="sn">'+s.name+'</p><p class="sd">'+s.desc+'</p></div>';
+    }).join("");
+  }
+  stagesEl.addEventListener("click",function(e){var el=e.target.closest(".stage");if(!el)return;active=+el.dataset.i;renderStages();document.getElementById("mapStage").textContent=stages[active].name.toUpperCase();toast("Risk model recalibrated &mdash; <b>"+stages[active].name+"</b> stage");});
+
+  function renderGoals(){
+    goalsEl.innerHTML=goals.map(function(g){
+      var actual=g.amount*g.funding/100;
+      var tags=(g.sols&&g.sols.length)?g.sols.map(function(s){return '<span class="sol-tag">'+s+'</span>';}).join(""):'<span class="sol-tag" style="background:#f1f2f4;border-color:#e3e5ea;color:#9097a3;">No solution mapped</span>';
+      return '<div class="goal">'
+        +'<div class="goal-top"><h4 class="goal-title">'+g.title+'<span class="goal-stage">'+g.stage+'</span></h4><button class="goal-edit" data-id="'+g.id+'">Edit / Update</button></div>'
+        +'<div class="goal-grid">'
+          +'<div class="gcell"><p class="gl">Target Value</p><p class="gv">'+fmt(g.amount)+'</p></div>'
+          +'<div class="gcell"><p class="gl">Actual Value</p><p class="gv">'+fmt(actual)+'</p></div>'
+          +'<div class="gcell"><p class="gl">Target Maturity</p><p class="gv">'+g.maturity+'</p></div>'
+          +'<div class="gcell gprog"><div class="bar"><div class="fill" style="width:'+g.funding+'%"></div></div><p class="pf">'+g.funding+'%</p></div>'
+        +'</div>'
+        +'<div class="funded-via"><p class="fv-label">Funded via:</p>'+tags+'</div>'
+      +'</div>';
+    }).join("");
+  }
+  goalsEl.addEventListener("click",function(e){var b=e.target.closest(".goal-edit");if(b)openModal(+b.dataset.id);});
+
+  var ov=document.getElementById("overlay"),fT=document.getElementById("fTitle"),fA=document.getElementById("fAmt"),fM=document.getElementById("fMat"),fF=document.getElementById("fFund"),mDel=document.getElementById("mDel"),mapStage=document.getElementById("mapStage"),mTitle=document.getElementById("mTitle"),solPick=document.getElementById("solPick");
+  function renderSolPick(sel){
+    solPick.innerHTML=SOLUTIONS.map(function(s){var on=sel.indexOf(s)>-1;return '<label class="sol-opt'+(on?' on':'')+'"><input type="checkbox" value="'+s+'"'+(on?' checked':'')+'/> '+s+'</label>';}).join("");
+    solPick.querySelectorAll("input").forEach(function(inp){inp.addEventListener("change",function(){inp.closest(".sol-opt").classList.toggle("on",inp.checked);});});
+  }
+  function selectedSols(){return Array.prototype.slice.call(solPick.querySelectorAll("input:checked")).map(function(i){return i.value;});}
+  function openModal(id){
+    editId=id||null;mapStage.textContent=stages[active].name.toUpperCase();
+    if(editId){var g=goals.find(function(x){return x.id===editId;});mTitle.textContent="Update Goal Target";fT.value=g.title;fA.value=fmtM(g.amount);fM.value=g.maturity;fF.value=g.funding;mapStage.textContent=g.stage.toUpperCase();renderSolPick(g.sols||[]);mDel.style.display="inline";}
+    else{mTitle.textContent="Map Custom Goal Target";fT.value="";fA.value="";fM.value="";fF.value=10;renderSolPick([]);mDel.style.display="none";}
+    ov.classList.add("show");fT.focus();
+  }
+  function closeModal(){ov.classList.remove("show");}
+  document.getElementById("createBtn").addEventListener("click",function(){openModal(null);});
+  document.getElementById("mClose").addEventListener("click",closeModal);
+  document.getElementById("mCancel").addEventListener("click",closeModal);
+  ov.addEventListener("click",function(e){if(e.target===ov)closeModal();});
+  document.getElementById("mSave").addEventListener("click",function(){
+    var t=fT.value.trim(),a=parseAmt(fA.value);if(!t||!a){toast("Enter a title and valid amount");return;}
+    var mat=fM.value.trim()||"TBD",fund=Math.max(0,Math.min(100,parseInt(fF.value,10)||0)),sols=selectedSols();
+    if(editId){var g=goals.find(function(x){return x.id===editId;});g.title=t;g.amount=a;g.maturity=mat;g.funding=fund;g.sols=sols;toast("Goal updated &mdash; <b>"+t+"</b>");}
+    else{goals.push({id:nextId++,title:t,amount:a,maturity:mat,funding:fund,stage:stages[active].name,sols:sols});toast("Goal saved &amp; propagated &mdash; <b>"+t+"</b>");}
+    // TODO: PUT/POST goal + mapped solutions to your Maybank CRM goals API here.
+    renderGoals();renderSummary();closeModal();
+  });
+  mDel.addEventListener("click",function(){goals=goals.filter(function(x){return x.id!==editId;});renderGoals();renderSummary();closeModal();toast("Goal removed");});
+
+  var tEl=document.getElementById("toast"),tT;
+  function toast(m){tEl.innerHTML=m;tEl.classList.add("show");clearTimeout(tT);tT=setTimeout(function(){tEl.classList.remove("show");},2200);}
+
+  renderSummary();renderStages();renderGoals();
+})();
+</script>
+</body>
+</html>
