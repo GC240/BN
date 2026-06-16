@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Content Performance — Maybank Private Banking</title>
+<style>
+  :root{
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --ink-strong:#1f242c; --label:#8b909b; --sub:#9097a3;
+    --line:#e7e9ee; --green:#17A865; --red:#dd3b30;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:transparent;color:#313742;font-family:var(--font);font-size:13px;line-height:1.45;-webkit-font-smoothing:antialiased;padding:8px;}
+  .head{display:flex;align-items:center;gap:8px;margin:0 2px 12px;}
+  .live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(23,168,101,.5);animation:pulse 1.8s infinite;}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(23,168,101,.45);}70%{box-shadow:0 0 0 7px rgba(23,168,101,0);}100%{box-shadow:0 0 0 0 rgba(23,168,101,0);}}
+  .head .h-t{font-size:12px;font-weight:600;color:#6b7280;letter-spacing:.02em;}
+  .head .h-s{font-size:11px;color:var(--sub);}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(192px,1fr));gap:13px;}
+  .dash{position:relative;border:1px solid var(--line);border-radius:13px;padding:15px 15px 14px;background:transparent;transition:background .15s,border-color .15s,box-shadow .15s;}
+  .dash:hover{background:rgba(18,22,30,.018);border-color:#dde0e6;box-shadow:0 4px 14px rgba(20,25,40,.05);}
+  .ic{position:absolute;top:13px;right:13px;width:31px;height:31px;border-radius:9px;display:grid;place-items:center;}
+  .ic svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .label{font-size:10.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--label);margin:0 0 11px;padding-right:38px;line-height:1.3;min-height:26px;}
+  .value{font-size:23px;font-weight:800;color:var(--ink-strong);margin:0;letter-spacing:-.02em;transition:color .25s;}
+  .value.flash{color:#0d9488;}
+  .delta{display:flex;align-items:center;gap:5px;font-size:12.5px;font-weight:700;margin:7px 0 1px;}
+  .delta .ar{font-size:13px;}
+  .delta.up{color:var(--green);} .delta.down{color:var(--red);}
+  .sub{font-size:11px;color:var(--sub);margin:0;}
+
+  @media (max-width:520px){ .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));} .value{font-size:20px;} }
+</style>
+</head>
+<body>
+  <div class="head">
+    <span class="h-t">Content Performance</span>
+    <span class="h-s">&middot; vs last quarter</span>
+  </div>
+  <div class="grid" id="grid"></div>
+
+<script>
+(function(){
+  "use strict";
+  // icon library (feather-style)
+  var IC={
+    megaphone:'<path d="m3 11 18-5v12L3 14z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>',
+    play:'<circle cx="12" cy="12" r="9"/><path d="M10 8.5 16 12l-6 3.5z" fill="currentColor" stroke="none"/>',
+    calendar:'<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+    funnel:'<path d="M3 4h18l-7 8v6l-4 2v-8z"/>',
+    trend:'<polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/>',
+    wallet:'<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M16 12h4"/>',
+    users:'<circle cx="9" cy="8" r="3"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><path d="M16 5.5a3 3 0 0 1 0 5"/><path d="M19.5 20a5.5 5.5 0 0 0-3-4.9"/>',
+    cursor:'<path d="M5 3l6.5 17 2.2-6.8L20.5 11z"/>',
+    heart:'<path d="M12 20S4 15 4 9.2A3.8 3.8 0 0 1 12 7a3.8 3.8 0 0 1 8 2.2C20 15 12 20 12 20z"/>',
+    eye:'<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+    bars:'<line x1="6" y1="20" x2="6" y2="12"/><line x1="12" y1="20" x2="12" y2="5"/><line x1="18" y1="20" x2="18" y2="14"/>',
+    mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 7 8.5 6 8.5-6"/>'
+  };
+
+  // metrics: cur = current, base = last quarter, goodUp = higher is better
+  var M=[
+    {k:"camp", label:"Total Campaigns",            cur:34,     base:28,     type:"count",  goodUp:true,  amp:0,    ic:"megaphone", c:"#B58A00", bg:"#FFF6D6"},
+    {k:"active",label:"Active Campaigns",          cur:6,      base:4,      type:"count",  goodUp:true,  amp:0,    ic:"play",      c:"#17A865", bg:"#E6F6EC"},
+    {k:"sched", label:"Scheduled Campaigns",       cur:12,     base:9,      type:"count",  goodUp:true,  amp:0,    ic:"calendar",  c:"#2f6fd6", bg:"#E7F0FB"},
+    {k:"conv",  label:"Content → Lead Conversion", cur:28.0,   base:24.0,   type:"pct",    goodUp:true,  amp:.18,  ic:"funnel",    c:"#6366f1", bg:"#ECECFB"},
+    {k:"aum",   label:"AUM Influenced",            cur:142.6,  base:116.0,  type:"cM",     goodUp:true,  amp:.6,   ic:"trend",     c:"#0d9488", bg:"#E2F6F2"},
+    {k:"cost",  label:"Content Production Cost",   cur:318,    base:388,    type:"cK",     goodUp:false, amp:1.2,  ic:"wallet",    c:"#e07b1a", bg:"#FDEFE3"},
+    {k:"mql",   label:"MQLs Generated",            cur:1240,   base:1030,   type:"count",  goodUp:true,  amp:6,    ic:"users",     c:"#2f6fd6", bg:"#E7F0FB"},
+    {k:"ctr",   label:"Click-Through Rate",        cur:7.2,    base:6.1,    type:"pct",    goodUp:true,  amp:.06,  ic:"cursor",    c:"#6366f1", bg:"#ECECFB"},
+    {k:"eng",   label:"Engagement Rate",           cur:11.5,   base:9.8,    type:"pct",    goodUp:true,  amp:.08,  ic:"heart",     c:"#db2777", bg:"#FBE9F0"},
+    {k:"imp",   label:"Impressions / Reach",       cur:154000, base:132000, type:"count",  goodUp:true,  amp:280,  ic:"eye",       c:"#0d9488", bg:"#E2F6F2"},
+    {k:"roas",  label:"Return on Content Spend",   cur:5.5,    base:4.5,    type:"mult",   goodUp:true,  amp:.05,  ic:"bars",      c:"#17A865", bg:"#E6F6EC"},
+    {k:"unsub", label:"Unsubscribe Rate",          cur:0.12,   base:0.14,   type:"pct",    goodUp:false, amp:.003, ic:"mail",      c:"#64748b", bg:"#EEF0F3"}
+  ];
+
+  function fmt(v,t){
+    if(t==="count")  return Math.round(v).toLocaleString("en-MY");
+    if(t==="pct")    return (v<1?v.toFixed(2):v.toFixed(1))+"%";
+    if(t==="cM")     return "RM "+v.toFixed(1)+"M";
+    if(t==="cK")     return "RM "+Math.round(v).toLocaleString("en-MY")+"K";
+    if(t==="mult")   return v.toFixed(1)+"x";
+    return v;
+  }
+  function deltaHtml(m){
+    var change=(m.cur-m.base)/m.base*100;          // <-- real increase formula
+    var increased=change>=0;
+    var good=m.goodUp?increased:!increased;
+    var arrow=increased?"&uarr;":"&darr;";
+    var pct=Math.abs(change);
+    var pctText=(pct<10?pct.toFixed(1):Math.round(pct))+"%";
+    return {cls:good?"up":"down",html:'<span class="ar">'+arrow+'</span>'+pctText+' vs last quarter'};
+  }
+
+  var grid=document.getElementById("grid");
+  grid.innerHTML=M.map(function(m){
+    var d=deltaHtml(m);
+    return '<div class="dash">'
+      +'<div class="ic" style="background:'+m.bg+';color:'+m.c+'"><svg viewBox="0 0 24 24">'+IC[m.ic]+'</svg></div>'
+      +'<p class="label">'+m.label+'</p>'
+      +'<p class="value" id="v-'+m.k+'">'+fmt(m.cur,m.type)+'</p>'
+      +'<p class="delta '+d.cls+'" id="d-'+m.k+'">'+d.html+'</p>'
+      +'<p class="sub">This quarter</p>'
+    +'</div>';
+  }).join("");
+
+  // Static values — figures and deltas are fixed (no live feed).
+  // TODO: to refresh from your content-analytics API, re-fetch M[] values and re-render.
+})();
+</script>
+</body>
+</html>
