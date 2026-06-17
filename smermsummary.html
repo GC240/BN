@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Maybank SME RM — Overview</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+  :root{
+    --font:'Poppins',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    --fs-header:16px; --fs-value:14px;
+    --yellow:#F5C518; --blue:#3b82f6; --blue-deep:#2f6fd6; --cyan:#22b8cf; --pink:#e6447e;
+    --orange:#f59e42; --green:#17A865; --indigo:#6366f1; --slate:#94a3b8;
+    --ink:#313742; --ink-strong:#1a1a1a; --amt:#3a3f48; --muted:#71778a;
+    --line:#e8eaee; --track:#eef0f3; --ok:#17A865; --red:#dd3b30;
+    --shadow:0 1px 2px rgba(20,25,40,.04),0 6px 18px rgba(20,25,40,.05);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:transparent;color:var(--ink);font-family:var(--font);font-size:var(--fs-value);line-height:1.5;-webkit-font-smoothing:antialiased;padding:0;}
+  .app{width:100%;max-width:100%;margin:0;}
+  .card{background:#fff;border:1px solid var(--line);border-radius:13px;box-shadow:var(--shadow);padding:17px 19px;transition:box-shadow .15s;}
+  .card:hover{box-shadow:0 4px 16px rgba(20,25,40,.07);}
+  .title{font-size:var(--fs-header);font-weight:700;color:var(--ink-strong);margin:0 0 3px;letter-spacing:-.01em;}
+  .subt{font-size:12px;color:var(--muted);margin:0 0 14px;}
+  .grid{display:grid;gap:15px;} .g2{grid-template-columns:1fr 1fr;} .gt{grid-template-columns:1.9fr 1.1fr;}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:16px;}
+  .kpi{position:relative;background:#fff;border:1px solid var(--line);border-radius:13px;box-shadow:var(--shadow);padding:16px 18px;overflow:hidden;}
+  .kpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--ac,#3b82f6);}
+  .kpi .kl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:0 0 8px;}
+  .kpi .kv{font-size:22px;font-weight:800;color:var(--ink-strong);margin:0;letter-spacing:-.02em;display:flex;align-items:baseline;gap:8px;}
+  .kpi .kv .d{font-size:13px;font-weight:700;}
+  .kpi .kf{font-size:11.5px;color:var(--muted);margin:9px 0 0;}
+  .up{color:var(--ok);} .down{color:var(--red);}
+  svg.chart{width:100%;height:auto;display:block;}
+  .rtiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:14px;}
+  .rtile{text-align:center;}
+  .ring{width:66px;height:66px;border-radius:50%;margin:0 auto 8px;position:relative;display:grid;place-items:center;}
+  .ring::after{content:"";position:absolute;inset:7px;background:#fff;border-radius:50%;}
+  .ring span{position:relative;z-index:1;font-size:13px;font-weight:800;color:var(--ink-strong);}
+  .rname{font-size:11px;color:var(--muted);margin:0;line-height:1.3;}
+  .stack{display:flex;height:28px;border-radius:8px;overflow:hidden;} .stack span{height:100%;}
+  .stack-legend{list-style:none;margin:14px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px;}
+  .stack-legend li{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink);}
+  .stack-legend .dot{width:9px;height:9px;border-radius:2px;flex:none;}
+  .stack-legend .p{margin-left:auto;font-weight:700;color:var(--ink-strong);}
+  .cli{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);}
+  .cli:last-child{border-bottom:none;}
+  .cli .ava{width:34px;height:34px;border-radius:9px;flex:none;display:grid;place-items:center;font-weight:700;font-size:12px;color:#fff;}
+  .cli .cn{font-weight:600;color:var(--blue-deep);font-size:13px;}
+  .cli .cm{font-size:11.5px;color:var(--muted);}
+  .cli .cv{margin-left:auto;text-align:right;font-weight:700;color:var(--amt);font-size:13px;}
+  .qcard{display:flex;flex-direction:column;} .qcard .mini{flex:1;}
+  .mini{display:flex;flex-direction:column;gap:12px;height:100%;}
+  .mini .m{border:1px solid var(--line);border-radius:11px;padding:12px 14px;flex:1;display:flex;flex-direction:column;justify-content:center;}
+  .mini .ml{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:0;}
+  .mini .mv{font-size:18px;font-weight:800;color:var(--ink-strong);margin:3px 0 0;}
+  .mini .md{font-size:11px;font-weight:600;margin:2px 0 0;}
+  @media (max-width:900px){.kpis{grid-template-columns:1fr 1fr;}.g2,.gt{grid-template-columns:1fr;}}
+  @media (max-width:520px){.kpis{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+  <div class="app">
+    <div class="kpis">
+      <div class="kpi" style="--ac:#3b82f6"><p class="kl">Portfolio AUM</p><p class="kv">RM 248.6M <span class="d up">&uarr; 6.8%</span></p><p class="kf">Vs Last Quarter</p></div>
+      <div class="kpi" style="--ac:#17A865"><p class="kl">Active SME Clients</p><p class="kv">184 <span class="d up">&uarr; 12</span></p><p class="kf">This Month</p></div>
+      <div class="kpi" style="--ac:#f59e42"><p class="kl">Pipeline Value</p><p class="kv">RM 42.3M <span class="d up">&uarr; 18.2%</span></p><p class="kf">Weighted</p></div>
+      <div class="kpi" style="--ac:#e6447e"><p class="kl">TD Maturities (30D)</p><p class="kv">RM 18.9M <span class="d down">&darr; 9</span></p><p class="kf">Retention Focus</p></div>
+    </div>
+
+    <div class="grid gt" style="margin-bottom:15px;">
+      <div class="card">
+        <p class="title">Portfolio AUM Trend</p>
+        <p class="subt">Total relationship AUM · last 12 months · <span style="color:var(--ok);font-weight:700">+12.4% YoY</span></p>
+        <svg class="chart" id="aumArea" viewBox="0 0 720 230" preserveAspectRatio="none"></svg>
+      </div>
+      <div class="card qcard">
+        <p class="title">Quarter at a Glance</p>
+        <p class="subt">Key movements</p>
+        <div class="mini">
+          <div class="m"><p class="ml">Revenue YTD</p><p class="mv">RM 9.6M</p><p class="md up">&uarr; 11% vs LY</p></div>
+          <div class="m"><p class="ml">Win Rate</p><p class="mv">31%</p><p class="md up">&uarr; 2 pts</p></div>
+          <div class="m"><p class="ml">Cross-Sell Ratio</p><p class="mv">3.8</p><p class="md">products / client</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:15px;">
+      <p class="title">SME Products — Quick Overview</p>
+      <p class="subt">Penetration across the Maybank SME shelf (% of clients holding)</p>
+      <div class="rtiles" id="ringTiles"></div>
+    </div>
+
+    <div class="grid g2" style="margin-bottom:15px;">
+      <div class="card">
+        <p class="title">Product Penetration Profile</p>
+        <p class="subt">Spread across core SME products</p>
+        <svg class="chart" id="radar" viewBox="0 0 300 270" style="max-width:420px;margin:0 auto;"></svg>
+      </div>
+      <div class="card">
+        <p class="title">Top SME Clients</p>
+        <p class="subt">By relationship value</p>
+        <div id="topClients"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="title">Product Holding Distribution</p>
+      <p class="subt">Share of holdings across the portfolio</p>
+      <div class="stack" id="holdStack"></div>
+      <ul class="stack-legend" id="holdLegend"></ul>
+    </div>
+  </div>
+
+<script>
+(function(){
+  "use strict";
+  function area(id,vals,w,h,color){
+    var max=Math.max.apply(null,vals)*1.08, min=Math.min.apply(null,vals)*0.92, pad=14;
+    var n=vals.length, sx=(w-pad*2)/(n-1);
+    function X(i){return pad+i*sx;} function Y(v){return h-18-(v-min)/(max-min)*(h-34);}
+    var d="M"+X(0)+","+Y(vals[0]); for(var i=1;i<n;i++)d+=" L"+X(i)+","+Y(vals[i]);
+    var fill=d+" L"+X(n-1)+","+(h-18)+" L"+X(0)+","+(h-18)+" Z";
+    var grid="";[0.25,0.5,0.75].forEach(function(g){var y=18+g*(h-34);grid+='<line x1="'+pad+'" y1="'+y+'" x2="'+(w-pad)+'" y2="'+y+'" stroke="#f1f3f6"/>';});
+    return grid+'<defs><linearGradient id="ag'+id+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="'+color+'" stop-opacity=".22"/><stop offset="100%" stop-color="'+color+'" stop-opacity=".02"/></linearGradient></defs>'
+      +'<path d="'+fill+'" fill="url(#ag'+id+')"/><path d="'+d+'" fill="none" stroke="'+color+'" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>'
+      +'<circle cx="'+X(n-1)+'" cy="'+Y(vals[n-1])+'" r="4.5" fill="'+color+'" stroke="#fff" stroke-width="2"/>';
+  }
+  document.getElementById("aumArea").innerHTML=area("a",[198,205,210,214,219,224,228,232,236,240,244,248.6],720,230,"#2f6fd6");
+
+  var prods=[
+    {n:"SME First Account-i",v:88,c:"#3b82f6"},{n:"Current Account-i",v:76,c:"#22b8cf"},
+    {n:"Maybank2u Biz",v:71,c:"#6366f1"},{n:"Working Capital Fin-i",v:54,c:"#17A865"},
+    {n:"Trade Finance",v:41,c:"#f59e42"},{n:"Payroll Services",v:33,c:"#e6447e"},
+    {n:"QRPayBiz",v:28,c:"#F5C518"},{n:"Corporate Card",v:24,c:"#94a3b8"}
+  ];
+  document.getElementById("ringTiles").innerHTML=prods.map(function(p){
+    return '<div class="rtile"><div class="ring" style="background:conic-gradient('+p.c+' 0 '+p.v+'%, var(--track) '+p.v+'% 100%)"><span>'+p.v+'%</span></div><p class="rname">'+p.n+'</p></div>';
+  }).join("");
+
+  function radar(id,data){
+    var n=data.length, cx=150, cy=140, R=92;
+    function pt(i,f){var a=-Math.PI/2+i*2*Math.PI/n;return [cx+R*f*Math.cos(a),cy+R*f*Math.sin(a)];}
+    var s="";
+    [0.34,0.67,1].forEach(function(f){var p=[];for(var i=0;i<n;i++){var q=pt(i,f);p.push(q[0].toFixed(1)+","+q[1].toFixed(1));}s+='<polygon points="'+p.join(" ")+'" fill="none" stroke="#e8eaee"/>';});
+    for(var i=0;i<n;i++){var o=pt(i,1);s+='<line x1="'+cx+'" y1="'+cy+'" x2="'+o[0].toFixed(1)+'" y2="'+o[1].toFixed(1)+'" stroke="#eef0f3"/>';}
+    var dp=[];for(var i=0;i<n;i++){var q=pt(i,data[i].v/100);dp.push(q[0].toFixed(1)+","+q[1].toFixed(1));}
+    s+='<polygon points="'+dp.join(" ")+'" fill="rgba(47,111,214,.16)" stroke="#2f6fd6" stroke-width="2"/>';
+    for(var i=0;i<n;i++){var q=pt(i,data[i].v/100);s+='<circle cx="'+q[0].toFixed(1)+'" cy="'+q[1].toFixed(1)+'" r="3" fill="#2f6fd6"/>';}
+    for(var i=0;i<n;i++){var l=pt(i,1.16);var anc=Math.abs(l[0]-cx)<8?"middle":(l[0]>cx?"start":"end");s+='<text x="'+l[0].toFixed(1)+'" y="'+(l[1]+3).toFixed(1)+'" font-size="9" fill="#71778a" text-anchor="'+anc+'">'+data[i].n+'</text>';}
+    document.getElementById(id).innerHTML=s;
+  }
+  radar("radar",[{n:"SME Acct-i",v:88},{n:"Current-i",v:76},{n:"M2U Biz",v:71},{n:"WC Fin-i",v:54},{n:"Trade Fin",v:41},{n:"Payroll",v:33},{n:"QRPayBiz",v:28}]);
+
+  var clients=[
+    {n:"Maju Jaya Engineering Sdn Bhd",m:"Small Enterprise · Manufacturing",v:"RM 18.4M",i:"MJ",c:"#3b82f6"},
+    {n:"Evergreen Packaging Industries Sdn Bhd",m:"Micro Enterprise · Manufacturing",v:"RM 12.1M",i:"EP",c:"#17A865"},
+    {n:"Mutiara Marine Services Sdn Bhd",m:"Medium Enterprise · Manufacturing",v:"RM 9.6M",i:"MM",c:"#e6447e"}
+  ];
+  document.getElementById("topClients").innerHTML=clients.map(function(c){return '<div class="cli"><span class="ava" style="background:'+c.c+'">'+c.i+'</span><div><div class="cn">'+c.n+'</div><div class="cm">'+c.m+'</div></div><span class="cv">'+c.v+'</span></div>';}).join("");
+
+  var hold=[
+    {n:"Deposits",v:22,c:"#3b82f6"},{n:"Financing",v:26,c:"#e6447e"},{n:"Trade Finance",v:18,c:"#22b8cf"},
+    {n:"Cash Management",v:12,c:"#F5C518"},{n:"Payments & Collections",v:8,c:"#f59e42"},
+    {n:"FX & Treasury",v:6,c:"#17A865"},{n:"Merchant Solutions",v:5,c:"#6366f1"},{n:"Cards",v:3,c:"#94a3b8"}
+  ];
+  document.getElementById("holdStack").innerHTML=hold.map(function(h){return '<span style="width:'+h.v+'%;background:'+h.c+'"></span>';}).join("");
+  document.getElementById("holdLegend").innerHTML=hold.map(function(h){return '<li><span class="dot" style="background:'+h.c+'"></span>'+h.n+'<span class="p">'+h.v+'%</span></li>';}).join("");
+})();
+</script>
+</body>
+</html>
