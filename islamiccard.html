@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Customer 360° · Farhan bin Mohammad Haq</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+:root{
+  --f:'Poppins',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --green:#0FA968;--green-d:#0B8553;--green-b:#E5F6EE;--green-l:#D0EFE0;
+  --gold:#D4A017;--gold-d:#A6800F;--gold-b:#FFF9E6;--gold-l:#FCE9A0;
+  --emerald:#047857;
+  --blue:#2864B8;--blue-b:#E8F0FC;
+  --amber:#E5A100;--amber-b:#FFF8E6;--amber-d:#B58000;
+  --red:#D63B3B;--red-b:#FCEAEA;--red-d:#B52D2D;
+  --cyan:#1AABB5;--cyan-b:#E5F9FA;
+  --pink:#DB4D80;--ind:#6C6CF1;
+  --page:#F5F7F6;--white:#fff;
+  --bdr:#E2E5EA;--bdr-l:#EEF0F3;
+  --ink:#1F2530;--ink2:#3D4550;--mu:#6B7280;--ey:#9CA3AF;
+  --sh:0 1px 3px rgba(20,40,30,.04),0 2px 8px rgba(20,40,30,.06);
+  --sh2:0 4px 16px rgba(20,40,30,.1);
+  --r:12px;--rr:10px;--tr:.2s ease;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--f);font-size:13px;line-height:1.5;color:var(--ink);background:var(--page);-webkit-font-smoothing:antialiased;}
+
+.wrap{padding:18px 24px;max-width:1500px;margin:0 auto;}
+
+/* ─── CUSTOMER PROFILE ─── */
+.profile{background:linear-gradient(135deg,#FAFBFC 0%,#fff 100%);border:1px solid var(--bdr);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;margin-bottom:16px;}
+.profile-top{display:flex;align-items:center;gap:18px;padding:18px 22px;border-bottom:1px solid var(--bdr-l);}
+.profile-av{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#0FA968,#D4A017);display:grid;place-items:center;color:#fff;font-size:22px;font-weight:700;flex:none;box-shadow:0 4px 12px rgba(15,169,104,.25);}
+.profile-info{flex:1;min-width:0;}
+.profile-name{font-size:18px;font-weight:700;color:var(--ink);letter-spacing:-.01em;}
+.profile-id{font-size:12px;color:var(--mu);margin-top:2px;display:flex;gap:14px;flex-wrap:wrap;}
+.profile-id b{color:var(--ink2);font-weight:600;}
+.profile-id a{color:var(--blue);text-decoration:none;font-weight:600;}
+.profile-id a:hover{text-decoration:underline;}
+.profile-tags{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap;}
+.tag{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:12px;letter-spacing:.02em;}
+.tag.islamic{background:linear-gradient(135deg,var(--green-b),var(--green-l));color:var(--green-d);border:1px solid var(--green-l);}
+.tag.active{background:var(--green-b);color:var(--green-d);}
+.tag.priority{background:var(--blue-b);color:var(--blue);}
+.profile-meta{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;padding:14px 22px;}
+.meta-cell .lbl{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:3px;}
+.meta-cell .val{font-size:13px;font-weight:600;color:var(--ink);}
+.meta-cell .sub{font-size:10.5px;color:var(--mu);margin-top:1px;}
+
+/* ─── TAB CARD ─── */
+.tab-card{background:var(--white);border:1px solid var(--bdr);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;}
+.tab-bar{display:flex;border-bottom:1px solid var(--bdr);background:#FAFBFC;overflow-x:auto;}
+.tab-bar::-webkit-scrollbar{height:3px;}
+.tab-bar::-webkit-scrollbar-thumb{background:#ccc;}
+.tb{border:none;background:none;font-family:var(--f);font-size:13px;font-weight:600;color:var(--mu);
+   padding:14px 20px;border-bottom:3px solid transparent;margin-bottom:-1px;cursor:pointer;transition:var(--tr);white-space:nowrap;display:flex;align-items:center;gap:8px;}
+.tb:hover{color:var(--ink);background:rgba(15,169,104,.05);}
+.tb.on{color:var(--green-d);border-bottom-color:var(--green);background:#fff;}
+.tb .tb-ic{width:18px;height:18px;}
+.tb .tb-count{background:var(--green-b);color:var(--green-d);font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;margin-left:2px;}
+.tb.on .tb-count{background:var(--green);color:#fff;}
+
+.tab-body{padding:18px;background:#fff;}
+.pn{display:none;}.pn.on{display:block;}
+
+/* ─── SNAPSHOT KPIs ─── */
+.snap{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px;}
+.snap-card{background:#FAFBFC;border:1px solid var(--bdr-l);border-radius:var(--rr);padding:13px 15px;position:relative;overflow:hidden;}
+.snap-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--ac);}
+.snap-lbl{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.05em;font-weight:600;margin-bottom:5px;}
+.snap-val{font-size:16px;font-weight:700;color:var(--ink);letter-spacing:-.01em;line-height:1.15;}
+.snap-trend{font-size:10.5px;font-weight:600;margin-top:4px;display:inline-flex;align-items:center;gap:3px;}
+.snap-trend.up{color:var(--green-d);}.snap-trend.dn{color:var(--red);}
+
+/* ─── PRODUCT GRID ─── */
+.products-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.prod{padding:12px;border:1px solid var(--bdr-l);border-radius:9px;background:#FAFBFC;transition:var(--tr);cursor:pointer;}
+.prod:hover{border-color:var(--green);background:var(--green-b);transform:translateY(-1px);}
+.prod-icon{width:30px;height:30px;border-radius:8px;background:var(--ib);color:var(--ac);display:grid;place-items:center;margin-bottom:8px;}
+.prod-icon svg{width:15px;height:15px;}
+.prod-name{font-size:11.5px;font-weight:600;color:var(--ink);line-height:1.3;margin-bottom:3px;}
+.prod-detail{font-size:10px;color:var(--mu);}
+.prod-amount{font-size:13px;font-weight:700;color:var(--ink);margin-top:5px;}
+.prod-chip{display:inline-block;font-size:9px;font-weight:600;padding:2px 6px;border-radius:6px;margin-top:5px;background:var(--green-b);color:var(--green-d);}
+
+/* ─── FINANCING CARDS ─── */
+.fin-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.fin-card{background:#FAFBFC;border:1px solid var(--bdr-l);border-radius:var(--rr);overflow:hidden;transition:var(--tr);}
+.fin-card:hover{box-shadow:var(--sh2);transform:translateY(-2px);}
+.fin-card-top{padding:14px 16px;border-bottom:1px solid var(--bdr-l);background:#fff;}
+.fin-card-type{font-size:13px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:8px;margin-bottom:3px;}
+.fin-card-type .ix{width:24px;height:24px;border-radius:7px;background:var(--ac-b);color:var(--ac);display:grid;place-items:center;}
+.fin-card-type .ix svg{width:13px;height:13px;}
+.fin-concept{font-size:10.5px;color:var(--mu);}
+.fin-concept b{color:var(--gold-d);font-weight:600;}
+.fin-amt-row{display:flex;justify-content:space-between;align-items:flex-end;margin-top:8px;}
+.fin-amt-row .a-lbl{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.04em;font-weight:600;}
+.fin-amt-row .a-val{font-size:15px;font-weight:700;color:var(--ink);line-height:1.1;margin-top:2px;}
+.fin-card-body{padding:14px 16px;}
+.fin-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.fin-row .li-lbl{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.04em;font-weight:600;}
+.fin-row .li-val{font-size:12px;font-weight:600;color:var(--ink);margin-top:2px;}
+.fin-progress-lbl{display:flex;justify-content:space-between;font-size:10.5px;color:var(--mu);margin-bottom:3px;}
+.bar{height:5px;background:var(--bdr-l);border-radius:3px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:3px;}
+
+/* ─── NBA CARDS ─── */
+.nba-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.nba-card{padding:14px 14px 14px 18px;background:var(--bg);border:1px solid var(--bdr);border-radius:10px;position:relative;overflow:hidden;transition:var(--tr);}
+.nba-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--ac);}
+.nba-card:hover{box-shadow:var(--sh2);transform:translateY(-2px);}
+.nba-head{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.nba-icon{width:28px;height:28px;border-radius:8px;background:var(--ac-b);color:var(--ac);display:grid;place-items:center;flex:none;}
+.nba-icon svg{width:14px;height:14px;}
+.nba-title{font-size:12.5px;font-weight:700;color:var(--ink);}
+.nba-tag{font-size:9px;font-weight:700;padding:2px 6px;border-radius:8px;background:var(--ac-b);color:var(--ac);margin-left:auto;text-transform:uppercase;letter-spacing:.05em;}
+.nba-body{font-size:11.5px;color:var(--ink2);line-height:1.55;margin-bottom:8px;}
+.nba-amount{color:var(--gold-d);font-weight:700;}
+.nba-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.nba-conf{font-size:10.5px;color:var(--mu);}
+.nba-conf b{color:var(--green-d);font-weight:700;}
+.nba-cta{font-size:11px;font-weight:600;color:#fff;background:var(--ac);border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-family:var(--f);transition:var(--tr);display:inline-flex;align-items:center;gap:5px;}
+.nba-cta:hover{transform:translateX(2px);opacity:.92;}
+.nba-cta svg{width:11px;height:11px;}
+
+/* ─── QUICK ACTIONS ─── */
+.qa-section{margin-top:18px;padding-top:16px;border-top:1px solid var(--bdr-l);}
+.qa-h{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.qa-h::before{content:"";width:3px;height:14px;background:var(--green);border-radius:2px;}
+.qa{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;}
+.qa-btn{background:#FAFBFC;border:1px solid var(--bdr-l);border-radius:var(--rr);padding:13px 10px;display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;transition:var(--tr);text-align:center;font-family:var(--f);}
+.qa-btn:hover{background:var(--green-b);border-color:var(--green);box-shadow:var(--sh2);transform:translateY(-2px);}
+.qa-btn-ic{width:34px;height:34px;border-radius:9px;background:var(--ac-b);color:var(--ac);display:grid;place-items:center;}
+.qa-btn-ic svg{width:17px;height:17px;}
+.qa-btn-lbl{font-size:10.5px;font-weight:600;color:var(--ink);line-height:1.35;}
+
+/* ─── MODAL (Journey) ─── */
+.modal-bg{position:fixed;inset:0;background:rgba(20,28,40,.55);z-index:100;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px);}
+.modal-bg.on{display:flex;}
+.modal{background:#fff;border-radius:14px;width:100%;max-width:680px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:modalIn .25s ease-out;}
+@keyframes modalIn{from{opacity:0;transform:scale(.96) translateY(10px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.modal-h{padding:16px 22px;border-bottom:1px solid var(--bdr-l);display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,var(--green-b) 0%,#fff 100%);}
+.modal-h h3{font-size:15px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:10px;}
+.modal-h h3 .ix{width:30px;height:30px;border-radius:8px;background:var(--green);color:#fff;display:grid;place-items:center;}
+.modal-h h3 .ix svg{width:15px;height:15px;}
+.modal-x{background:none;border:none;font-size:22px;cursor:pointer;color:var(--mu);width:32px;height:32px;border-radius:8px;display:grid;place-items:center;transition:var(--tr);}
+.modal-x:hover{background:rgba(0,0,0,.06);color:var(--ink);}
+.modal-body{padding:20px 22px;overflow-y:auto;}
+
+/* Stepper */
+.stepper{display:flex;align-items:center;margin-bottom:22px;}
+.step{flex:1;display:flex;flex-direction:column;align-items:center;position:relative;}
+.step-dot{width:30px;height:30px;border-radius:50%;background:#E2E5EA;color:#9CA3AF;display:grid;place-items:center;font-weight:700;font-size:13px;z-index:2;transition:var(--tr);}
+.step.done .step-dot{background:var(--green);color:#fff;}
+.step.cur .step-dot{background:var(--gold);color:#fff;box-shadow:0 0 0 4px rgba(212,160,23,.2);}
+.step-lbl{font-size:10px;color:var(--mu);margin-top:5px;font-weight:600;text-align:center;}
+.step.done .step-lbl,.step.cur .step-lbl{color:var(--ink);}
+.step::after{content:"";position:absolute;top:14px;left:60%;right:-40%;height:2px;background:var(--bdr);z-index:1;}
+.step:last-child::after{display:none;}
+.step.done::after{background:var(--green);}
+
+/* Form */
+.form-row{margin-bottom:14px;}
+.form-row label{display:block;font-size:11px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px;}
+.form-row input,.form-row select,.form-row textarea{width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-family:var(--f);font-size:13px;color:var(--ink);background:#fff;transition:var(--tr);}
+.form-row input:focus,.form-row select:focus,.form-row textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(15,169,104,.15);}
+.form-row input[readonly]{background:#F5F7F6;color:var(--ink2);}
+.form-row .hint{font-size:10.5px;color:var(--mu);margin-top:4px;}
+.form-row.prefilled label::after{content:" ● Prefilled";color:var(--green-d);font-weight:600;font-size:9px;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.summary-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--bdr-l);font-size:12.5px;}
+.summary-row:last-child{border-bottom:none;}
+.summary-row .l{color:var(--mu);}
+.summary-row .v{font-weight:600;color:var(--ink);}
+.summary-row.total .v{color:var(--green-d);font-size:14px;font-weight:700;}
+.success-msg{text-align:center;padding:20px;}
+.success-icon{width:64px;height:64px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;margin:0 auto 14px;}
+.success-icon svg{width:32px;height:32px;}
+.success-msg h4{font-size:17px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.success-msg p{font-size:12.5px;color:var(--mu);}
+.ref-no{font-family:'Courier New',monospace;background:var(--green-b);color:var(--green-d);padding:6px 14px;border-radius:6px;display:inline-block;margin-top:10px;font-weight:700;}
+
+.modal-f{padding:14px 22px;border-top:1px solid var(--bdr-l);display:flex;justify-content:space-between;gap:10px;background:#FAFBFC;}
+.btn{padding:9px 18px;border-radius:8px;font-family:var(--f);font-size:13px;font-weight:600;cursor:pointer;border:none;transition:var(--tr);display:inline-flex;align-items:center;gap:6px;}
+.btn-p{background:var(--green);color:#fff;}
+.btn-p:hover{background:var(--green-d);}
+.btn-s{background:#fff;color:var(--ink);border:1px solid var(--bdr);}
+.btn-s:hover{background:#FAFBFC;}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+.btn svg{width:13px;height:13px;}
+
+/* RESPONSIVE */
+@media(max-width:1200px){
+  .snap{grid-template-columns:repeat(3,1fr);}
+  .products-grid{grid-template-columns:repeat(3,1fr);}
+  .nba-grid{grid-template-columns:repeat(2,1fr);}
+  .fin-grid{grid-template-columns:1fr;}
+  .qa{grid-template-columns:repeat(3,1fr);}
+  .profile-meta{grid-template-columns:repeat(3,1fr);}
+}
+@media(max-width:780px){
+  .snap,.products-grid,.nba-grid,.qa{grid-template-columns:1fr 1fr;}
+  .profile-meta{grid-template-columns:1fr 1fr;}
+  .wrap{padding:12px;}
+  .tb{padding:12px 14px;font-size:12px;}
+  .form-grid{grid-template-columns:1fr;}
+}
+@media(max-width:480px){
+  .snap,.products-grid,.nba-grid,.qa{grid-template-columns:1fr;}
+  .profile-meta{grid-template-columns:1fr;}
+  .profile-top{flex-direction:column;text-align:center;}
+  .stepper{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<!-- ═══ CUSTOMER PROFILE ═══ -->
+<div class="profile">
+  <div class="profile-top">
+    <div class="profile-av">FH</div>
+    <div class="profile-info">
+      <div class="profile-name">Farhan bin Mohammad Haq</div>
+      <div class="profile-id">
+        <span><b>Account:</b> 00002589</span>
+        <span><b>Segment:</b> Islamic</span>
+        <span><b>RM:</b> <a href="https://presales.businessbywire.com/appgb8/businessnext/detail/User?x=b2ghdvsfsj4lcxpxa9rwxt5p6tfrrb485nmp2fntjf65jj2zjvka" target="_blank">Daniel</a></span>
+        <span><b>Engagement:</b> 75</span>
+        <span><b>Churn:</b> 18%</span>
+      </div>
+      <div class="profile-tags">
+        <span class="tag islamic">● ISLAMIC</span>
+        <span class="tag active">● ACTIVE</span>
+        <span class="tag priority">● NORMAL PRIORITY</span>
+      </div>
+    </div>
+  </div>
+  <div class="profile-meta">
+    <div class="meta-cell"><div class="lbl">Account</div><div class="val">00002589</div><div class="sub">Customer ID</div></div>
+    <div class="meta-cell"><div class="lbl">Relationship Manager</div><div class="val"><a href="https://presales.businessbywire.com/appgb8/businessnext/detail/User?x=b2ghdvsfsj4lcxpxa9rwxt5p6tfrrb485nmp2fntjf65jj2zjvka" target="_blank" style="color:var(--blue);text-decoration:none;font-weight:600;">Daniel</a></div><div class="sub">Open CRM record →</div></div>
+    <div class="meta-cell"><div class="lbl">Segment</div><div class="val">Islamic</div><div class="sub">Shariah-compliant only</div></div>
+    <div class="meta-cell"><div class="lbl">Status / Priority</div><div class="val">Active</div><div class="sub">Priority: Normal</div></div>
+    <div class="meta-cell"><div class="lbl">Engagement / Churn</div><div class="val">Score 75 · Churn 18%</div><div class="sub">Healthy relationship</div></div>
+  </div>
+</div>
+
+<!-- ═══ TAB CARD ═══ -->
+<div class="tab-card">
+
+  <div class="tab-bar">
+    <button class="tb on" data-t="holdings">
+      <svg class="tb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Islamic Product Holdings Snapshot <span class="tb-count">11</span>
+    </button>
+    <button class="tb" data-t="financing">
+      <svg class="tb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Islamic Financing Overview <span class="tb-count">4</span>
+    </button>
+    <button class="tb" data-t="nba">
+      <svg class="tb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"/><circle cx="12" cy="12" r="3"/></svg>
+      AI RM Insights · Next Best Actions <span class="tb-count">6</span>
+    </button>
+  </div>
+
+  <div class="tab-body">
+
+    <!-- ═══ TAB 1: HOLDINGS ═══ -->
+    <div class="pn on" id="holdings">
+      <div class="snap">
+        <div class="snap-card" style="--ac:var(--green)"><div class="snap-lbl">Total Relationship Value</div><div class="snap-val">RM 4.82M</div><div class="snap-trend up">↑ 8.4% YoY</div></div>
+        <div class="snap-card" style="--ac:var(--gold)"><div class="snap-lbl">Outstanding Financing</div><div class="snap-val">RM 1.94M</div><div class="snap-trend dn">↓ 4.2% MoM</div></div>
+        <div class="snap-card" style="--ac:var(--blue)"><div class="snap-lbl">Deposit Balance</div><div class="snap-val">RM 1.36M</div><div class="snap-trend up">↑ 12.1% YoY</div></div>
+        <div class="snap-card" style="--ac:var(--cyan)"><div class="snap-lbl">Investment Value</div><div class="snap-val">RM 1.52M</div><div class="snap-trend up">↑ 6.8% YoY</div></div>
+        <div class="snap-card" style="--ac:var(--ind)"><div class="snap-lbl">Monthly Contribution</div><div class="snap-val">RM 18,400</div><div class="snap-trend up">↑ Consistent</div></div>
+      </div>
+      <div class="products-grid" id="products"></div>
+    </div>
+
+    <!-- ═══ TAB 2: FINANCING ═══ -->
+    <div class="pn" id="financing">
+      <div class="fin-grid" id="financings"></div>
+    </div>
+
+    <!-- ═══ TAB 3: NBA ═══ -->
+    <div class="pn" id="nba">
+      <div class="nba-grid" id="nba-cards"></div>
+    </div>
+
+    <!-- ═══ QUICK ACTIONS (always visible) ═══ -->
+    <div class="qa-section">
+      <div class="qa-h">Quick RM Actions · Shariah-Compliant Workflows</div>
+      <div class="qa" id="qa"></div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+<!-- ═══ MODAL ═══ -->
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <div class="modal-h">
+      <h3><span class="ix" id="m-ix"></span><span id="m-title">Action</span></h3>
+      <button class="modal-x" id="m-close">×</button>
+    </div>
+    <div class="modal-body" id="m-body"></div>
+    <div class="modal-f">
+      <button class="btn btn-s" id="m-back">← Back</button>
+      <button class="btn btn-p" id="m-next">Next →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ─── CUSTOMER DATA ─── */
+var CUST={
+  id:"00002589",
+  name:"Farhan bin Mohammad Haq",
+  segment:"Islamic",
+  rm:"Daniel",
+  priority:"Normal",
+  status:"Active",
+  engagement:75,
+  churn:18,
+  email:"farhan.haq@example.com.my",
+  phone:"+60 12-345 6789",
+  branch:"Maybank Islamic KLCC"
+};
+
+/* ─── TABS ─── */
+document.querySelectorAll(".tb").forEach(function(t){
+  t.addEventListener("click",function(){
+    document.querySelectorAll(".tb").forEach(function(x){x.classList.remove("on");});
+    document.querySelectorAll(".pn").forEach(function(p){p.classList.remove("on");});
+    t.classList.add("on");
+    document.getElementById(t.dataset.t).classList.add("on");
+  });
+});
+
+/* ─── ICONS ─── */
+function svg(p){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>';}
+var ICON={
+  save:'<rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18"/><path d="M7 14h.01"/>',
+  curr:'<circle cx="12" cy="12" r="9"/><path d="M12 6v12M9 9h6M9 15h6"/>',
+  td:'<path d="M3 3v18h18"/><path d="M7 17l4-4 4 4 6-6"/>',
+  home:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+  car:'<path d="M5 17h14M5 11l2-5h10l2 5"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/>',
+  pf:'<circle cx="12" cy="8" r="4"/><path d="M5 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/>',
+  sme:'<rect x="3" y="7" width="18" height="14" rx="1"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
+  trade:'<polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/>',
+  shield:'<path d="M12 2L3 6v6c0 5 3.5 9.4 9 10 5.5-.6 9-5 9-10V6l-9-4z"/>',
+  sukuk:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/>',
+  wealth:'<circle cx="12" cy="12" r="9"/><path d="M12 2v20M2 12h20"/>',
+  fam:'<circle cx="9" cy="7" r="3"/><circle cx="17" cy="9" r="2"/><path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="M14 21v-1a3 3 0 0 1 3-3h2a3 3 0 0 1 3 3v1"/>',
+  green:'<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19.2 2c1 3 .5 4.74-2 7 4.5-1 6.5 2 5 5-1 3-2 5-9 5z"/>',
+  plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+  chart:'<polyline points="22 7 13 16 9 12 2 19"/><polyline points="16 7 22 7 22 13"/>',
+  cal:'<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+  refresh:'<polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>',
+  doc:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>',
+  lightbulb:'<path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.8.7 1 1.3 1 2.3v1h6v-1c0-1 .2-1.6 1-2.3A7 7 0 0 0 12 2z"/>',
+  arrow:'<path d="M5 12h14M13 5l7 7-7 7"/>',
+  check:'<polyline points="20 6 9 17 4 12"/>'
+};
+function ic(n){return svg(ICON[n]);}
+
+/* ─── PRODUCT HOLDINGS (Farhan's portfolio) ─── */
+var products=[
+  {n:"Savings Account-i",d:"Wadiah · 2 accounts",amt:"RM 186,400",chip:"Wadiah",ic:"save",ac:"var(--green)",ib:"var(--green-b)"},
+  {n:"Current Account-i",d:"Mudharabah · CASA",amt:"RM 312,600",chip:"Mudharabah",ic:"curr",ac:"var(--blue)",ib:"var(--blue-b)"},
+  {n:"Term Deposit-i",d:"General Investment-i",amt:"RM 860,000",chip:"Mudharabah",ic:"td",ac:"var(--cyan)",ib:"var(--cyan-b)"},
+  {n:"Home Financing-i",d:"Musharakah Mutanaqisah",amt:"RM 820,000",chip:"MM",ic:"home",ac:"var(--gold)",ib:"var(--gold-b)"},
+  {n:"Auto Financing-i",d:"Murabahah · 1 vehicle",amt:"RM 142,000",chip:"Murabahah",ic:"car",ac:"var(--amber)",ib:"var(--amber-b)"},
+  {n:"Personal Financing-i",d:"Tawarruq",amt:"RM 78,000",chip:"Tawarruq",ic:"pf",ac:"var(--pink)",ib:"#FBE9EF"},
+  {n:"SME Financing-i",d:"Working Capital-i",amt:"RM 900,000",chip:"Tawarruq",ic:"sme",ac:"var(--ind)",ib:"#F0F0FF"},
+  {n:"Trade Finance-i",d:"LC Murabahah · 4 active",amt:"RM 380,000",chip:"Murabahah",ic:"trade",ac:"var(--emerald)",ib:"var(--green-b)"},
+  {n:"Family Takaful",d:"Etiqa Takaful",amt:"RM 1.2M cover",chip:"Tabarru'",ic:"shield",ac:"var(--green-d)",ib:"var(--green-b)"},
+  {n:"Sukuk Investments",d:"Govt + Corp Sukuk",amt:"RM 620,000",chip:"Ijarah",ic:"sukuk",ac:"var(--gold-d)",ib:"var(--gold-b)"},
+  {n:"Islamic Unit Trust-i",d:"Wakalah · 4 funds",amt:"RM 900,000",chip:"Wakalah",ic:"wealth",ac:"var(--blue)",ib:"var(--blue-b)"}
+];
+document.getElementById("products").innerHTML=products.map(function(p){
+  return '<div class="prod" style="--ac:'+p.ac+';--ib:'+p.ib+'"><div class="prod-icon">'+ic(p.ic)+'</div><div class="prod-name">'+p.n+'</div><div class="prod-detail">'+p.d+'</div><div class="prod-amount">'+p.amt+'</div><span class="prod-chip">'+p.chip+'</span></div>';
+}).join("");
+
+/* ─── FINANCING ─── */
+var financings=[
+  {type:"Home Financing-i",concept:"Musharakah Mutanaqisah",ic:"home",ac:"var(--green)",ab:"var(--green-b)",approved:"RM 1.20M",outstanding:"RM 820,000",tenure:"22 yrs remaining",rate:"3.85% p.a.",next:"05 Jul 2026",status:"Current",statusColor:"var(--green-d)",progress:32},
+  {type:"Auto Financing-i",concept:"Murabahah",ic:"car",ac:"var(--amber)",ab:"var(--amber-b)",approved:"RM 220,000",outstanding:"RM 142,000",tenure:"3 yrs · 8 mo left",rate:"3.45% p.a.",next:"12 Jul 2026",status:"Current",statusColor:"var(--green-d)",progress:35},
+  {type:"SME Working Capital-i",concept:"Tawarruq",ic:"sme",ac:"var(--ind)",ab:"#F0F0FF",approved:"RM 1.50M",outstanding:"RM 900,000",tenure:"Revolving · 5 yrs",rate:"4.25% p.a.",next:"30 Jun 2026",status:"Active",statusColor:"var(--blue)",progress:60},
+  {type:"Trade Finance-i (LC)",concept:"Murabahah",ic:"trade",ac:"var(--emerald)",ab:"var(--green-b)",approved:"RM 600,000",outstanding:"RM 380,000",tenure:"Per transaction",rate:"3.95% p.a.",next:"18 Jul 2026",status:"4 LCs Open",statusColor:"var(--blue)",progress:63}
+];
+document.getElementById("financings").innerHTML=financings.map(function(f){
+  return '<div class="fin-card" style="--ac:'+f.ac+';--ac-b:'+f.ab+'">'
+    +'<div class="fin-card-top"><div class="fin-card-type"><span class="ix">'+ic(f.ic)+'</span>'+f.type+'</div>'
+    +'<div class="fin-concept">Concept: <b>'+f.concept+'</b></div>'
+    +'<div class="fin-amt-row"><div><div class="a-lbl">Outstanding</div><div class="a-val">'+f.outstanding+'</div></div><div style="text-align:right;"><div class="a-lbl">Approved Limit</div><div class="a-val" style="color:var(--mu);">'+f.approved+'</div></div></div></div>'
+    +'<div class="fin-card-body">'
+    +'<div class="fin-row"><div><div class="li-lbl">Tenure</div><div class="li-val">'+f.tenure+'</div></div><div><div class="li-lbl">Profit Rate</div><div class="li-val">'+f.rate+'</div></div></div>'
+    +'<div class="fin-row" style="margin-bottom:8px;"><div><div class="li-lbl">Next Payment</div><div class="li-val">'+f.next+'</div></div><div><div class="li-lbl">Status</div><div class="li-val" style="color:'+f.statusColor+';">● '+f.status+'</div></div></div>'
+    +'<div><div class="fin-progress-lbl"><span>Repayment progress</span><span>'+f.progress+'%</span></div><div class="bar"><div class="bar-fill" style="width:'+f.progress+'%;background:'+f.ac+';"></div></div></div>'
+    +'</div></div>';
+}).join("");
+
+/* ─── NBA CARDS ─── */
+var nbaList=[
+  {id:"home-topup",ic:"home",t:"Home Financing-i Top-Up Eligible",b:'Property valuation increased <span class="nba-amount">RM 450,000</span>. Customer eligible for top-up financing of <span class="nba-amount">RM 320K</span> via Musharakah Mutanaqisah.',tag:"FINANCING",ac:"var(--green)",ab:"var(--green-b)",bg:"#F9FDFB",conf:94,action:"create-financing"},
+  {id:"family-takaful",ic:"fam",t:"Recommend Family Takaful",b:'Customer has 2 children entering tertiary education. Suggest <b>Etiqa Family Takaful</b> with education rider, est. contribution <span class="nba-amount">RM 480/mo</span>.',tag:"TAKAFUL",ac:"var(--gold)",ab:"var(--gold-b)",bg:"#FFFCF5",conf:87,action:"recommend-product"},
+  {id:"td-idle",ic:"td",t:"Idle Funds → Term Deposit-i",b:'Current Account-i averaged <span class="nba-amount">RM 380K</span> for 3 months. Suggest 6-month <b>Term Deposit-i</b> at 3.95% p.a.',tag:"DEPOSITS",ac:"var(--blue)",ab:"var(--blue-b)",bg:"#F7FAFE",conf:91,action:"recommend-product"},
+  {id:"sme-growth",ic:"sme",t:"SME Cash Flow Growth",b:'Business deposits ↑ <span class="nba-amount">28% YoY</span>. Recommend <b>Working Capital-i top-up</b> to RM 2.0M (current RM 1.5M).',tag:"SME",ac:"var(--ind)",ab:"#F0F0FF",bg:"#FAFAFF",conf:89,action:"create-financing"},
+  {id:"green-sukuk",ic:"green",t:"Green Sukuk Opportunity",b:'Customer expressed ESG interest. Recommend <b>Maybank Green Sukuk</b> · target return 4.2% · Shariah & ESG-certified.',tag:"WEALTH",ac:"var(--emerald)",ab:"var(--green-b)",bg:"#F9FDFB",conf:85,action:"investment-proposal"},
+  {id:"trade-expand",ic:"trade",t:"Trade Finance-i Expansion",b:'4 LCs opened in Q2 · all settled on time. Suggest increasing LC limit from <span class="nba-amount">RM 600K → RM 1.0M</span>.',tag:"TRADE",ac:"var(--cyan)",ab:"var(--cyan-b)",bg:"#F7FCFD",conf:88,action:"create-financing"}
+];
+document.getElementById("nba-cards").innerHTML=nbaList.map(function(n){
+  return '<div class="nba-card" data-id="'+n.id+'" style="--ac:'+n.ac+';--ac-b:'+n.ab+';--bg:'+n.bg+'"><div class="nba-head"><div class="nba-icon">'+ic(n.ic)+'</div><div class="nba-title">'+n.t+'</div><span class="nba-tag">'+n.tag+'</span></div><div class="nba-body">'+n.b+'</div><div class="nba-foot"><div class="nba-conf">AI Confidence · <b>'+n.conf+'%</b></div><button class="nba-cta" data-action="'+n.action+'" data-nba="'+n.id+'">Act on this '+svg(ICON.arrow)+'</button></div></div>';
+}).join("");
+
+/* ─── QUICK ACTIONS ─── */
+var qa=[
+  {l:"Create Financing Application-i",ic:"plus",ac:"var(--green)",ab:"var(--green-b)",action:"create-financing"},
+  {l:"Generate Investment Proposal",ic:"chart",ac:"var(--gold)",ab:"var(--gold-b)",action:"investment-proposal"},
+  {l:"Schedule Customer Review",ic:"cal",ac:"var(--blue)",ab:"var(--blue-b)",action:"schedule-review"},
+  {l:"Start KYC Refresh",ic:"refresh",ac:"var(--ind)",ab:"#F0F0FF",action:"kyc-refresh"},
+  {l:"Recommend Product-i",ic:"lightbulb",ac:"var(--amber)",ab:"var(--amber-b)",action:"recommend-product"},
+  {l:"Generate Shariah Report",ic:"doc",ac:"var(--emerald)",ab:"var(--green-b)",action:"shariah-report"}
+];
+document.getElementById("qa").innerHTML=qa.map(function(q){
+  return '<button class="qa-btn" style="--ac:'+q.ac+';--ac-b:'+q.ab+'" data-action="'+q.action+'"><span class="qa-btn-ic">'+ic(q.ic)+'</span><span class="qa-btn-lbl">'+q.l+'</span></button>';
+}).join("");
+
+/* ═══════════════════════════════════════════════ */
+/* ═══ WORKING QUICK ACTION JOURNEYS ═══════════════ */
+/* ═══════════════════════════════════════════════ */
+
+var JOURNEYS={
+  "create-financing":{
+    title:"Create Financing Application-i",
+    ix:ic("plus"),
+    steps:["Product","Details","Review","Submit"],
+    nbaContext:{
+      "home-topup":{product:"Home Financing-i",concept:"Musharakah Mutanaqisah",amount:"320000",tenure:"20",purpose:"Home renovation & equity release"},
+      "sme-growth":{product:"SME Working Capital-i",concept:"Tawarruq",amount:"500000",tenure:"5",purpose:"Working capital top-up for business expansion"},
+      "trade-expand":{product:"Trade Finance-i (LC)",concept:"Murabahah",amount:"400000",tenure:"1",purpose:"Increase LC limit for import operations"}
+    },
+    screens:[
+      function(ctx){
+        return '<div class="form-row"><label>Customer</label><input type="text" value="'+CUST.name+' · '+CUST.id+'" readonly></div>'
+          +'<div class="form-row prefilled"><label>Financing Product-i</label><select id="f-product"><option'+(ctx.product==="Home Financing-i"?" selected":"")+'>Home Financing-i</option><option'+(ctx.product==="Auto Financing-i"?" selected":"")+'>Auto Financing-i</option><option'+(ctx.product==="Personal Financing-i"?" selected":"")+'>Personal Financing-i</option><option'+(ctx.product==="SME Working Capital-i"?" selected":"")+'>SME Working Capital-i</option><option'+(ctx.product==="Trade Finance-i (LC)"?" selected":"")+'>Trade Finance-i (LC)</option></select></div>'
+          +'<div class="form-row prefilled"><label>Shariah Concept</label><select id="f-concept"><option'+(ctx.concept==="Murabahah"?" selected":"")+'>Murabahah</option><option'+(ctx.concept==="Musharakah Mutanaqisah"?" selected":"")+'>Musharakah Mutanaqisah</option><option'+(ctx.concept==="Tawarruq"?" selected":"")+'>Tawarruq</option><option'+(ctx.concept==="Ijarah"?" selected":"")+'>Ijarah</option></select><div class="hint">Auto-prefilled based on selected product</div></div>';
+      },
+      function(ctx){
+        return '<div class="form-grid"><div class="form-row prefilled"><label>Financing Amount (RM)</label><input type="number" id="f-amount" value="'+(ctx.amount||"")+'"></div>'
+          +'<div class="form-row prefilled"><label>Tenure (Years)</label><input type="number" id="f-tenure" value="'+(ctx.tenure||"5")+'"></div></div>'
+          +'<div class="form-row"><label>Purpose of Financing</label><textarea id="f-purpose" rows="3">'+(ctx.purpose||"")+'</textarea></div>'
+          +'<div class="form-grid"><div class="form-row"><label>Profit Rate (p.a.)</label><input type="text" value="3.85% (indicative)" readonly></div>'
+          +'<div class="form-row"><label>Branch</label><input type="text" value="'+CUST.branch+'" readonly></div></div>';
+      },
+      function(){
+        var amt=document.getElementById("f-amount").value;var tenure=document.getElementById("f-tenure").value;
+        var prod=document.getElementById("f-product").value;var concept=document.getElementById("f-concept").value;
+        var purp=document.getElementById("f-purpose").value;
+        var monthly=Math.round(amt/(tenure*12)*1.18);
+        return '<div style="background:var(--green-b);padding:14px;border-radius:10px;margin-bottom:14px;border-left:3px solid var(--green);"><div style="font-size:11px;color:var(--green-d);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Application Summary</div>'
+          +'<div class="summary-row"><span class="l">Customer</span><span class="v">'+CUST.name+'</span></div>'
+          +'<div class="summary-row"><span class="l">Account ID</span><span class="v">'+CUST.id+'</span></div>'
+          +'<div class="summary-row"><span class="l">Product</span><span class="v">'+prod+'</span></div>'
+          +'<div class="summary-row"><span class="l">Shariah Concept</span><span class="v">'+concept+'</span></div>'
+          +'<div class="summary-row"><span class="l">Tenure</span><span class="v">'+tenure+' years</span></div>'
+          +'<div class="summary-row"><span class="l">Purpose</span><span class="v" style="text-align:right;max-width:60%;font-size:11px;">'+purp+'</span></div>'
+          +'<div class="summary-row total"><span class="l">Financing Amount</span><span class="v">RM '+Number(amt).toLocaleString()+'</span></div>'
+          +'<div class="summary-row total"><span class="l">Est. Monthly Installment</span><span class="v">RM '+monthly.toLocaleString()+'</span></div>'
+          +'</div><div style="font-size:11.5px;color:var(--mu);padding:0 4px;">Submitting will create a credit application in BusinessNext CRM and route to Credit-i for Shariah review.</div>';
+      },
+      function(){
+        var ref="FIN-"+CUST.id+"-"+Math.floor(Math.random()*9000+1000);
+        return '<div class="success-msg"><div class="success-icon">'+svg(ICON.check)+'</div><h4>Application Submitted</h4><p>Financing-i application created for <b>'+CUST.name+'</b> and routed for Shariah Advisory Committee review.</p><div class="ref-no">Ref: '+ref+'</div><p style="margin-top:12px;font-size:11px;">Expected SLA: 3 business days · Customer will receive SMS confirmation.</p></div>';
+      }
+    ]
+  },
+
+  "investment-proposal":{
+    title:"Generate Islamic Investment Proposal",
+    ix:ic("chart"),
+    steps:["Profile","Allocation","Preview","Generate"],
+    nbaContext:{
+      "green-sukuk":{focus:"Green Sukuk · ESG-aligned",risk:"Moderate",amount:"500000"}
+    },
+    screens:[
+      function(ctx){
+        return '<div class="form-row"><label>Customer</label><input type="text" value="'+CUST.name+' · '+CUST.id+'" readonly></div>'
+          +'<div class="form-grid"><div class="form-row"><label>Risk Profile</label><select id="i-risk"><option>Conservative</option><option'+(ctx.risk==="Moderate"||!ctx.risk?" selected":"")+'>Moderate</option><option>Aggressive</option></select></div>'
+          +'<div class="form-row prefilled"><label>Investment Amount (RM)</label><input type="number" id="i-amount" value="'+(ctx.amount||"250000")+'"></div></div>'
+          +'<div class="form-row"><label>Investment Focus</label><input type="text" id="i-focus" value="'+(ctx.focus||"Shariah-compliant balanced portfolio")+'"></div>'
+          +'<div class="form-row"><label>Investment Horizon</label><select id="i-horizon"><option>1-3 years</option><option selected>3-5 years</option><option>5+ years</option></select></div>';
+      },
+      function(){
+        return '<div style="font-size:12px;color:var(--mu);margin-bottom:12px;">Recommended Shariah-compliant allocation based on Moderate risk profile:</div>'
+          +'<div style="display:flex;flex-direction:column;gap:8px;">'
+          +allocRow("Govt Sukuk Malaysia","var(--green)",35)
+          +allocRow("Corporate Sukuk","var(--gold)",20)
+          +allocRow("Islamic Unit Trust-i","var(--blue)",25)
+          +allocRow("Shariah Equity Funds","var(--ind)",15)
+          +allocRow("Cash / GIA-i","var(--cyan)",5)
+          +'</div><div style="margin-top:12px;font-size:11px;color:var(--mu);">All recommendations vetted by Maybank Islamic Shariah Advisory Committee.</div>';
+      },
+      function(){
+        var amt=document.getElementById("i-amount").value;var risk=document.getElementById("i-risk").value;var focus=document.getElementById("i-focus").value;
+        return '<div style="background:var(--gold-b);padding:14px;border-radius:10px;margin-bottom:14px;border-left:3px solid var(--gold);"><div style="font-size:11px;color:var(--gold-d);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Proposal Preview</div>'
+          +'<div class="summary-row"><span class="l">Customer</span><span class="v">'+CUST.name+'</span></div>'
+          +'<div class="summary-row"><span class="l">Risk Profile</span><span class="v">'+risk+'</span></div>'
+          +'<div class="summary-row"><span class="l">Focus</span><span class="v" style="text-align:right;max-width:60%;font-size:11px;">'+focus+'</span></div>'
+          +'<div class="summary-row total"><span class="l">Proposed Investment</span><span class="v">RM '+Number(amt).toLocaleString()+'</span></div>'
+          +'<div class="summary-row"><span class="l">Expected Return (p.a.)</span><span class="v" style="color:var(--green-d);">+6.5% to +9.2%</span></div>'
+          +'</div>';
+      },
+      function(){
+        var ref="INV-"+CUST.id+"-"+Math.floor(Math.random()*9000+1000);
+        return '<div class="success-msg"><div class="success-icon">'+svg(ICON.check)+'</div><h4>Proposal Generated</h4><p>Investment proposal PDF ready to share with <b>'+CUST.name+'</b>.</p><div class="ref-no">Ref: '+ref+'</div><p style="margin-top:12px;font-size:11px;">PDF emailed to RM Daniel · Customer can review in M2U Biz portal.</p></div>';
+      }
+    ]
+  },
+
+  "schedule-review":{
+    title:"Schedule Customer Review",
+    ix:ic("cal"),
+    steps:["Type","Schedule","Agenda","Confirm"],
+    screens:[
+      function(){
+        return '<div class="form-row"><label>Customer</label><input type="text" value="'+CUST.name+' · '+CUST.id+'" readonly></div>'
+          +'<div class="form-row"><label>Review Type</label><select id="r-type"><option>Annual Portfolio Review</option><option>Financing Renewal Discussion</option><option>Cross-Sell Opportunity</option><option>Risk Review</option></select></div>'
+          +'<div class="form-row"><label>Meeting Format</label><select id="r-format"><option>In-person · KLCC Branch</option><option>Video call · M2U Connect</option><option>Phone call</option></select></div>';
+      },
+      function(){
+        var today=new Date();today.setDate(today.getDate()+7);
+        var dt=today.toISOString().split("T")[0];
+        return '<div class="form-grid"><div class="form-row"><label>Date</label><input type="date" id="r-date" value="'+dt+'"></div>'
+          +'<div class="form-row"><label>Time</label><select id="r-time"><option>09:00 AM</option><option>10:30 AM</option><option selected>02:00 PM</option><option>04:00 PM</option></select></div></div>'
+          +'<div class="form-row"><label>Duration</label><select><option>30 minutes</option><option selected>60 minutes</option><option>90 minutes</option></select></div>'
+          +'<div class="form-row"><label>Attendees</label><input type="text" value="Daniel (RM), Farhan bin Mohammad Haq" readonly></div>';
+      },
+      function(){
+        return '<div class="form-row"><label>Meeting Agenda</label><textarea id="r-agenda" rows="5">1. Portfolio performance review (YTD: +8.4%)\n2. Home Financing-i top-up opportunity (RM 320K eligible)\n3. Green Sukuk allocation discussion\n4. Family Takaful renewal\n5. Q&A and next steps</textarea></div>'
+          +'<div class="form-row"><label>Materials to Prepare</label><textarea rows="3">Customer 360 report, Shariah compliance summary, Investment performance deck</textarea></div>';
+      },
+      function(){
+        var date=document.getElementById("r-date").value;var time=document.getElementById("r-time").value;
+        var ref="MTG-"+CUST.id+"-"+Math.floor(Math.random()*9000+1000);
+        return '<div class="success-msg"><div class="success-icon">'+svg(ICON.check)+'</div><h4>Meeting Scheduled</h4><p>Review meeting booked with <b>'+CUST.name+'</b> on <b>'+date+' at '+time+'</b>.</p><div class="ref-no">Ref: '+ref+'</div><p style="margin-top:12px;font-size:11px;">Calendar invite sent to both parties · SMS reminder 24 hours before.</p></div>';
+      }
+    ]
+  },
+
+  "kyc-refresh":{
+    title:"Start KYC Refresh",
+    ix:ic("refresh"),
+    steps:["Profile","Documents","Verify","Complete"],
+    screens:[
+      function(){
+        return '<div class="form-row"><label>Customer</label><input type="text" value="'+CUST.name+' · '+CUST.id+'" readonly></div>'
+          +'<div class="form-grid"><div class="form-row"><label>NRIC / Passport</label><input type="text" value="800215-08-1234" readonly></div>'
+          +'<div class="form-row"><label>Email</label><input type="email" value="'+CUST.email+'"></div></div>'
+          +'<div class="form-grid"><div class="form-row"><label>Mobile</label><input type="tel" value="'+CUST.phone+'"></div>'
+          +'<div class="form-row"><label>Residential Address</label><input type="text" value="Kuala Lumpur, Malaysia" readonly></div></div>'
+          +'<div class="form-row"><label>Source of Funds</label><select><option selected>Business Income · SME Operations</option><option>Salary</option><option>Investment Returns</option></select></div>';
+      },
+      function(){
+        return '<div style="font-size:12px;color:var(--mu);margin-bottom:12px;">Required documents for KYC refresh (Islamic banking standard):</div>'
+          +'<div style="display:flex;flex-direction:column;gap:8px;">'
+          +docItem("NRIC (front & back)",true,"On file")
+          +docItem("Latest 3 months bank statement",true,"On file")
+          +docItem("Business registration (SSM)",true,"On file")
+          +docItem("Source of wealth declaration",false,"Required")
+          +docItem("Shariah preference confirmation",false,"Required")
+          +'</div>';
+      },
+      function(){
+        return '<div class="form-row"><label>Risk Rating Confirmation</label><select><option selected>Low Risk (Standard CDD)</option><option>Medium Risk (Enhanced)</option><option>High Risk (Senior Approval)</option></select></div>'
+          +'<div class="form-row"><label>PEP Status</label><select><option selected>Not a PEP</option><option>PEP - Domestic</option><option>PEP - Foreign</option></select></div>'
+          +'<div class="form-row"><label>Sanctions Screening</label><input type="text" value="Cleared · No matches found" readonly style="color:var(--green-d);"></div>'
+          +'<div class="form-row"><label>Notes</label><textarea rows="3">Customer remains low-risk Islamic banking client. All documents verified and Shariah preference reconfirmed.</textarea></div>';
+      },
+      function(){
+        var ref="KYC-"+CUST.id+"-"+new Date().toISOString().split("T")[0];
+        return '<div class="success-msg"><div class="success-icon">'+svg(ICON.check)+'</div><h4>KYC Refresh Complete</h4><p>Customer profile for <b>'+CUST.name+'</b> verified and updated.</p><div class="ref-no">Ref: '+ref+'</div><p style="margin-top:12px;font-size:11px;">Next KYC refresh due: '+nextYear()+' · Auto-reminder scheduled</p></div>';
+      }
+    ]
+  },
+
+  "recommend-product":{
+    title:"Recommend Product-i",
+    ix:ic("lightbulb"),
+    steps:["Match","Select","Compose","Send"],
+    nbaContext:{
+      "family-takaful":{product:"Etiqa Family Takaful with Education Rider",reason:"Customer has 2 children entering tertiary education"},
+      "td-idle":{product:"6-Month Term Deposit-i at 3.95% p.a.",reason:"Idle funds detected in Current Account-i (avg RM 380K for 3 months)"}
+    },
+    screens:[
+      function(ctx){
+        return '<div class="form-row"><label>Customer</label><input type="text" value="'+CUST.name+' · '+CUST.id+'" readonly></div>'
+          +'<div style="background:var(--green-b);padding:12px;border-radius:8px;margin-bottom:14px;font-size:11.5px;border-left:3px solid var(--green);"><b style="color:var(--green-d);">AI Match:</b> Based on customer profile, behaviour and financial health (score 75), top product recommendations identified.</div>'
+          +'<div class="form-row prefilled"><label>Recommended Product</label><select id="rp-product"><option'+(ctx.product&&ctx.product.indexOf("Takaful")>=0?" selected":"")+'>Etiqa Family Takaful with Education Rider</option><option'+(ctx.product&&ctx.product.indexOf("Term Deposit")>=0?" selected":"")+'>6-Month Term Deposit-i at 3.95% p.a.</option><option>Maybank Green Sukuk · ESG-certified</option><option>Islamic Unit Trust-i · Asia Equity Fund</option></select></div>'
+          +'<div class="form-row prefilled"><label>Reason</label><textarea id="rp-reason" rows="2">'+(ctx.reason||"")+'</textarea></div>';
+      },
+      function(){
+        return '<div style="font-size:12px;color:var(--mu);margin-bottom:12px;">Product details and benefits:</div>'
+          +'<div style="background:#FAFBFC;padding:14px;border-radius:8px;border:1px solid var(--bdr-l);"><div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:8px;">Key Features</div>'
+          +'<ul style="font-size:12px;color:var(--ink2);padding-left:18px;line-height:1.7;"><li>100% Shariah-compliant · approved by SAC</li><li>Competitive returns/protection benefits</li><li>Flexible contribution / withdrawal terms</li><li>Free Shariah Advisory consultation</li><li>Digital onboarding via M2U Biz</li></ul></div>'
+          +'<div class="form-row" style="margin-top:14px;"><label>Personalised Note</label><textarea rows="3">Dear Mr Farhan, based on our recent portfolio review and your family priorities, I would like to propose this Shariah-compliant solution. Happy to discuss further at your convenience.</textarea></div>';
+      },
+      function(){
+        var prod=document.getElementById("rp-product").value;
+        return '<div class="form-row"><label>Channel</label><select id="rp-channel"><option selected>Email + SMS</option><option>Email only</option><option>WhatsApp Business</option><option>M2U Inbox</option></select></div>'
+          +'<div class="form-row"><label>Subject</label><input type="text" value="Recommendation: '+prod+'"></div>'
+          +'<div class="form-row"><label>Send to</label><input type="text" value="'+CUST.email+' · '+CUST.phone+'" readonly></div>'
+          +'<div style="font-size:11px;color:var(--mu);padding:10px;background:var(--blue-b);border-radius:8px;border-left:3px solid var(--blue);">Recommendation will be logged in BusinessNext CRM and tied to Farhan\'s Customer 360 record for tracking.</div>';
+      },
+      function(){
+        var ref="REC-"+CUST.id+"-"+Math.floor(Math.random()*9000+1000);
+        return '<div class="success-msg"><div class="success-icon">'+svg(ICON.check)+'</div><h4>Recommendation Sent</h4><p>Product recommendation delivered to <b>'+CUST.name+'</b> via Email + SMS.</p><div class="ref-no">Ref: '+ref+'</div><p style="margin-top:12px;font-size:11px;">Tracking enabled · You will be notified of customer response.</p></div>';
+      }
+    ]
+  },
+
+  "shariah-report":{
+    title:"Generate Shariah Report",
+    ix:ic("doc"),
+    steps:["Period","Scope","Review","Generate"],
+    screens:[
+      function(){
+        return '<div class="form-row"><label>Customer</label><input type="text" value="'+CUST.name+' · '+CUST.id+'" readonly></div>'
+          +'<div class="form-grid"><div class="form-row"><label>Report Period</label><select><option>Last 30 days</option><option>Last 90 days</option><option selected>Year to Date</option><option>Full Year (FY 2025-26)</option></select></div>'
+          +'<div class="form-row"><label>Report Type</label><select><option selected>Shariah Compliance Audit</option><option>Purification Calculation</option><option>Contract Review</option></select></div></div>';
+      },
+      function(){
+        return '<div style="font-size:12px;color:var(--mu);margin-bottom:12px;">Include the following in the report:</div>'
+          +'<div style="display:flex;flex-direction:column;gap:8px;">'
+          +checkItem("Product compliance status (11 products)",true)
+          +checkItem("Contract review (Murabahah, Musharakah, Tawarruq, etc.)",true)
+          +checkItem("Purification requirements",true)
+          +checkItem("Zakat calculation",true)
+          +checkItem("Transaction log review",true)
+          +checkItem("Shariah Advisory Committee notes",false)
+          +'</div>';
+      },
+      function(){
+        return '<div style="background:var(--green-b);padding:14px;border-radius:10px;margin-bottom:14px;border-left:3px solid var(--green);"><div style="font-size:11px;color:var(--green-d);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Report Preview</div>'
+          +'<div class="summary-row"><span class="l">Customer</span><span class="v">'+CUST.name+'</span></div>'
+          +'<div class="summary-row"><span class="l">Account</span><span class="v">'+CUST.id+'</span></div>'
+          +'<div class="summary-row"><span class="l">Compliance Status</span><span class="v" style="color:var(--green-d);">✓ 100% Shariah Compliant</span></div>'
+          +'<div class="summary-row"><span class="l">Active Contracts</span><span class="v">8 contract types</span></div>'
+          +'<div class="summary-row"><span class="l">Purification</span><span class="v" style="color:var(--green-d);">None required</span></div>'
+          +'<div class="summary-row"><span class="l">Est. Zakat (Annual)</span><span class="v">RM 24,600</span></div>'
+          +'<div class="summary-row total"><span class="l">Report Pages</span><span class="v">14 pages</span></div></div>';
+      },
+      function(){
+        var ref="SR-"+CUST.id+"-"+new Date().toISOString().split("T")[0];
+        return '<div class="success-msg"><div class="success-icon">'+svg(ICON.check)+'</div><h4>Shariah Report Generated</h4><p>14-page Shariah compliance report for <b>'+CUST.name+'</b> ready to download.</p><div class="ref-no">Ref: '+ref+'</div><p style="margin-top:12px;font-size:11px;">PDF saved to BusinessNext CRM · Signed by Maybank Islamic SAC</p></div>';
+      }
+    ]
+  }
+};
+
+function allocRow(n,c,p){return '<div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:#FAFBFC;border-radius:7px;"><span style="width:8px;height:8px;border-radius:2px;background:'+c+';"></span><span style="flex:1;font-size:12px;font-weight:600;">'+n+'</span><span style="font-size:11px;color:var(--mu);">'+p+'%</span></div>';}
+function docItem(n,done,status){return '<div style="display:flex;align-items:center;gap:10px;padding:9px 11px;background:'+(done?"var(--green-b)":"var(--amber-b)")+';border-radius:7px;border-left:3px solid '+(done?"var(--green)":"var(--amber)")+';"><span style="color:'+(done?"var(--green-d)":"var(--amber-d)")+';">'+svg(done?ICON.check:ICON.refresh)+'</span><span style="flex:1;font-size:12px;font-weight:600;">'+n+'</span><span style="font-size:10.5px;color:var(--mu);font-weight:600;">'+status+'</span></div>';}
+function checkItem(n,checked){return '<label style="display:flex;align-items:center;gap:10px;padding:9px 11px;background:#FAFBFC;border-radius:7px;border:1px solid var(--bdr-l);cursor:pointer;font-size:12px;"><input type="checkbox"'+(checked?" checked":"")+' style="width:16px;height:16px;"><span style="flex:1;">'+n+'</span></label>';}
+function nextYear(){var d=new Date();d.setFullYear(d.getFullYear()+1);return d.toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"});}
+
+/* ─── MODAL CONTROLLER ─── */
+var currentJ=null,currentStep=0,currentCtx={};
+var modalBg=document.getElementById("modal-bg"),mTitle=document.getElementById("m-title"),mIx=document.getElementById("m-ix"),mBody=document.getElementById("m-body"),mBack=document.getElementById("m-back"),mNext=document.getElementById("m-next");
+
+function openJourney(action,nbaId){
+  currentJ=JOURNEYS[action];if(!currentJ)return;
+  currentStep=0;currentCtx={};
+  if(nbaId&&currentJ.nbaContext&&currentJ.nbaContext[nbaId])currentCtx=currentJ.nbaContext[nbaId];
+  mTitle.textContent=currentJ.title;mIx.innerHTML=currentJ.ix;
+  modalBg.classList.add("on");
+  renderStep();
+}
+
+function renderStep(){
+  var stepper='<div class="stepper">';
+  for(var i=0;i<currentJ.steps.length;i++){
+    var cls=i<currentStep?"done":(i===currentStep?"cur":"");
+    stepper+='<div class="step '+cls+'"><div class="step-dot">'+(i<currentStep?"✓":(i+1))+'</div><div class="step-lbl">'+currentJ.steps[i]+'</div></div>';
+  }
+  stepper+='</div>';
+  mBody.innerHTML=stepper+currentJ.screens[currentStep](currentCtx);
+  mBack.style.visibility=currentStep===0?"hidden":"visible";
+  mBack.textContent=currentStep===0?"":"← Back";
+  var isLast=currentStep===currentJ.screens.length-1;
+  var isSecondLast=currentStep===currentJ.screens.length-2;
+  mNext.innerHTML=isLast?"Close ✓":(isSecondLast?"Submit "+svg(ICON.check):"Next →");
+}
+
+mNext.addEventListener("click",function(){
+  if(currentStep<currentJ.screens.length-1){currentStep++;renderStep();}
+  else{modalBg.classList.remove("on");}
+});
+mBack.addEventListener("click",function(){if(currentStep>0){currentStep--;renderStep();}});
+document.getElementById("m-close").addEventListener("click",function(){modalBg.classList.remove("on");});
+modalBg.addEventListener("click",function(e){if(e.target===modalBg)modalBg.classList.remove("on");});
+
+/* Wire up Quick Actions */
+document.querySelectorAll("[data-action]").forEach(function(b){
+  b.addEventListener("click",function(){openJourney(b.dataset.action,b.dataset.nba);});
+});
+
+})();
+</script>
+</body>
+</html>
