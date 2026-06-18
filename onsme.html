@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>SME RM Dashboard</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;overflow:hidden;font-family:'Poppins',sans-serif;background:#F4F5F7;}
+.shell{display:flex;flex-direction:column;height:100%;}
+.tabs{background:#fff;border-bottom:1px solid #E2E5EA;display:flex;gap:0;padding:0 20px;flex:none;overflow-x:auto;}
+.tabs::-webkit-scrollbar{height:3px;}
+.tabs::-webkit-scrollbar-thumb{background:#ddd;border-radius:2px;}
+.t{border:none;background:none;font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;color:#7A808E;padding:11px 16px;border-bottom:2.5px solid transparent;margin-bottom:-1px;cursor:pointer;transition:.18s ease;white-space:nowrap;}
+.t:hover{color:#2B3038;}
+.t.on{color:#2B3038;border-bottom-color:#F5C518;}
+.frame{flex:1;border:none;width:100%;background:#F4F5F7;}
+@media(max-width:600px){.tabs{padding:0 12px;}.t{font-size:12px;padding:10px 12px;}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="tabs">
+    <button class="t on" data-src="1-overview.html">Overview</button>
+    <button class="t" data-src="2-portfolio.html">Portfolio View</button>
+    <button class="t" data-src="3-pipeline.html">Pipeline &amp; Risk</button>
+    <button class="t" data-src="4-products.html">Product Penetration</button>
+    <button class="t" data-src="5-financials.html">Financials</button>
+    <button class="t" data-src="6-clients.html">Client Analytics</button>
+    <button class="t" data-src="7-performance.html">Performance</button>
+  </div>
+  <iframe class="frame" id="frame" src="1-overview.html"></iframe>
+</div>
+<script>
+document.querySelectorAll(".t").forEach(function(t){
+  t.addEventListener("click",function(){
+    document.querySelectorAll(".t").forEach(function(x){x.classList.remove("on");});
+    t.classList.add("on");
+    document.getElementById("frame").src=t.dataset.src;
+  });
+});
+</script>
+</body>
+</html>
