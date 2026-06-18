@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>VBI & Legacy Risk Dashlet</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+:root{
+  --f:'Poppins',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --page:#F4F5F7;--white:#fff;
+  --bdr:#E2E5EA;--bdr-l:#EEF0F3;
+  --ink:#1F2530;--ink2:#3D4550;--mu:#6B7280;
+  --green:#0FA968;--green-b:#E5F6EE;--green-d:#0B8553;
+  --amber:#F59E0B;--amber-b:#FEF8E7;--amber-bdr:#F4D88A;--amber-d:#D4870A;
+  --sh:0 1px 3px rgba(20,28,40,.04),0 2px 8px rgba(20,28,40,.06);
+  --sh2:0 4px 16px rgba(20,28,40,.1);
+  --r:14px;--tr:.18s ease;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--f);font-size:13px;line-height:1.55;color:var(--ink);background:var(--page);-webkit-font-smoothing:antialiased;padding:20px;}
+
+.wrap{width:100%;max-width:1100px;margin:0 auto;}
+
+/* GRID: 2 cards equal width on desktop */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+
+/* ─── CARD BASE ─── */
+.card{border-radius:var(--r);padding:18px 20px;transition:box-shadow var(--tr),transform var(--tr);position:relative;}
+.card:hover{box-shadow:var(--sh2);transform:translateY(-2px);}
+
+/* ─── VBI CARD (left, white with green accent) ─── */
+.card-vbi{background:var(--white);border:1px solid var(--bdr);box-shadow:var(--sh);}
+.vbi-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px;}
+.vbi-title{display:flex;align-items:flex-start;gap:8px;}
+.vbi-leaf{flex:none;color:var(--green);margin-top:2px;}
+.vbi-leaf svg{width:18px;height:18px;}
+.vbi-title h3{font-size:15px;font-weight:700;color:var(--ink);line-height:1.35;letter-spacing:-.01em;}
+.vbi-badge{background:var(--green-b);color:var(--green-d);font-size:11px;font-weight:700;padding:5px 10px;border-radius:8px;white-space:nowrap;line-height:1.3;text-align:center;flex:none;}
+.vbi-body{font-size:12.5px;color:var(--mu);line-height:1.55;margin-bottom:14px;}
+.vbi-progress-row{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:12.5px;margin-bottom:6px;}
+.vbi-progress-row .label{font-weight:600;color:var(--ink);}
+.vbi-progress-row .value{font-weight:600;color:var(--ink2);}
+.vbi-bar{height:6px;background:#E8EAEE;border-radius:4px;overflow:hidden;}
+.vbi-bar-fill{height:100%;background:linear-gradient(90deg,#0FA968 0%,#15C57E 100%);border-radius:4px;transition:width .4s ease;}
+
+/* ─── LEGACY RISK CARD (right, amber theme) ─── */
+.card-risk{background:#FFFBEB;border:1.5px solid var(--amber-bdr);}
+.risk-badge{display:inline-block;background:var(--amber-b);color:var(--amber-d);font-size:10.5px;font-weight:700;letter-spacing:.05em;padding:4px 10px;border-radius:6px;border:1px solid var(--amber-bdr);margin-bottom:10px;text-transform:uppercase;}
+.risk-title{font-size:15px;font-weight:700;color:var(--ink);line-height:1.35;letter-spacing:-.01em;margin-bottom:8px;}
+.risk-body{font-size:12.5px;color:var(--ink2);line-height:1.6;margin-bottom:14px;}
+.risk-amount{color:var(--amber-d);font-weight:700;}
+.risk-cta{display:inline-flex;align-items:center;gap:8px;background:var(--amber);color:#fff;font-family:var(--f);font-size:13px;font-weight:700;padding:10px 18px;border:none;border-radius:8px;cursor:pointer;transition:background var(--tr),transform var(--tr);text-decoration:none;}
+.risk-cta:hover{background:var(--amber-d);transform:translateX(2px);}
+.risk-cta:active{transform:translateX(0);}
+.risk-cta svg{width:14px;height:14px;}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:780px){
+  .grid{grid-template-columns:1fr;gap:14px;}
+  body{padding:14px;}
+  .card{padding:16px;}
+  .vbi-title h3,.risk-title{font-size:14px;}
+}
+@media(max-width:420px){
+  body{padding:12px;font-size:12px;}
+  .card{padding:14px;}
+  .vbi-head{flex-direction:column;align-items:stretch;gap:8px;}
+  .vbi-badge{align-self:flex-start;}
+  .vbi-progress-row{flex-wrap:wrap;}
+  .risk-cta{width:100%;justify-content:center;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="grid">
+
+  <!-- ═══ VBI CARD ═══ -->
+  <div class="card card-vbi">
+    <div class="vbi-head">
+      <div class="vbi-title">
+        <span class="vbi-leaf">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19.2 2c1 3 .5 4.74-2 7 4.5-1 6.5 2 5 5-1 3-2 5-9 5z"/>
+            <path d="M2 21c0-3 1.85-5.36 5.08-6"/>
+          </svg>
+        </span>
+        <h3>Value-Based Intermediation (VBI) Card Transactions</h3>
+      </div>
+      <span class="vbi-badge">ESG Shield<br>Active</span>
+    </div>
+    <p class="vbi-body">
+      Real-time transaction tracking ensures that Dato' Ahmad's merchant payments map strictly to halal-certified, environment-friendly commerce in line with BNM rules.
+    </p>
+    <div class="vbi-progress-row">
+      <span class="label">Halal Green Agriculture Procurement</span>
+      <span class="value">MYR 125,000 (VBI Score 92%)</span>
+    </div>
+    <div class="vbi-bar"><div class="vbi-bar-fill" style="width:92%;"></div></div>
+  </div>
+
+  <!-- ═══ LEGACY RISK ALERT CARD ═══ -->
+  <div class="card card-risk">
+    <span class="risk-badge">LEGACY RISK ALERT</span>
+    <h3 class="risk-title">Amanah Estate Distribution &amp; Freeze Warning</h3>
+    <p class="risk-body">
+      Without Hibah Mutlaqah declarations, up to <span class="risk-amount">RM 773,200</span> of non-liquid properties in Kuala Lumpur could remain frozen for years under traditional civil probate.
+    </p>
+    <a href="#" class="risk-cta">
+      Analyze WASEE Faraid Ratios
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14M13 5l7 7-7 7"/>
+      </svg>
+    </a>
+  </div>
+
+</div>
+</div>
+</body>
+</html>
