@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Account Plan Target — Petronas Chemical Group | Maybank GGB</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:auto}
+body{font-family:'Poppins',sans-serif;background:#fff;font-size:14px;color:#1a2332;-webkit-font-smoothing:antialiased;line-height:1.4}
+.wrap{width:100%}
+
+/* ── COMPACT META STRIP (replaces big title card) ── */
+.meta-strip{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-bottom:12px;margin-bottom:12px;border-bottom:1px solid #eef0f3}
+.meta-left{display:flex;align-items:center;gap:10px;min-width:0}
+.meta-left .client-name{font-size:14.5px;font-weight:600;color:#0A1628;white-space:nowrap}
+.meta-left .meta-sep{color:#d1d5db}
+.meta-left .meta-sub{font-size:12.5px;color:#6b7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.meta-tags{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}
+.tag{font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:5px;white-space:nowrap}
+.tag-gold{background:#FFF3CD;color:#856404}
+.tag-blue{background:#E6F1FB;color:#0C447C}
+.tag-green{background:#EAF3DE;color:#27500A}
+
+/* ── KPI STRIP — slim inline, no boxed cards ── */
+.kpi-strip{display:flex;align-items:stretch;gap:0;margin-bottom:12px;border:1px solid #eef0f3;border-radius:8px;overflow:hidden}
+.kpi-cell{flex:1;padding:9px 14px;border-right:1px solid #eef0f3;min-width:0}
+.kpi-cell:last-child{border-right:none}
+.kpi-cell .lbl{font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:.4px;font-weight:600;margin-bottom:3px;white-space:nowrap}
+.kpi-cell .val{font-size:16px;font-weight:600;color:#0A1628;line-height:1.15;white-space:nowrap}
+.kpi-cell .sub{font-size:10.5px;margin-top:2px;font-weight:500;white-space:nowrap}
+.up{color:#16a34a}.dn{color:#dc2626}.am{color:#d97706}.mut{color:#9ca3af}
+
+/* ── INFO BANNER ── */
+.banner{background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px;padding:8px 13px;margin-bottom:12px;font-size:12px;color:#856404;display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.banner svg{flex-shrink:0;margin-top:1px}
+
+/* ── CONTROLS ── */
+.controls-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.ctl-label{font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:.4px;flex-shrink:0}
+.filter-btn{padding:5px 12px;border-radius:20px;border:1px solid #e5e7eb;background:#fff;font-size:12px;font-weight:500;color:#4b5563;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .12s;white-space:nowrap}
+.filter-btn:hover{border-color:#FFAD00;background:#fffbeb}
+.filter-btn.on{background:#0A1628;color:#FFAD00;border-color:#0A1628;font-weight:600}
+.search-input{padding:6px 11px;border-radius:6px;border:1px solid #e5e7eb;font-size:12.5px;font-family:'Poppins',sans-serif;outline:none;width:190px;color:#1a2332}
+.search-input:focus{border-color:#FFAD00;box-shadow:0 0 0 2px rgba(255,173,0,.15)}
+.toggle-wrap{display:flex;align-items:center;gap:7px;margin-left:auto}
+.toggle-switch{position:relative;width:36px;height:20px;background:#d1d5db;border-radius:20px;cursor:pointer;transition:background .15s;flex-shrink:0}
+.toggle-switch.on{background:#FFAD00}
+.toggle-switch .knob{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .15s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.toggle-switch.on .knob{left:18px}
+.toggle-label{font-size:11.5px;color:#4b5563;font-weight:500;white-space:nowrap}
+
+/* ── TABLE — blends flat, no nested card chrome ── */
+.table-outer{border:1px solid #eef0f3;border-radius:8px;overflow:hidden;margin-bottom:12px}
+.table-scroll{overflow-x:auto;width:100%;max-height:620px;overflow-y:auto}
+table.calc-tbl{width:100%;border-collapse:collapse;min-width:1280px;font-size:13.5px;table-layout:fixed}
+table.calc-tbl colgroup col.col-type{width:110px}
+table.calc-tbl colgroup col.col-prod{width:240px}
+table.calc-tbl colgroup col.col-region{width:90px}
+table.calc-tbl colgroup col.col-entity{width:115px}
+table.calc-tbl colgroup col.col-actual{width:135px}
+table.calc-tbl colgroup col.col-niiA{width:110px}
+table.calc-tbl colgroup col.col-target{width:135px}
+table.calc-tbl colgroup col.col-niiT{width:110px}
+table.calc-tbl colgroup col.col-remarks{width:280px}
+
+table.calc-tbl thead th{padding:9px 8px;text-align:left;font-size:14px;font-weight:600;white-space:normal;line-height:1.25;border-bottom:1.5px solid rgba(0,0,0,.06);position:sticky;top:0;z-index:5;vertical-align:middle}
+th.h-type{background:#f8f9fa;color:#374151}
+th.h-prod{background:#f8f9fa;color:#374151}
+th.h-region{background:#f8f9fa;color:#374151}
+th.h-entity{background:#f8f9fa;color:#374151}
+th.h-actual{background:#FFF3CD;color:#856404;text-align:center}
+th.h-niiA{background:#D1FAE5;color:#065F46;text-align:center}
+th.h-target{background:#FFF3CD;color:#856404;text-align:center}
+th.h-niiT{background:#DBEAFE;color:#1E40AF;text-align:center}
+th.h-remarks{background:#DBEAFE;color:#1E40AF}
+
+table.calc-tbl tbody td{padding:7px 10px;border-bottom:1px solid #f3f4f6;vertical-align:middle;font-size:13.5px;color:#1a2332;overflow:hidden;text-overflow:ellipsis}
+table.calc-tbl tbody tr:hover td{background:#fafbfc}
+td.c-type{font-weight:600;color:#0A1628;vertical-align:top;padding-top:9px;background:#fff}
+td.c-type .type-count{font-size:10px;font-weight:400;color:#9ca3af;display:block;margin-top:2px}
+td.c-prod{font-weight:500;white-space:normal}
+td.c-region{color:#6b7280;font-size:12px}
+td.c-entity{color:#6b7280;font-size:12px}
+td.c-actual{background:#FFFCF0;text-align:center;font-weight:600;color:#1a2332}
+td.c-niiA{background:#F0FDF7;text-align:center;font-weight:600;color:#065F46}
+td.c-target{background:#FFFCF0;text-align:center}
+td.c-niiT{background:#F5F9FF;text-align:center}
+td.c-remarks{background:#F5F9FF;white-space:normal}
+
+.dash-row td{color:#b0b7c3}
+.dash-row td.c-prod{color:#6b7280}
+.held-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#16a34a;margin-right:6px;flex-shrink:0}
+.unheld-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#d1d5db;margin-right:6px;flex-shrink:0}
+
+input.cell-input{width:100%;padding:5px 6px;border-radius:5px;border:1px solid #e5e7eb;font-size:13px;font-family:'Poppins',sans-serif;text-align:center;background:#fff;outline:none;color:#1a2332}
+input.cell-input:focus{border-color:#FFAD00;box-shadow:0 0 0 2px rgba(255,173,0,.15);background:#fffefa}
+input.cell-input.ai-suggested{color:#92400e;font-style:italic;background:#fffdf5}
+textarea.cell-input{width:100%;padding:5px 6px;border-radius:5px;border:1px solid #e5e7eb;font-size:12px;font-family:'Poppins',sans-serif;resize:vertical;min-height:32px;outline:none;color:#1a2332;line-height:1.35}
+textarea.cell-input:focus{border-color:#FFAD00;box-shadow:0 0 0 2px rgba(255,173,0,.15)}
+textarea.cell-input.ai-suggested{color:#92400e;font-style:italic;background:#fffdf5}
+
+tr.total-row td{background:#FFF3CD!important;font-weight:700;color:#0A1628;border-top:2px solid #FFAD00;padding:10px 8px;font-size:13px}
+tr.total-row .total-arrow{font-size:12.5px;color:#374151;display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:wrap}
+tr.total-row input.cell-input{font-weight:700;background:#fff}
+tr.total-row .total-label{white-space:normal}
+
+.legend-row{display:flex;gap:14px;flex-wrap:wrap;padding:8px 12px;font-size:11px;color:#9ca3af;align-items:center;border-top:1px solid #f3f4f6}
+.legend-item{display:flex;align-items:center;gap:5px}
+
+@media (max-width:768px){
+  .meta-strip{flex-direction:column;align-items:flex-start}
+  .kpi-strip{flex-wrap:wrap}
+  .kpi-cell{flex:1 1 45%;border-bottom:1px solid #eef0f3}
+  table.calc-tbl{min-width:1280px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="meta-strip">
+  <div class="meta-left">
+    <span class="client-name">Petronas Chemical Group Berhad</span>
+    <span class="meta-sep">&middot;</span>
+    <span class="meta-sub">CIF-PC-0091 &middot; FY 2026&ndash;27 &middot; All Corporate Banking Product Lines</span>
+  </div>
+  <div class="meta-tags">
+    <span class="tag tag-gold">GGB-76 &middot; Realised vs Planned</span>
+    <span class="tag tag-blue">Auto-populated from C360</span>
+    <span class="tag tag-green">87 Products &middot; 6 Divisions</span>
+  </div>
+</div>
+
+<div class="kpi-strip" id="kpi-row"></div>
+
+<div class="banner">
+  <svg width="15" height="15" viewBox="0 0 16 16" fill="none" style="margin-top:1px"><circle cx="8" cy="8" r="7" stroke="#856404" stroke-width="1.3"/><path d="M8 7v4.2M8 5v.01" stroke="#856404" stroke-width="1.3" stroke-linecap="round"/></svg>
+  <span><strong>FY 2025&ndash;26 Actual</strong> and <strong>NII Actual</strong> are read-only, auto-filled from the finance system for products PCHEM currently holds with Maybank &mdash; others show a dash (&mdash;). <strong>FY 2026&ndash;27 Target</strong>, <strong>NII Target</strong> and <strong>Maker Remarks</strong> are editable, pre-filled with AI-suggested values you can adjust.</span>
+</div>
+
+<div class="controls-bar">
+  <span class="ctl-label">Filter</span>
+  <button class="filter-btn on" data-filter="all" onclick="setFilter('all',this)">All Products (87)</button>
+  <button class="filter-btn" data-filter="Credit" onclick="setFilter('Credit',this)">Credit</button>
+  <button class="filter-btn" data-filter="Cash Management" onclick="setFilter('Cash Management',this)">Cash Management</button>
+  <button class="filter-btn" data-filter="Trade Finance" onclick="setFilter('Trade Finance',this)">Trade Finance</button>
+  <button class="filter-btn" data-filter="Treasury & FX" onclick="setFilter('Treasury & FX',this)">Treasury &amp; FX</button>
+  <button class="filter-btn" data-filter="Investment Banking" onclick="setFilter('Investment Banking',this)">Investment Banking</button>
+  <button class="filter-btn" data-filter="Securities Services" onclick="setFilter('Securities Services',this)">Securities</button>
+  <input class="search-input" id="searchBox" placeholder="Search product..." oninput="renderTable()"/>
+  <div class="toggle-wrap">
+    <span class="toggle-label">Held only</span>
+    <div class="toggle-switch" id="heldToggle" onclick="toggleHeldOnly()"><div class="knob"></div></div>
+  </div>
+</div>
+
+<div class="table-outer">
+  <div class="table-scroll">
+    <table class="calc-tbl">
+      <colgroup>
+        <col class="col-type"><col class="col-prod"><col class="col-region"><col class="col-entity">
+        <col class="col-actual"><col class="col-niiA"><col class="col-target"><col class="col-niiT"><col class="col-remarks">
+      </colgroup>
+      <thead>
+        <tr>
+          <th class="h-type">Product Type</th>
+          <th class="h-prod">Product</th>
+          <th class="h-region">Region</th>
+          <th class="h-entity">Booking Entity</th>
+          <th class="h-actual">FY 2025&ndash;26 Actual</th>
+          <th class="h-niiA">NII Actual (M)</th>
+          <th class="h-target">FY 2026&ndash;27 Target</th>
+          <th class="h-niiT">NII Target (M)</th>
+          <th class="h-remarks">Maker Remarks</th>
+        </tr>
+      </thead>
+      <tbody id="tbl-body"></tbody>
+      <tfoot id="tbl-foot"></tfoot>
+    </table>
+  </div>
+  <div class="legend-row">
+    <span class="legend-item"><span class="held-dot"></span>Existing holding &mdash; actuals auto-filled</span>
+    <span class="legend-item"><span class="unheld-dot"></span>No current holding &mdash; whitespace, target fully editable</span>
+    <span class="legend-item" style="color:#92400e;font-style:italic">Italic amber = AI-suggested value (editable)</span>
+  </div>
+</div>
+
+</div>
+
+<script id="product-data" type="application/json">
+[{"type": "Credit", "showType": true, "typeSpan": 7, "product": "Short-Term Revolving Credit (STRC / STRC-i)", "region": "APAC", "entity": "Maybank MY", "actual": "210M", "niiA": "3.6", "noiA": "0.6", "rwaA": "1.8%", "target": "260M", "niiT": "4.3", "noiT": "0.7", "rwaT": "1.9%", "remarks": "Downstream expansion drives higher utilisation H2.", "held": true}, {"type": "Credit", "showType": false, "typeSpan": 7, "product": "Overdraft / Cash Line-i", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "30M", "niiT": "0.4", "noiT": "0.1", "rwaT": "1.5%", "remarks": "Working capital buffer \u2014 propose at next review.", "held": false}, {"type": "Credit", "showType": false, "typeSpan": 7, "product": "Bridging Loan", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "No active bridging requirement identified.", "held": false}, {"type": "Credit", "showType": false, "typeSpan": 7, "product": "Term Loan / Commodity Murabahah Financing-i (CMTF-i)", "region": "APAC", "entity": "Maybank MY", "actual": "1,320M", "niiA": "9.85", "noiA": "\u2014", "rwaA": "2.1%", "target": "1,600M", "niiT": "11.8", "noiT": "0.3", "rwaT": "2.2%", "remarks": "Expand utilisation with RAPID-linked feedstock requirements.", "held": true}, {"type": "Credit", "showType": false, "typeSpan": 7, "product": "Ijarah Term Financing (IMBT)", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "150M", "niiT": "1.1", "noiT": "0.1", "rwaT": "2.0%", "remarks": "Capex asset financing \u2014 plant upgrade cycle FY27.", "held": false}, {"type": "Credit", "showType": false, "typeSpan": 7, "product": "Syndication Loan / Syndicated Murabahah-i", "region": "Global", "entity": "Maybank IB", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "No syndication mandate currently \u2014 monitor M&A financing need.", "held": false}, {"type": "Credit", "showType": false, "typeSpan": 7, "product": "Project Finance / Istisna' Wa Ijarah-i", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Potential trigger if Thailand JV expansion proceeds.", "held": false}, {"type": "Cash Management", "showType": true, "typeSpan": 16, "product": "Corporate Current Account / Current Account-i", "region": "APAC", "entity": "Maybank MY", "actual": "48M", "niiA": "\u2014", "noiA": "0.18", "rwaA": "\u2014", "target": "65M", "niiT": "\u2014", "noiT": "0.25", "rwaT": "\u2014", "remarks": "Regional treasury centralisation opportunity.", "held": true}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "Maybank2E Regional Cash Platform", "region": "APAC", "entity": "Maybank MY/SG", "actual": "\u2014", "niiA": "\u2014", "noiA": "0.15", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "0.22", "rwaT": "\u2014", "remarks": "Onboard SG and UAE entities onto M2E RC.", "held": true}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "Multi-bank Account Reporting (MT940)", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "0.08", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "0.10", "rwaT": "\u2014", "remarks": "Consolidate visibility across 5 group entities.", "held": true}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "Working Capital Positioning", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Offer as value-add with CASA growth.", "held": false}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "RENTAS / IBG / DuitNow Corporate", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "0.20", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "0.28", "rwaT": "\u2014", "remarks": "Domestic payment volume growing with capex programme.", "held": true}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "SWIFT Cross-border Payments", "region": "APAC/EMEA", "entity": "Maybank MY/SG", "actual": "\u2014", "niiA": "\u2014", "noiA": "0.30", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "0.42", "rwaT": "\u2014", "remarks": "ASEAN expansion adds cross-border payment flow.", "held": true}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "GIRO Payroll Crediting", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "0.06", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "0.08", "rwaT": "\u2014", "remarks": "8,600 employees \u2014 payroll wallet opportunity.", "held": false}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "ERP Host-to-Host AP (Vendor Payments)", "region": "APAC", "entity": "Maybank MY", "actual": "720M", "niiA": "\u2014", "noiA": "0.22", "rwaA": "\u2014", "target": "850M", "niiT": "\u2014", "noiT": "0.30", "rwaT": "\u2014", "remarks": "SAP S/4HANA migration enables H2H integration.", "held": true}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "Virtual Account (e-Collections)", "region": "APAC", "entity": "Maybank MY", "actual": "120", "niiA": "\u2014", "noiA": "0.04", "rwaA": "\u2014", "target": "200", "niiT": "\u2014", "noiT": "0.07", "rwaT": "\u2014", "remarks": "Expand virtual account coverage to all subsidiaries.", "held": true}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "Direct Debit / FPX", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Not relevant \u2014 B2B collections only.", "held": false}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "Cheque / Cash Collections", "region": "APAC", "entity": "Maybank MY", "actual": "850M", "niiA": "\u2014", "noiA": "0.10", "rwaA": "\u2014", "target": "950M", "niiT": "\u2014", "noiT": "0.13", "rwaT": "\u2014", "remarks": "Receivables and collections growing steadily.", "held": true}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "Cash Pooling \u2014 Notional Pooling-i", "region": "APAC", "entity": "Maybank MY", "actual": "180M", "niiA": "\u2014", "noiA": "0.45", "rwaA": "\u2014", "target": "300M", "niiT": "\u2014", "noiT": "0.75", "rwaT": "\u2014", "remarks": "Regional treasury centralisation \u2014 SG/UAE entities to join.", "held": true}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "Cash Pooling \u2014 Zero Balance / Sweeping", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "100M", "niiT": "\u2014", "noiT": "0.15", "rwaT": "\u2014", "remarks": "Propose alongside notional pooling rollout.", "held": false}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "Money Market Placement / CMD-i", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "200M", "niiT": "1.8", "noiT": "\u2014", "rwaT": "1.2%", "remarks": "Surplus cash placement \u2014 propose post Q2 capex review.", "held": false}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "Corporate FD / GIA-i (Mudarabah)", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Client prefers liquid placements \u2014 monitor.", "held": false}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "M2E Regional Cross-border Liquidity", "region": "ASEAN", "entity": "Maybank MY/SG/ID", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Bundle with notional pooling expansion FY27.", "held": false}, {"type": "Trade Finance", "showType": true, "typeSpan": 22, "product": "LC Import / LC Import-i", "region": "APAC", "entity": "Maybank MY/SG", "actual": "650M", "niiA": "\u2014", "noiA": "3.98", "rwaA": "3.5%", "target": "780M", "niiT": "\u2014", "noiT": "5.20", "rwaT": "3.6%", "remarks": "New EU export corridors \u2014 H1 pipeline confirmed.", "held": true}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Trust Receipt / TR-i", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "120M", "niiT": "1.0", "noiT": "0.4", "rwaT": "3.0%", "remarks": "Post-import financing window for raw materials.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Shipping Guarantee / SG-i", "region": "APAC", "entity": "Maybank MY", "actual": "120M", "niiA": "\u2014", "noiA": "0.35", "rwaA": "\u2014", "target": "160M", "niiT": "\u2014", "noiT": "0.48", "rwaT": "\u2014", "remarks": "Increase coverage for ASEAN shipping corridors.", "held": true}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Inward Bills for Collection-i", "region": "APAC", "entity": "Maybank MY", "actual": "380M", "niiA": "\u2014", "noiA": "0.55", "rwaA": "\u2014", "target": "450M", "niiT": "\u2014", "noiT": "0.68", "rwaT": "\u2014", "remarks": "Documentary collections expanding with import volume.", "held": true}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "OFCL Import", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Not currently utilised \u2014 explore for capex imports.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "LC Export / LC Export-i", "region": "EMEA", "entity": "Maybank SG", "actual": "25M", "niiA": "\u2014", "noiA": "0.80", "rwaA": "3.8%", "target": "60M", "niiT": "\u2014", "noiT": "1.6", "rwaT": "3.8%", "remarks": "EMEA corridor opening FY27.", "held": true}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Transferable LC", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Not relevant to current export structure.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "BEP / BEP-i (Bills of Exchange Purchased)", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "50M", "niiT": "0.3", "noiT": "0.2", "rwaT": "3.2%", "remarks": "Export bills discounting \u2014 propose with EU corridor.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "OBC / OBC-i (Outward Bills Collection)", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Bundle with export LC growth.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "OFCL Export", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Pre-export financing \u2014 monitor for South Korea deal.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Bank Guarantee / BG-i", "region": "APAC", "entity": "Maybank MY", "actual": "450M", "niiA": "\u2014", "noiA": "1.2", "rwaA": "\u2014", "target": "550M", "niiT": "\u2014", "noiT": "1.5", "rwaT": "\u2014", "remarks": "Thailand JV \u2014 est. USD 25M BG required Q2 2026.", "held": true}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Standby LC (SBLC)", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "80M", "niiT": "\u2014", "noiT": "0.35", "rwaT": "\u2014", "remarks": "Cross-sell alongside performance bond renewal.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Bankers' Acceptance / AB-i", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Not currently active \u2014 review with treasury team.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "UPAS / Trade Loan-i", "region": "APAC", "entity": "Maybank MY", "actual": "1,200M", "niiA": "\u2014", "noiA": "2.1", "rwaA": "3.2%", "target": "1,500M", "niiT": "\u2014", "noiT": "2.8", "rwaT": "3.3%", "remarks": "Increase LC corridors across China & ASEAN.", "held": true}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Invoice Financing-i", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "100M", "niiT": "\u2014", "noiT": "0.6", "rwaT": "3.5%", "remarks": "Receivables financing \u2014 pair with SCF rollout.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Receivables Purchase / Discounting", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Evaluate against existing receivables programme.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Supplier Finance-i (SCF)", "region": "APAC", "entity": "Maybank MY", "actual": "780M", "niiA": "\u2014", "noiA": "1.45", "rwaA": "4.1%", "target": "1,100M", "niiT": "\u2014", "noiT": "2.1", "rwaT": "4.5%", "remarks": "Onboard Top-20 strategic suppliers \u2014 CFO champion confirmed.", "held": true}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Dynamic Discounting", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Bundle with SCF supplier onboarding programme.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "CMA Warehousing (Commodity)", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Relevant if feedstock storage financing required.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Pre-export Financing", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Monitor \u2014 relevant to South Korea acquisition flows.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "China Business Solutions (CNH)", "region": "China", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "150M", "niiT": "\u2014", "noiT": "0.5", "rwaT": "3.0%", "remarks": "Increase LC corridors across China & ASEAN.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Trade Credit Insurance", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Discuss with export credit team if EU corridor scales.", "held": false}, {"type": "Treasury & FX", "showType": true, "typeSpan": 21, "product": "FX Spot / Bay' al-Sarf", "region": "APAC", "entity": "Maybank MY/SG", "actual": "\u2014", "niiA": "\u2014", "noiA": "0.30", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "0.40", "rwaT": "\u2014", "remarks": "Captured within FX forward programme \u2014 track separately FY27.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "FX Forward / Bay' al-Sarf+Wa'd", "region": "APAC", "entity": "Maybank MY/SG", "actual": "550M", "niiA": "\u2014", "noiA": "1.84", "rwaA": "4.5%", "target": "800M", "niiT": "\u2014", "noiT": "2.7", "rwaT": "4.6%", "remarks": "ASEAN expansion adds FX exposure significantly.", "held": true}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "FX Swap-i", "region": "APAC", "entity": "Maybank SG", "actual": "120M", "niiA": "\u2014", "noiA": "0.25", "rwaA": "\u2014", "target": "160M", "niiT": "\u2014", "noiT": "0.34", "rwaT": "\u2014", "remarks": "Liquidity bridging for cross-border subsidiaries.", "held": true}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "FX Options / Wa'd-based", "region": "APAC", "entity": "Maybank SG", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Propose as hedging alternative for volatile corridors.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "NDF (Non-Deliverable Forward)", "region": "APAC", "entity": "Maybank SG", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Not required \u2014 no CNY/non-convertible exposure currently.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Target/Par Forward / Structured FX", "region": "APAC", "entity": "Maybank SG", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Offer as alternative to vanilla forward post Q2 review.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Interest Rate Swap / PRS-i", "region": "APAC", "entity": "Maybank MY", "actual": "100M IRS", "niiA": "\u2014", "noiA": "0.4", "rwaA": "5.0%", "target": "300M IRS", "niiT": "\u2014", "noiT": "1.2", "rwaT": "5.2%", "remarks": "New cross-sell \u2014 IRS pitch to Sarah Lim Q2.", "held": true}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Cross-Currency Swap / CCS-i", "region": "APAC", "entity": "Maybank MY/SG", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Relevant if foreign currency loan drawn for South Korea deal.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Forward Rate Agreement (FRA)", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Not currently active.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "IR Cap / Floor / Collar", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Alternative hedge structure \u2014 discuss with treasury.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Swaption", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Not currently relevant to PCHEM hedging needs.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "REPO / CMD-i", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Short-dated surplus placement \u2014 propose if cash builds.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "NID / NID-i", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Not currently held.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "MGS / GII / T-Bills", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Treasury investment \u2014 not active with Maybank currently.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Corporate Bonds / Commercial Papers", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Covered under DCM \u2014 see Investment Banking section.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Commodity Hedging", "region": "APAC", "entity": "Maybank MY", "actual": "180M", "niiA": "\u2014", "noiA": "0.55", "rwaA": "\u2014", "target": "230M", "niiT": "\u2014", "noiT": "0.70", "rwaT": "\u2014", "remarks": "Feedstock price volatility hedging \u2014 active programme.", "held": true}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "FCFD (Foreign Currency Fixed Deposit)", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Not held \u2014 client retains FX in operating accounts.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Dual Currency Investment (DCI)", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Not suitable for treasury risk profile \u2014 informational only.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Structured / Digital Deposits", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Not currently active.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Range Accrual Notes", "region": "APAC", "entity": "Maybank MY", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Not currently active.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Money Market Deposit (MMD)", "region": "APAC", "entity": "Maybank MY", "actual": "180M", "niiA": "1.84", "noiA": "\u2014", "rwaA": "\u2014", "target": "260M", "niiT": "2.6", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Surplus liquidity \u2014 capture short-dated placements.", "held": true}, {"type": "Investment Banking", "showType": true, "typeSpan": 14, "product": "Bond / Sukuk Origination", "region": "Global", "entity": "Maybank IB", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Monitor for refinancing window post FY26 results.", "held": false}, {"type": "Investment Banking", "showType": false, "typeSpan": 14, "product": "Green / Sustainable Sukuk-i", "region": "Global", "entity": "Maybank IB", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "500M", "niiT": "\u2014", "noiT": "1.5", "rwaT": "\u2014", "remarks": "Position Sustainability-Linked Revolving Credit Facility.", "held": false}, {"type": "Investment Banking", "showType": false, "typeSpan": 14, "product": "Hybrid / Quasi-equity", "region": "Global", "entity": "Maybank IB", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Not currently relevant to capital structure.", "held": false}, {"type": "Investment Banking", "showType": false, "typeSpan": 14, "product": "Fixed Income Syndication", "region": "Global", "entity": "Maybank IB", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "No active mandate.", "held": false}, {"type": "Investment Banking", "showType": false, "typeSpan": 14, "product": "Syndicated Loan MLA / Bookrunner", "region": "Global", "entity": "Maybank IB", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Monitor for large capex financing requirement.", "held": false}, {"type": "Investment Banking", "showType": false, "typeSpan": 14, "product": "Leveraged Finance / LBO", "region": "Global", "entity": "Maybank IB", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Relevant only if M&A financed via leverage \u2014 monitor.", "held": false}, {"type": "Investment Banking", "showType": false, "typeSpan": 14, "product": "Agency & Trustee Services", "region": "Global", "entity": "Maybank IB", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Not active \u2014 no existing bond programme.", "held": false}, {"type": "Investment Banking", "showType": false, "typeSpan": 14, "product": "IPO / Islamic IPO", "region": "Malaysia", "entity": "Maybank IB", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Not applicable \u2014 PCHEM already listed.", "held": false}, {"type": "Investment Banking", "showType": false, "typeSpan": 14, "product": "Rights Issue / Secondary Placement", "region": "Malaysia", "entity": "Maybank IB", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Not currently applicable.", "held": false}, {"type": "Investment Banking", "showType": false, "typeSpan": 14, "product": "Equity & Commodity Derivatives (ECD)", "region": "Global", "entity": "Maybank IB", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Relevant for commodity price hedging \u2014 coordinate with GM.", "held": false}, {"type": "Investment Banking", "showType": false, "typeSpan": 14, "product": "M&A Advisory", "region": "Global", "entity": "Maybank IB", "actual": "1.5M fee", "niiA": "\u2014", "noiA": "1.5", "rwaA": "\u2014", "target": "2.0M fee", "niiT": "\u2014", "noiT": "2.0", "rwaT": "\u2014", "remarks": "South Korea acquisition \u2014 pitch by 30 Jun 2026.", "held": true}, {"type": "Investment Banking", "showType": false, "typeSpan": 14, "product": "Project Finance Advisory", "region": "APAC", "entity": "Maybank IB", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Monitor for Thailand JV expansion financing.", "held": false}, {"type": "Investment Banking", "showType": false, "typeSpan": 14, "product": "ESG / Sustainability Advisory", "region": "Global", "entity": "Maybank IB", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "300K fee", "niiT": "\u2014", "noiT": "0.3", "rwaT": "\u2014", "remarks": "Bursa NSRF FY2025 compliance gap \u2014 advisory opportunity.", "held": false}, {"type": "Investment Banking", "showType": false, "typeSpan": 14, "product": "Strategic & Sector Advisory", "region": "Global", "entity": "Maybank IB", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "No active mandate.", "held": false}, {"type": "Securities Services", "showType": true, "typeSpan": 7, "product": "Institutional Broking", "region": "ASEAN", "entity": "Maybank Securities", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Not applicable to corporate treasury relationship.", "held": false}, {"type": "Securities Services", "showType": false, "typeSpan": 7, "product": "Prime Broking", "region": "ASEAN", "entity": "Maybank Securities", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Not applicable.", "held": false}, {"type": "Securities Services", "showType": false, "typeSpan": 7, "product": "Custodian Services", "region": "ASEAN", "entity": "Maybank Trustees", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Not currently required.", "held": false}, {"type": "Securities Services", "showType": false, "typeSpan": 7, "product": "Clearing & Settlement", "region": "Malaysia", "entity": "Maybank Securities", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Not applicable.", "held": false}, {"type": "Securities Services", "showType": false, "typeSpan": 7, "product": "Equity Research", "region": "ASEAN", "entity": "Maybank IB", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Provided as relationship value-add \u2014 non-revenue.", "held": false}, {"type": "Securities Services", "showType": false, "typeSpan": 7, "product": "Unit Trust / Shariah Funds Distribution", "region": "Malaysia", "entity": "Maybank AM", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Not applicable to corporate treasury.", "held": false}, {"type": "Securities Services", "showType": false, "typeSpan": 7, "product": "Private Equity (Amplify)", "region": "ASEAN", "entity": "Maybank IB", "actual": "\u2014", "niiA": "\u2014", "noiA": "\u2014", "rwaA": "\u2014", "target": "\u2014", "niiT": "\u2014", "noiT": "\u2014", "rwaT": "\u2014", "remarks": "Monitor if PCHEM explores PE-backed JV structures.", "held": false}]
+</script>
+<script>
+const PRODUCTS = JSON.parse(document.getElementById('product-data').textContent);
+
+const TYPE_ORDER = ['Credit','Cash Management','Trade Finance','Treasury & FX','Investment Banking','Securities Services'];
+
+let state = { filter: 'all', heldOnly: false };
+
+function parseNum(v) {
+  if (v === undefined || v === null) return null;
+  const s = String(v).trim();
+  if (s === '\u2014' || s === '-' || s === '') return null;
+  const cleaned = s.replace(/,/g,'').replace(/%/g,'').replace(/M\s*(IRS|fee|notional)?/gi,'').replace(/K\s*(fee)?/gi,'').trim();
+  const num = parseFloat(cleaned);
+  if (isNaN(num)) return null;
+  if (/K/i.test(s) && !/M/i.test(s)) return num / 1000;
+  return num;
+}
+
+function renderKPIs() {
+  let totalNiiA = 0, totalNiiT = 0, heldCount = 0, totalProducts = PRODUCTS.length;
+  PRODUCTS.forEach(p => {
+    if (p.held) heldCount++;
+    const a = parseNum(p.niiA);
+    if (a !== null) totalNiiA += a;
+  });
+  document.querySelectorAll('.cell-input[data-field="niiT"]').forEach(inp => {
+    const v = parseNum(inp.value);
+    if (v !== null) totalNiiT += v;
+  });
+  const growth = totalNiiA > 0 ? (((totalNiiT - totalNiiA) / totalNiiA) * 100).toFixed(0) : null;
+  const kpiHtml = `
+    <div class="kpi-cell"><div class="lbl">Total Products</div><div class="val">${totalProducts}</div><div class="sub mut">${TYPE_ORDER.length} divisions</div></div>
+    <div class="kpi-cell"><div class="lbl">Active Holdings</div><div class="val">${heldCount}</div><div class="sub up">${((heldCount/totalProducts)*100).toFixed(0)}% penetration</div></div>
+    <div class="kpi-cell"><div class="lbl">NII Actual FY25&ndash;26</div><div class="val">USD ${totalNiiA.toFixed(1)}M</div><div class="sub mut">Across held products</div></div>
+    <div class="kpi-cell"><div class="lbl">NII Target FY26&ndash;27</div><div class="val" style="color:#0C447C">USD ${totalNiiT.toFixed(1)}M</div><div class="sub up">${growth !== null ? (growth>=0?'+':'') + growth + '% YoY target' : 'Enter targets'}</div></div>
+    <div class="kpi-cell"><div class="lbl">Whitespace</div><div class="val am">${totalProducts - heldCount}</div><div class="sub am">Cross-sell opportunity</div></div>
+  `;
+  document.getElementById('kpi-row').innerHTML = kpiHtml;
+}
+
+function setFilter(f, btn) {
+  state.filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  renderTable();
+}
+
+function toggleHeldOnly() {
+  state.heldOnly = !state.heldOnly;
+  document.getElementById('heldToggle').classList.toggle('on', state.heldOnly);
+  renderTable();
+}
+
+function escAttr(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+}
+
+function currentFilteredList() {
+  const search = document.getElementById('searchBox').value.trim().toLowerCase();
+  return PRODUCTS.filter(p => {
+    if (state.filter !== 'all' && p.type !== state.filter) return false;
+    if (state.heldOnly && !p.held) return false;
+    if (search && !p.product.toLowerCase().includes(search)) return false;
+    return true;
+  });
+}
+
+function renderTable() {
+  const filtered = currentFilteredList();
+  const groups = {};
+  filtered.forEach(p => { (groups[p.type] = groups[p.type] || []).push(p); });
+
+  let html = '';
+  let rowIdx = 0;
+  TYPE_ORDER.forEach(type => {
+    const items = groups[type];
+    if (!items || !items.length) return;
+    items.forEach((p, i) => {
+      const dashRowClass = p.held ? '' : ' class="dash-row"';
+      const dot = p.held ? '<span class="held-dot"></span>' : '<span class="unheld-dot"></span>';
+      const typeCell = i === 0 ? `<td class="c-type" rowspan="${items.length}">${escAttr(type)}<span class="type-count">${items.length} products</span></td>` : '';
+      const targetSuggested = p.target !== '\u2014';
+      const niiTSuggested = p.niiT !== '\u2014';
+      const remarksSuggested = p.remarks && p.remarks.length > 0;
+      html += `<tr${dashRowClass} data-idx="${rowIdx}">
+        ${typeCell}
+        <td class="c-prod">${dot}${escAttr(p.product)}</td>
+        <td class="c-region">${escAttr(p.region)}</td>
+        <td class="c-entity">${escAttr(p.entity)}</td>
+        <td class="c-actual">${escAttr(p.actual)}</td>
+        <td class="c-niiA">${escAttr(p.niiA)}</td>
+        <td class="c-target"><input class="cell-input${targetSuggested && !p.held ? ' ai-suggested':''}" data-field="target" data-idx="${rowIdx}" value="${escAttr(p.target)}" oninput="onEdit(this)"/></td>
+        <td class="c-niiT"><input class="cell-input${niiTSuggested && !p.held ? ' ai-suggested':''}" data-field="niiT" data-idx="${rowIdx}" value="${escAttr(p.niiT)}" oninput="onEdit(this)"/></td>
+        <td class="c-remarks"><textarea class="cell-input${!p.held && remarksSuggested ? ' ai-suggested':''}" data-field="remarks" data-idx="${rowIdx}" oninput="onEdit(this)">${escAttr(p.remarks)}</textarea></td>
+      </tr>`;
+      rowIdx++;
+    });
+  });
+
+  document.getElementById('tbl-body').innerHTML = html || '<tr><td colspan="9" style="text-align:center;padding:30px;color:#9ca3af">No products match this filter.</td></tr>';
+  renderTotals(filtered);
+  renderKPIs();
+}
+
+function onEdit(el) {
+  if (el.classList.contains('ai-suggested')) el.classList.remove('ai-suggested');
+  renderTotals(currentFilteredList());
+  renderKPIs();
+}
+
+function renderTotals(filtered) {
+  let totalNiiA = 0, totalNiiT = 0, heldInView = 0;
+  filtered.forEach(p => {
+    const a = parseNum(p.niiA);
+    if (a !== null) totalNiiA += a;
+    if (p.held) heldInView++;
+  });
+  document.querySelectorAll('#tbl-body input[data-field="niiT"]').forEach(inp => {
+    const v = parseNum(inp.value);
+    if (v !== null) totalNiiT += v;
+  });
+  const growthPct = totalNiiA > 0 ? (((totalNiiT - totalNiiA) / totalNiiA) * 100).toFixed(0) : null;
+  const growthText = growthPct !== null ? (growthPct >= 0 ? '+' + growthPct + '% YoY growth target' : growthPct + '% YoY') : 'Enter targets to see growth';
+
+  document.getElementById('tbl-foot').innerHTML = `
+    <tr class="total-row">
+      <td colspan="4" class="total-label">TOTAL FY TARGETS &mdash; ${filtered.length} product${filtered.length===1?'':'s'} in view (${heldInView} held)</td>
+      <td style="text-align:center">&mdash;</td>
+      <td style="text-align:center">${totalNiiA.toFixed(1)}</td>
+      <td style="text-align:center">&mdash;</td>
+      <td style="text-align:center"><span class="total-arrow">${totalNiiA.toFixed(1)} &rarr; <strong>${totalNiiT.toFixed(1)}</strong></span></td>
+      <td style="font-size:11.5px;color:#856404;font-weight:600">${growthText}</td>
+    </tr>
+  `;
+}
+
+renderTable();
+</script>
+</body>
+</html>
