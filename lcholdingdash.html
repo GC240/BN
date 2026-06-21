@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LC Holding 360 — Petronas Chemicals Malaysia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%}
+body{font-family:'Poppins',sans-serif;background:#fff;color:#1f2430;font-size:13.5px;-webkit-font-smoothing:antialiased;line-height:1.4}
+
+.lc-grid{display:grid;grid-template-columns:repeat(12,1fr);width:100%}
+.col-3{grid-column:span 3}
+.col-4{grid-column:span 4}
+.col-5{grid-column:span 5}
+.col-6{grid-column:span 6}
+.col-7{grid-column:span 7}
+.col-8{grid-column:span 8}
+.col-12{grid-column:span 12}
+
+.cell{border-right:1px solid #ebecf0;border-bottom:1px solid #ebecf0;padding:14px 16px;min-width:0}
+.cell:last-child{border-right:none}
+
+.c-label{font-size:10px;font-weight:600;color:#9aa1ae;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c-val{font-size:17px;font-weight:700;color:#1f2430;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c-val.sm{font-size:14px}
+.c-sub{font-size:11px;margin-top:3px;font-weight:600}
+.tr-up{color:#22c55e}.tr-down{color:#ef4444}.tr-flat{color:#9aa1ae}.tr-amber{color:#d97706}
+
+.status-chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px}
+.chip-green{background:#E7F8EE;color:#15803d}
+.chip-blue{background:#E6F1FB;color:#2563A8}
+.chip-amber{background:#FFF4DE;color:#a15c07}
+.chip-red{background:#FCE8EA;color:#c0273f}
+.chip-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+
+.section-row{grid-column:1/-1;padding:11px 16px 7px;border-bottom:1px solid #ebecf0;background:#fafbfc}
+.section-row h2{font-size:12px;font-weight:700;color:#1f2430;text-transform:uppercase;letter-spacing:.5px}
+
+.chart-cell{padding:14px 16px}
+.chart-cell .c-title{font-size:12.5px;font-weight:600;color:#1f2430;margin-bottom:1px}
+.chart-cell .c-meta{font-size:10.5px;color:#9aa1ae;margin-bottom:10px}
+.chart-box{position:relative;height:200px;width:100%}
+.chart-box.tall{height:240px}
+
+table.lc-tbl{width:100%;border-collapse:collapse;font-size:12px}
+table.lc-tbl th{padding:8px 12px;text-align:left;font-size:10px;font-weight:600;color:#9aa1ae;text-transform:uppercase;letter-spacing:.3px;background:#fafbfc;border-bottom:1px solid #ebecf0;white-space:nowrap}
+table.lc-tbl th.num{text-align:right}
+table.lc-tbl td{padding:8px 12px;border-bottom:1px solid #f1f2f5;color:#1f2430;vertical-align:middle}
+table.lc-tbl td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+table.lc-tbl tbody tr:last-child td{border-bottom:none}
+table.lc-tbl tbody tr:hover td{background:#fafbfc}
+.table-scroll{overflow-x:auto;width:100%}
+
+.type-pill{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;white-space:nowrap}
+.tp-issue{background:#E6F1FB;color:#2563A8}
+.tp-accept{background:#F3EEFE;color:#7C5FD4}
+.tp-amend{background:#FFF4DE;color:#a15c07}
+.tp-settle{background:#E7F8EE;color:#15803d}
+.tp-partial{background:#FCE8EA;color:#c0273f}
+
+.insight-row{display:flex;align-items:center;justify-content:space-between;padding:9px 16px;border-bottom:1px solid #f1f2f5;gap:10px}
+.insight-row:last-child{border-bottom:none}
+.insight-key{font-size:12px;color:#4b5163;font-weight:500;flex-shrink:0}
+.insight-val{font-size:12.5px;font-weight:700;color:#1f2430;text-align:right}
+
+.util-track{height:8px;background:#f1f2f5;border-radius:20px;overflow:hidden;margin-top:8px}
+.util-fill{height:100%;border-radius:20px}
+
+@media (max-width:1100px){
+  .col-3{grid-column:span 4 !important}
+  .col-4{grid-column:span 6 !important}
+  .col-6{grid-column:span 6 !important}
+  .col-8{grid-column:span 12 !important}
+  .col-12{grid-column:span 12 !important}
+}
+@media (max-width:680px){
+  .col-3,.col-4,.col-6,.col-8,.col-12{grid-column:span 12 !important}
+  .cell{border-right:none}
+  body{font-size:13px}
+}
+</style>
+</head>
+<body>
+<div class="lc-grid" id="lc-grid">
+
+<!-- HOLDING SUMMARY -->
+<div class="section-row"><h2>Holding Summary &mdash; Import Letter of Credit-i</h2></div>
+
+<div class="cell col-3"><div class="c-label">Holding ID</div><div class="c-val sm">HLD-LC-000124</div></div>
+<div class="cell col-3"><div class="c-label">Product</div><div class="c-val sm">Import LC-i</div><div class="c-sub tr-flat">Usance LC &middot; Trade Finance</div></div>
+<div class="cell col-3"><div class="c-label">Issuing Bank</div><div class="c-val sm">Maybank Islamic Berhad</div></div>
+<div class="cell col-3"><div class="c-label">Status</div><div><span class="status-chip chip-green"><span class="chip-dot"></span>Active</span></div><div class="c-sub tr-flat">Risk Grade A-</div></div>
+
+<div class="cell col-3"><div class="c-label">Beneficiary</div><div class="c-val sm">BASF SE Germany</div></div>
+<div class="cell col-3"><div class="c-label">Facility Limit</div><div class="c-val">RM 650.0M</div></div>
+<div class="cell col-3"><div class="c-label">Outstanding Amount</div><div class="c-val">RM 532.0M</div><div class="c-sub tr-amber">81.8% utilised</div></div>
+<div class="cell col-3"><div class="c-label">Relationship Manager</div><div class="c-val sm">James Thomas</div></div>
+
+<div class="cell col-3"><div class="c-label">Currency</div><div class="c-val">USD</div></div>
+<div class="cell col-3"><div class="c-label">Issue Date</div><div class="c-val sm">15-Jan-2025</div></div>
+<div class="cell col-3"><div class="c-label">Expiry Date</div><div class="c-val sm">31-Dec-2025</div></div>
+<div class="cell col-3"><div class="c-label">Tenor</div><div class="c-val">180 Days</div></div>
+
+<div class="cell col-12" style="padding-top:12px">
+  <div class="c-label">Facility Utilisation</div>
+  <div class="util-track"><div class="util-fill" style="width:81.8%;background:#d97706"></div></div>
+  <div style="display:flex;justify-content:space-between;margin-top:5px;font-size:11px;color:#9aa1ae"><span>RM 532.0M outstanding</span><span>RM 650.0M limit &middot; 81.8%</span></div>
+</div>
+
+<!-- TRANSACTION TILL DATE -->
+<div class="section-row"><h2>Transaction Till Date</h2></div>
+
+<div class="cell col-3"><div class="c-label">Total LC Issued YTD</div><div class="c-val">RM 780M</div></div>
+<div class="cell col-3"><div class="c-label">Total Settled</div><div class="c-val">RM 365M</div></div>
+<div class="cell col-3"><div class="c-label">Outstanding</div><div class="c-val">RM 532M</div></div>
+<div class="cell col-3"><div class="c-label">Active LCs</div><div class="c-val">14</div></div>
+
+<div class="cell col-3"><div class="c-label">Average Tenor</div><div class="c-val">165 Days</div></div>
+<div class="cell col-3"><div class="c-label">Revenue Generated</div><div class="c-val">RM 720,000</div></div>
+<div class="cell col-6 chart-cell">
+  <div class="c-title">LC Issuance by Counterparty</div>
+  <div class="c-meta">USD, YTD transactions</div>
+  <div class="chart-box"><canvas id="counterpartyChart" role="img" aria-label="Bar chart showing LC issuance amounts by counterparty. BASF SE 45M, LyondellBasell 32.5M, SABIC Chemicals 58M, Mitsui Chemicals 48.5M, all in USD."></canvas></div>
+</div>
+
+<div class="cell col-7 chart-cell">
+  <div class="c-title">Issued vs Settled vs Outstanding</div>
+  <div class="c-meta">RM million, year to date</div>
+  <div class="chart-box tall"><canvas id="flowChart" role="img" aria-label="Donut chart showing total LC issued 780M, settled 365M, and outstanding 532M ringgit."></canvas></div>
+</div>
+<div class="cell col-5" style="padding:0">
+  <div class="table-scroll">
+    <table class="lc-tbl">
+      <thead><tr><th>Date</th><th>Type</th><th>Counterparty</th><th class="num">Amount (USD)</th></tr></thead>
+      <tbody id="txn-tbl"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SCHEDULED PAYMENTS -->
+<div class="section-row"><h2>Scheduled Payments</h2></div>
+
+<div class="cell col-3"><div class="c-label">Next Payment Due</div><div class="c-val">RM 112.5M</div><div class="c-sub tr-flat">15-Aug-2025</div></div>
+<div class="cell col-3"><div class="c-label">Payments Due (30 Days)</div><div class="c-val">RM 257.5M</div></div>
+<div class="cell col-3"><div class="c-label">Payments Due (90 Days)</div><div class="c-val">RM 477.5M</div></div>
+<div class="cell col-3"><div class="c-label">Avg Upcoming Installment</div><div class="c-val">RM 106.4M</div></div>
+
+<div class="cell col-7" style="padding:0">
+  <div class="table-scroll">
+    <table class="lc-tbl">
+      <thead><tr><th>Due Date</th><th>Reference</th><th>Beneficiary</th><th class="num">Amount</th></tr></thead>
+      <tbody id="payments-tbl"></tbody>
+    </table>
+  </div>
+</div>
+<div class="cell col-5 chart-cell">
+  <div class="c-title">Upcoming Payment Schedule</div>
+  <div class="c-meta">RM million, by due date</div>
+  <div class="chart-box"><canvas id="paymentsChart" role="img" aria-label="Bar chart of five scheduled payments by due date, ranging from 54.5 million to 145 million ringgit, totaling 532 million ringgit due through November 2025."></canvas></div>
+</div>
+
+<div class="cell col-12"><div class="c-label">Expected Trade Revenue</div><div class="c-val">RM 285,000</div><div class="c-sub tr-flat">Projected from scheduled payment pipeline</div></div>
+
+<!-- RM INSIGHTS -->
+<div class="section-row"><h2>RM Insights</h2></div>
+
+<div class="cell col-12" style="padding:0">
+  <div class="insight-row"><span class="insight-key">Facility Utilisation</span><span class="insight-val"><span class="status-chip chip-amber">High &middot; 82%</span></span></div>
+  <div class="insight-row"><span class="insight-key">Renewal Probability</span><span class="insight-val"><span class="status-chip chip-green">95%</span></span></div>
+  <div class="insight-row"><span class="insight-key">Cross-Sell Opportunity</span><span class="insight-val">FX Forward + Commodity Hedging</span></div>
+  <div class="insight-row"><span class="insight-key">Next Review Date</span><span class="insight-val">30-Sep-2025</span></div>
+  <div class="insight-row"><span class="insight-key">ESG Screening Status</span><span class="insight-val"><span class="status-chip chip-green">Passed</span></span></div>
+  <div class="insight-row"><span class="insight-key">AML Screening Status</span><span class="insight-val"><span class="status-chip chip-green">Clear</span></span></div>
+  <div class="insight-row"><span class="insight-key">Recommended Action</span><span class="insight-val" style="color:#2563A8">Increase Trade Finance Line by RM 150M</span></div>
+</div>
+
+</div>
+<script>
+const dark = matchMedia('(prefers-color-scheme:dark)').matches;
+const gridColor = 'rgba(0,0,0,.05)';
+const txtColor = '#9aa1ae';
+
+const CYAN = '#2DD4E8', PINK = '#D4527E', AMBER = '#F0A93B', BLUE = '#2563A8', ORANGE = '#E8732D', PURPLE = '#7C5FD4', GREEN = '#22c55e';
+
+// ── TRANSACTION TABLE ──
+const txnTypeMap = {
+  'LC Issuance': 'tp-issue',
+  'Document Acceptance': 'tp-accept',
+  'Amendment': 'tp-amend',
+  'Settlement': 'tp-settle',
+  'Partial Settlement': 'tp-partial',
+};
+const transactions = [
+  ['15-Jan-2025', 'LC Issuance', 'BASF SE', 45000000],
+  ['10-Feb-2025', 'Document Acceptance', 'BASF SE', 45000000],
+  ['25-Feb-2025', 'LC Issuance', 'LyondellBasell', 32500000],
+  ['12-Mar-2025', 'Amendment', 'LyondellBasell', 5000000],
+  ['28-Mar-2025', 'Document Acceptance', 'LyondellBasell', 37500000],
+  ['18-Apr-2025', 'LC Issuance', 'SABIC Chemicals', 58000000],
+  ['20-May-2025', 'Partial Settlement', 'BASF SE', 20000000],
+  ['12-Jun-2025', 'LC Issuance', 'Mitsui Chemicals', 48500000],
+  ['05-Jul-2025', 'Document Acceptance', 'Mitsui Chemicals', 48500000],
+  ['20-Jul-2025', 'Settlement', 'LyondellBasell', 37500000],
+];
+document.getElementById('txn-tbl').innerHTML = transactions.map(t => `
+  <tr>
+    <td>${t[0]}</td>
+    <td><span class="type-pill ${txnTypeMap[t[1]]}">${t[1]}</span></td>
+    <td>${t[2]}</td>
+    <td class="num">${t[3].toLocaleString()}</td>
+  </tr>`).join('');
+
+// ── SCHEDULED PAYMENTS TABLE ──
+const payments = [
+  ['15-Aug-2025', 'LC250001', 'BASF SE', 112500000],
+  ['30-Aug-2025', 'LC250028', 'SABIC Chemicals', 145000000],
+  ['15-Sep-2025', 'LC250041', 'Mitsui Chemicals', 121250000],
+  ['30-Oct-2025', 'LC250055', 'Dow Chemical Asia', 98750000],
+  ['15-Nov-2025', 'LC250061', 'INEOS Group', 54500000],
+];
+document.getElementById('payments-tbl').innerHTML = payments.map(p => `
+  <tr>
+    <td>${p[0]}</td>
+    <td>${p[1]}</td>
+    <td>${p[2]}</td>
+    <td class="num">RM ${(p[3]/1000000).toFixed(1)}M</td>
+  </tr>`).join('');
+
+// ── COUNTERPARTY ISSUANCE CHART ──
+new Chart(document.getElementById('counterpartyChart'), {
+  type: 'bar',
+  data: {
+    labels: ['BASF SE', 'LyondellBasell', 'SABIC Chemicals', 'Mitsui Chemicals'],
+    datasets: [{
+      data: [45, 32.5, 58, 48.5],
+      backgroundColor: [BLUE, CYAN, PURPLE, AMBER],
+      borderRadius: 3
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display: false }, ticks: { color: txtColor, font: { size: 10.5 } } },
+      y: { grid: { color: gridColor }, ticks: { color: txtColor, font: { size: 10.5 } }, title: { display: true, text: 'USD M', color: txtColor, font: { size: 10 } } }
+    }
+  }
+});
+
+// ── ISSUED VS SETTLED VS OUTSTANDING DONUT ──
+new Chart(document.getElementById('flowChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Outstanding', 'Settled', 'Available headroom'],
+    datasets: [{
+      data: [532, 365, 118],
+      backgroundColor: [AMBER, GREEN, '#eef0f4'],
+      borderWidth: 2, borderColor: '#fff'
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false, cutout: '64%',
+    plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 9, font: { size: 10.5 }, color: txtColor, padding: 10 } } }
+  }
+});
+
+// ── PAYMENT SCHEDULE CHART ──
+new Chart(document.getElementById('paymentsChart'), {
+  type: 'bar',
+  data: {
+    labels: ['15-Aug', '30-Aug', '15-Sep', '30-Oct', '15-Nov'],
+    datasets: [{
+      data: [112.5, 145.0, 121.25, 98.75, 54.5],
+      backgroundColor: PINK,
+      borderRadius: 3
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display: false }, ticks: { color: txtColor, font: { size: 10 } } },
+      y: { grid: { color: gridColor }, ticks: { color: txtColor, font: { size: 10.5 } }, title: { display: true, text: 'RM M', color: txtColor, font: { size: 10 } } }
+    }
+  }
+});
+</script>
+</body>
+</html>
