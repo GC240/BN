@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Account Planning Dashboard — Petronas Chemicals Malaysia | Maybank GGB</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Poppins',sans-serif;background:#eef0f4;color:#1f2430;font-size:14px;-webkit-font-smoothing:antialiased;line-height:1.45}
+
+/* ── BUSINESSNEXT SHELL CHROME ── */
+.bn-shell{max-width:1480px;margin:0 auto}
+/* ── MINIMAL INLINE TAB STRIP — no header panel, just a thin row of tab buttons ── */
+.bn-tabs-inline{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;border-bottom:1px solid #e1e3e8;padding-bottom:0}
+.bn-tab-sm{padding:9px 16px;border-radius:9px 9px 0 0;font-size:12.5px;font-weight:500;color:#6b7280;white-space:nowrap;cursor:pointer;border:1px solid transparent;background:none;font-family:'Poppins',sans-serif}
+.bn-tab-sm.active{background:#14181f;color:#fff;font-weight:600}
+.bn-tab-sm:not(.active):hover{background:#eef0f4}
+
+.bn-titlebar{background:#fff;padding:16px 22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;border-bottom:1px solid #ebecf0}
+.bn-titlebar h1{font-size:18px;font-weight:600;color:#1f2430}
+.bn-actions{display:flex;gap:8px;flex-wrap:wrap}
+.bn-action-pill{display:flex;align-items:center;gap:6px;padding:7px 13px;border-radius:8px;border:1px solid #e1e3e8;background:#fff;font-size:12px;font-weight:500;color:#4b5163;white-space:nowrap}
+.bn-action-pill.accent{background:linear-gradient(90deg,#FF7A59,#FF4D9D);color:#fff;border:none;font-weight:600}
+
+.bn-meta-strip{background:#fff;padding:14px 22px;display:flex;flex-wrap:wrap;gap:30px;border-bottom:1px solid #ebecf0}
+.bn-meta-item .ml{font-size:10.5px;color:#9aa1ae;text-transform:uppercase;letter-spacing:.4px;font-weight:600;margin-bottom:4px}
+.bn-meta-item .mv{font-size:13.5px;font-weight:600;color:#1f2430}
+.bn-meta-item .mv a{color:#2563A8;text-decoration:none;font-weight:600}
+.bn-status-active{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#1f2430}
+.bn-status-dot{width:8px;height:8px;border-radius:50%;background:#22c55e}
+
+/* ── REAL TABS — each tab shows/hides its own panel ── */
+.bn-tabs{background:#fff;padding:10px 22px 0;display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid #ebecf0}
+.bn-tab{display:flex;align-items:center;gap:7px;padding:9px 16px;border-radius:9px 9px 0 0;font-size:12.5px;font-weight:500;color:#6b7280;white-space:nowrap;cursor:pointer;border:1px solid transparent;background:none;font-family:'Poppins',sans-serif}
+.bn-tab.active{background:#14181f;color:#fff;font-weight:600}
+.bn-tab:not(.active):hover{background:#f5f6f8}
+
+/* ── BODY ── */
+.bn-body{background:#f5f6f9;padding:20px 22px}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* ── SECTION LABEL (kept inside each tab panel, no numbering needed since tabs separate topics) ── */
+.section-head{display:flex;align-items:center;gap:9px;margin:0 0 13px}
+.section-head h2{font-size:15px;font-weight:600;color:#1f2430}
+.section-head .sh-line{flex:1;height:1px;background:#e1e3e8}
+
+/* ── KPI CARDS ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.kpi-card{background:#fff;border-radius:12px;border:1px solid #ebecf0;padding:16px 17px;min-width:0}
+.kpi-card .k-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:11px}
+.kpi-card .k-label{font-size:13px;font-weight:600;color:#1f2430;line-height:1.3}
+.k-icon{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.kpi-card .k-val{font-size:14px;color:#1f2430;margin-bottom:6px}
+.kpi-card .k-val::before{content:'\2022';margin-right:7px;color:#9aa1ae}
+.kpi-card .k-val b{font-size:21px;font-weight:700}
+.kpi-card .k-trend{font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:4px}
+.tr-up{color:#22c55e}.tr-down{color:#ef4444}.tr-flat{color:#6b7280}
+
+/* ── CARD ── */
+.card{background:#fff;border-radius:12px;border:1px solid #ebecf0;padding:18px;margin-bottom:16px}
+.card-title{font-size:14.5px;font-weight:600;color:#1f2430;margin-bottom:2px}
+.card-sub{font-size:11.5px;color:#9aa1ae;margin-bottom:14px}
+
+/* ── GRID LAYOUTS ── */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-2-1{display:grid;grid-template-columns:1.5fr 1fr;gap:16px}
+
+/* ── CHART CONTAINERS ── */
+.chart-box{position:relative;height:260px;width:100%}
+.chart-box.short{height:220px}
+
+/* ── TABLE ── */
+table.dash-tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+table.dash-tbl th{padding:8px 10px;text-align:left;font-size:10.5px;font-weight:600;color:#9aa1ae;text-transform:uppercase;letter-spacing:.3px;background:#f5f6f9;border-bottom:1px solid #ebecf0;white-space:nowrap}
+table.dash-tbl th.num{text-align:right}
+table.dash-tbl td{padding:8px 10px;border-bottom:1px solid #f1f2f5;color:#1f2430;vertical-align:middle}
+table.dash-tbl td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+table.dash-tbl tbody tr:last-child td{border-bottom:none}
+table.dash-tbl tbody tr:hover td{background:#fafbfc}
+.table-scroll{overflow-x:auto}
+
+.status-pill{font-size:10.5px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap}
+.st-won{background:#E7F8EE;color:#15803d}
+.st-pipe{background:#FFF4DE;color:#a15c07}
+.priority-pill{font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap}
+.pr-high{background:#FCE8EA;color:#c0273f}
+.pr-med{background:#FFF4DE;color:#a15c07}
+
+/* ── WALLET BARS ── */
+.wallet-row{margin-bottom:13px}
+.wallet-row:last-child{margin-bottom:0}
+.wallet-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;flex-wrap:wrap;gap:4px}
+.wallet-name{font-size:12.5px;font-weight:600;color:#1f2430}
+.wallet-figs{font-size:11px;color:#6b7280}
+.wallet-track{height:9px;background:#f1f2f5;border-radius:20px;overflow:hidden;position:relative}
+.wallet-fill{height:100%;border-radius:20px}
+.wallet-pct{font-size:11px;font-weight:700;margin-left:8px}
+
+/* ── HEALTH SCORE ── */
+.health-wrap{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.health-ring{position:relative;width:130px;height:130px;flex-shrink:0}
+.health-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.health-ring .ring-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.health-ring .ring-num{font-size:28px;font-weight:700;color:#1f2430}
+.health-ring .ring-lbl{font-size:10px;color:#9aa1ae;text-transform:uppercase;letter-spacing:.4px}
+.health-comps{flex:1;min-width:240px}
+.hc-row{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.hc-row:last-child{margin-bottom:0}
+.hc-name{font-size:11.5px;color:#4b5163;width:130px;flex-shrink:0}
+.hc-weight{font-size:10px;color:#9aa1ae;width:32px;flex-shrink:0}
+.hc-track{flex:1;height:7px;background:#f1f2f5;border-radius:20px;overflow:hidden}
+.hc-fill{height:100%;border-radius:20px}
+.hc-score{font-size:11px;font-weight:700;color:#1f2430;width:26px;text-align:right;flex-shrink:0}
+.relationship-badge{display:inline-flex;align-items:center;gap:7px;background:#E7F8EE;color:#15803d;font-size:12.5px;font-weight:600;padding:6px 14px;border-radius:20px;margin-top:12px}
+.dot-green{width:8px;height:8px;border-radius:50%;background:#22c55e}
+
+/* ── ACTIVITY LIST ── */
+.activity-list{display:flex;flex-direction:column;gap:0}
+.activity-row{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid #f1f2f5}
+.activity-row:last-child{border-bottom:none}
+.activity-date{font-size:10.5px;color:#9aa1ae;width:78px;flex-shrink:0}
+.activity-name{font-size:12.5px;color:#1f2430;flex:1;min-width:0}
+.activity-val{font-size:12.5px;font-weight:700;color:#1f2430;flex-shrink:0}
+
+/* ── ACTIONS LIST ── */
+.action-row{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid #f1f2f5}
+.action-row:last-child{border-bottom:none}
+.action-name{font-size:12.5px;color:#1f2430;flex:1;min-width:0}
+.action-val{font-size:12.5px;font-weight:700;color:#15803d;flex-shrink:0}
+.total-upside{background:#14181f;border-radius:9px;padding:12px 16px;margin-top:13px;display:flex;align-items:center;justify-content:space-between}
+.total-upside .tu-label{font-size:12px;color:rgba(255,255,255,.6);font-weight:500}
+.total-upside .tu-val{font-size:19px;font-weight:700;color:#FFD23F}
+
+.bn-footer{background:#fff;padding:12px 22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;font-size:11px;color:#9aa1ae;border-radius:0 0 10px 10px;border-top:1px solid #ebecf0}
+
+@media (max-width:1100px){
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .grid-2,.grid-2-1{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .bn-body{padding:14px}
+  .bn-titlebar,.bn-meta-strip,.bn-tabs{padding-left:14px;padding-right:14px}
+  .bn-titlebar h1{font-size:15px}
+  .health-wrap{flex-direction:column;align-items:flex-start}
+  .bn-search input{width:80px}
+}
+</style>
+</head>
+<body>
+<div class="bn-shell">
+
+<div class="bn-tabs-inline">
+  <button class="bn-tab-sm active" data-tab="overview" onclick="switchTab('overview',this)">Overview &amp; KPIs</button>
+  <button class="bn-tab-sm" data-tab="revenue" onclick="switchTab('revenue',this)">Revenue &amp; Wallet</button>
+  <button class="bn-tab-sm" data-tab="activity" onclick="switchTab('activity',this)">Transactions &amp; Deals</button>
+  <button class="bn-tab-sm" data-tab="risk" onclick="switchTab('risk',this)">Risk &amp; Actions</button>
+</div>
+
+<div class="bn-body">
+
+  <!-- ═══ TAB 1: OVERVIEW & KPIs ═══ -->
+
+  <div class="tab-panel active" id="panel-overview">
+    <div class="section-head"><h2>Wallet opportunity, revenue &amp; deal KPIs</h2><div class="sh-line"></div></div>
+
+    <div class="kpi-grid" id="kpi-grid"></div>
+  </div>
+
+  <!-- ═══ TAB 2: REVENUE & WALLET ═══ -->
+  <div class="tab-panel" id="panel-revenue">
+    <div class="section-head"><h2>Revenue performance</h2><div class="sh-line"></div></div>
+    <div class="grid-2-1">
+      <div class="card">
+        <div class="card-title">Revenue realized vs plan vs forecast</div>
+        <div class="card-sub">FY 2026 by quarter, USD million</div>
+        <div class="chart-box"><canvas id="revChart" role="img" aria-label="Bar and line chart comparing planned, realized and forecast revenue across four quarters of FY2026. Plan totals 13.0M, realized to date 8.5M, forecast 12.0M."></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Revenue mix by product</div>
+        <div class="card-sub">Total USD 13.0M planned</div>
+        <div class="chart-box"><canvas id="mixChart" role="img" aria-label="Donut chart showing revenue mix by product line. Trade Finance 3.1M, Treasury and Markets 2.8M, Cash Management 2.6M, Islamic Financing 2.3M, Corporate Lending 1.8M, Advisory and ESG 0.4M."></canvas></div>
+      </div>
+    </div>
+
+    <div class="section-head" style="margin-top:22px"><h2>Product penetration &amp; wallet share opportunity</h2><div class="sh-line"></div></div>
+    <div class="card">
+      <div class="card-title">Wallet share by product line</div>
+      <div class="card-sub">Current Maybank revenue against total addressable wallet, USD million</div>
+      <div id="wallet-bars"></div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 3: TRANSACTIONS & DEALS ═══ -->
+  <div class="tab-panel" id="panel-activity">
+    <div class="section-head"><h2>Transaction activity</h2><div class="sh-line"></div></div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Transaction volume trend</div>
+        <div class="card-sub">Last 6 months, RM billion</div>
+        <div class="chart-box"><canvas id="txnTrendChart" role="img" aria-label="Line chart showing monthly transaction volume from January to June, rising from 1.35 billion ringgit to 1.63 billion ringgit."></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Latest transaction activity</div>
+        <div class="card-sub">Most recent postings</div>
+        <div class="activity-list" id="activity-list"></div>
+      </div>
+    </div>
+
+    <div class="section-head" style="margin-top:22px"><h2>Deal performance</h2><div class="sh-line"></div></div>
+    <div class="card">
+      <div class="card-title">Past deal summary</div>
+      <div class="card-sub">Won and pipeline deals, current planning cycle</div>
+      <div class="table-scroll">
+        <table class="dash-tbl">
+          <thead><tr><th>Deal</th><th class="num">Amount</th><th>Status</th><th class="num">Revenue</th></tr></thead>
+          <tbody id="deals-tbl"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 4: RISK & ACTIONS ═══ -->
+  <div class="tab-panel" id="panel-risk">
+    <div class="section-head"><h2>Risk, RAROC &amp; relationship health</h2><div class="sh-line"></div></div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Relationship health score</div>
+        <div class="card-sub">Weighted composite across 6 components</div>
+        <div class="health-wrap">
+          <div class="health-ring">
+            <svg viewBox="0 0 130 130">
+              <circle cx="65" cy="65" r="56" fill="none" stroke="#f1f2f5" stroke-width="12"/>
+              <circle cx="65" cy="65" r="56" fill="none" stroke="#22c55e" stroke-width="12" stroke-linecap="round" stroke-dasharray="351.86" stroke-dashoffset="77.4"/>
+            </svg>
+            <div class="ring-center"><div class="ring-num">78</div><div class="ring-lbl">/ 100</div></div>
+          </div>
+          <div class="health-comps">
+            <div class="hc-row"><span class="hc-name">Revenue trend</span><span class="hc-weight">25%</span><div class="hc-track"><div class="hc-fill" style="width:74%;background:#2563A8"></div></div><span class="hc-score">74</span></div>
+            <div class="hc-row"><span class="hc-name">Wallet share</span><span class="hc-weight">20%</span><div class="hc-track"><div class="hc-fill" style="width:65%;background:#E8732D"></div></div><span class="hc-score">65</span></div>
+            <div class="hc-row"><span class="hc-name">Product penetration</span><span class="hc-weight">15%</span><div class="hc-track"><div class="hc-fill" style="width:72%;background:#2563A8"></div></div><span class="hc-score">72</span></div>
+            <div class="hc-row"><span class="hc-name">Credit performance</span><span class="hc-weight">15%</span><div class="hc-track"><div class="hc-fill" style="width:81%;background:#22c55e"></div></div><span class="hc-score">81</span></div>
+            <div class="hc-row"><span class="hc-name">Compliance</span><span class="hc-weight">10%</span><div class="hc-track"><div class="hc-fill" style="width:92%;background:#22c55e"></div></div><span class="hc-score">92</span></div>
+            <div class="hc-row"><span class="hc-name">Transaction activity</span><span class="hc-weight">15%</span><div class="hc-track"><div class="hc-fill" style="width:88%;background:#22c55e"></div></div><span class="hc-score">88</span></div>
+          </div>
+        </div>
+        <div class="relationship-badge"><span class="dot-green"></span>Strong relationship</div>
+      </div>
+      <div class="card">
+        <div class="card-title">RAROC &amp; credit risk snapshot</div>
+        <div class="card-sub">Portfolio-level, against hurdle rate</div>
+        <div class="chart-box short"><canvas id="rarocGauge" role="img" aria-label="Gauge chart showing portfolio RAROC at 15.4%, above the 13% hurdle rate."></canvas></div>
+        <table class="dash-tbl" style="margin-top:8px">
+          <tbody>
+            <tr><td>Credit utilisation</td><td class="num">72% &middot; stable</td></tr>
+            <tr><td>RAROC portfolio</td><td class="num" style="color:#15803d">15.4% &middot; above hurdle</td></tr>
+            <tr><td>ESG readiness score</td><td class="num">78% &middot; improving</td></tr>
+            <tr><td>Deal win rate (LTM)</td><td class="num">62% &middot; +7pp YoY</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-head" style="margin-top:22px"><h2>Planning actions</h2><div class="sh-line"></div></div>
+    <div class="card">
+      <div class="card-title">Account plan actions &mdash; RM focus</div>
+      <div class="card-sub">Prioritised next-best-actions for this planning cycle</div>
+      <div id="actions-list"></div>
+      <div class="total-upside">
+        <span class="tu-label">Total identified upside</span>
+        <span class="tu-val">USD 3.5M</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="bn-footer">
+  <span>&copy; Copyright 2026, All rights reserved.</span>
+  <span>Generated in 0.18s</span>
+  <span>powered by BUSINESSNEXT</span>
+</div>
+
+</div>
+<script>
+const dark = matchMedia('(prefers-color-scheme:dark)').matches;
+const gridColor = dark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.06)';
+const txtColor = dark ? '#94A3B8' : '#6b7280';
+
+const CYAN = '#2DD4E8', PINK = '#D4527E', AMBER = '#F0A93B', BLUE = '#2563A8', ORANGE = '#E8732D', PURPLE = '#7C5FD4', NAVY = '#14181f', GREEN = '#22c55e';
+
+function iconSvg(type, color) {
+  const icons = {
+    coin: '<circle cx="12" cy="12" r="8" stroke="' + color + '" stroke-width="1.6"/><path d="M9 12h6M12 9v6" stroke="' + color + '" stroke-width="1.6" stroke-linecap="round"/>',
+    chart: '<rect x="5" y="13" width="3" height="6" rx="1" fill="' + color + '"/><rect x="10.5" y="9" width="3" height="10" rx="1" fill="' + color + '"/><rect x="16" y="5" width="3" height="14" rx="1" fill="' + color + '"/>',
+    cash: '<rect x="4" y="7" width="16" height="10" rx="2" stroke="' + color + '" stroke-width="1.6"/><circle cx="12" cy="12" r="2.3" stroke="' + color + '" stroke-width="1.4"/>',
+    percent: '<circle cx="7.5" cy="7.5" r="2.3" stroke="' + color + '" stroke-width="1.6"/><circle cx="16.5" cy="16.5" r="2.3" stroke="' + color + '" stroke-width="1.6"/><path d="M17 7L7 17" stroke="' + color + '" stroke-width="1.6" stroke-linecap="round"/>',
+    eye: '<path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6Z" stroke="' + color + '" stroke-width="1.6"/><circle cx="12" cy="12" r="2.3" stroke="' + color + '" stroke-width="1.6"/>',
+    gauge: '<path d="M5 16a7 7 0 0 1 14 0" stroke="' + color + '" stroke-width="1.6" stroke-linecap="round"/><path d="M12 16l3-4" stroke="' + color + '" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="16" r="1.3" fill="' + color + '"/>',
+    card: '<rect x="3.5" y="6" width="17" height="12" rx="2" stroke="' + color + '" stroke-width="1.6"/><path d="M3.5 10h17" stroke="' + color + '" stroke-width="1.6"/>',
+    user: '<circle cx="12" cy="9" r="3.3" stroke="' + color + '" stroke-width="1.6"/><path d="M5.5 19c1-3.2 3.8-5 6.5-5s5.5 1.8 6.5 5" stroke="' + color + '" stroke-width="1.6" stroke-linecap="round"/>',
+  };
+  return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none">' + icons[type] + '</svg>';
+}
+
+// ── TAB SWITCHING — lazy-inits charts on first activation so canvases never size against a display:none parent ──
+const chartInitFns = {};
+const chartsInitialized = {};
+
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.bn-tab-sm').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + tabId).classList.add('active');
+  btn.classList.add('active');
+  if (!chartsInitialized[tabId] && chartInitFns[tabId]) {
+    chartInitFns[tabId]();
+    chartsInitialized[tabId] = true;
+  }
+}
+
+// ── TAB 1: OVERVIEW KPIs (no chart, renders immediately) ──
+const kpis = [
+  { label: 'Total Wallet Opportunity', val: 'USD 1.96B', trend: '\u2191 14% YoY', cls: 'tr-up', icon: 'coin', bg: '#FCE8EA', ic: '#D4527E' },
+  { label: 'Current Wallet Share', val: '26%', trend: '\u2191 3% YoY', cls: 'tr-up', icon: 'percent', bg: '#E6F1FB', ic: '#2563A8' },
+  { label: 'Revenue Target FY26/27', val: 'USD 13.0M', trend: 'Active', cls: 'tr-flat', icon: 'eye', bg: '#E6F1FB', ic: '#2563A8' },
+  { label: 'Realized Revenue (YTD)', val: 'USD 9.6M', trend: '74% achievement', cls: 'tr-flat', icon: 'cash', bg: '#FFF4DE', ic: '#a15c07' },
+  { label: 'Pipeline Revenue', val: 'USD 10.8M', trend: 'Gap USD 2.2M', cls: 'tr-down', icon: 'gauge', bg: '#FCE8EA', ic: '#c0273f' },
+  { label: 'Deal Win Rate (LTM)', val: '62%', trend: '\u2191 7%', cls: 'tr-up', icon: 'user', bg: '#E7F8EE', ic: '#15803d' },
+  { label: 'Product Penetration', val: '58%', trend: '\u2191 4%', cls: 'tr-up', icon: 'chart', bg: '#F3EEFE', ic: '#7C5FD4' },
+  { label: 'Credit Utilization', val: '72%', trend: 'Stable', cls: 'tr-flat', icon: 'gauge', bg: '#FFF4DE', ic: '#a15c07' },
+  { label: 'RAROC Portfolio', val: '15.4%', trend: 'Above hurdle', cls: 'tr-up', icon: 'card', bg: '#FCE8EA', ic: '#c0273f' },
+  { label: 'ESG Readiness Score', val: '78%', trend: 'Improving', cls: 'tr-up', icon: 'user', bg: '#E7F8EE', ic: '#15803d' },
+];
+document.getElementById('kpi-grid').innerHTML = kpis.map(k => `
+  <div class="kpi-card">
+    <div class="k-top">
+      <span class="k-label">${k.label}</span>
+      <span class="k-icon" style="background:${k.bg}">${iconSvg(k.icon, k.ic)}</span>
+    </div>
+    <div class="k-val"><b>${k.val}</b></div>
+    <div class="k-trend ${k.cls}">${k.trend}</div>
+  </div>`).join('');
+
+// ── TAB 2: REVENUE & WALLET ──
+chartInitFns['revenue'] = function () {
+  new Chart(document.getElementById('revChart'), {
+    data: {
+      labels: ['Q1 FY26', 'Q2 FY26', 'Q3 FY26', 'Q4 FY26'],
+      datasets: [
+        { type: 'bar', label: 'Plan (USD M)', data: [3.0, 3.2, 3.4, 3.4], backgroundColor: NAVY + 'CC', borderRadius: 3, order: 2 },
+        { type: 'bar', label: 'Realized (USD M)', data: [2.8, 3.0, 2.7, null], backgroundColor: CYAN, borderRadius: 3, order: 1 },
+        { type: 'line', label: 'Forecast (USD M)', data: [3.0, 3.1, 3.0, 2.9], borderColor: AMBER, backgroundColor: AMBER, borderWidth: 2.5, pointRadius: 4, tension: 0.25, order: 0 },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 10, font: { size: 10.5 }, color: txtColor, padding: 10 } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: txtColor, font: { size: 10.5 } } },
+        y: { grid: { color: gridColor }, ticks: { color: txtColor, font: { size: 10.5 } }, title: { display: true, text: 'USD M', color: txtColor, font: { size: 10 } } }
+      }
+    }
+  });
+
+  new Chart(document.getElementById('mixChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Trade Finance', 'Treasury & Markets', 'Cash Management', 'Islamic Financing', 'Corporate Lending', 'Advisory / ESG'],
+      datasets: [{
+        data: [3.1, 2.8, 2.6, 2.3, 1.8, 0.4],
+        backgroundColor: [BLUE, CYAN, PINK, AMBER, PURPLE, ORANGE],
+        borderWidth: 2, borderColor: dark ? '#14181f' : '#fff'
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '62%',
+      plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 9, font: { size: 10 }, color: txtColor, padding: 8 } } }
+    }
+  });
+
+  const walletData = [
+    { name: 'Cash Management', wallet: 8.5, revenue: 2.6, share: 31, color: PINK },
+    { name: 'Trade Finance', wallet: 12.0, revenue: 3.1, share: 26, color: BLUE },
+    { name: 'Treasury', wallet: 10.5, revenue: 2.8, share: 27, color: CYAN },
+    { name: 'Islamic Banking', wallet: 9.0, revenue: 2.3, share: 26, color: AMBER },
+    { name: 'Lending', wallet: 10.0, revenue: 2.2, share: 22, color: ORANGE },
+  ];
+  document.getElementById('wallet-bars').innerHTML = walletData.map(w => `
+    <div class="wallet-row">
+      <div class="wallet-head">
+        <span class="wallet-name">${w.name}</span>
+        <span class="wallet-figs">USD ${w.revenue.toFixed(1)}M of USD ${w.wallet.toFixed(1)}M wallet <span class="wallet-pct" style="color:${w.color}">${w.share}%</span></span>
+      </div>
+      <div class="wallet-track"><div class="wallet-fill" style="width:${w.share}%;background:${w.color}"></div></div>
+    </div>`).join('');
+};
+
+// ── TAB 3: TRANSACTIONS & DEALS ──
+chartInitFns['activity'] = function () {
+  new Chart(document.getElementById('txnTrendChart'), {
+    type: 'line',
+    data: {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+      datasets: [{
+        label: 'Volume (RM B)',
+        data: [1.35, 1.42, 1.58, 1.61, 1.49, 1.63],
+        borderColor: BLUE, backgroundColor: BLUE + '22', fill: true, tension: 0.3, pointRadius: 4, borderWidth: 2.5
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: txtColor, font: { size: 10.5 } } },
+        y: { grid: { color: gridColor }, ticks: { color: txtColor, font: { size: 10.5 } }, title: { display: true, text: 'RM B', color: txtColor, font: { size: 10 } } }
+      }
+    }
+  });
+
+  const activity = [
+    ['18-Jun-2026', 'LNG Export Collections', 'RM 148M'],
+    ['17-Jun-2026', 'USD/MYR FX Hedge', 'RM 96M'],
+    ['15-Jun-2026', 'Supplier Payment Batch', 'RM 84M'],
+    ['13-Jun-2026', 'Murabahah Drawdown', 'RM 120M'],
+    ['12-Jun-2026', 'Trade LC Issuance', 'RM 65M'],
+    ['10-Jun-2026', 'Cash Pooling Sweep', 'RM 180M'],
+  ];
+  document.getElementById('activity-list').innerHTML = activity.map(a => `
+    <div class="activity-row">
+      <span class="activity-date">${a[0]}</span>
+      <span class="activity-name">${a[1]}</span>
+      <span class="activity-val">${a[2]}</span>
+    </div>`).join('');
+
+  const deals = [
+    ['Islamic Revolving Credit Facility', 'RM 1.5B', 'Won', 'RM 1.8M'],
+    ['Supply Chain Financing Program', 'RM 800M', 'Won', 'RM 1.2M'],
+    ['Commodity Murabahah Facility', 'RM 600M', 'Won', 'RM 0.9M'],
+    ['FX Hedging Mandate', 'RM 1.2B', 'Won', 'RM 1.1M'],
+    ['ESG Linked Financing Proposal', 'RM 500M', 'Pipeline', 'RM 0.7M'],
+    ['Green Sukuk Advisory', 'RM 1.0B', 'Pipeline', 'RM 1.0M'],
+  ];
+  document.getElementById('deals-tbl').innerHTML = deals.map(d => `
+    <tr>
+      <td>${d[0]}</td>
+      <td class="num">${d[1]}</td>
+      <td><span class="status-pill ${d[2] === 'Won' ? 'st-won' : 'st-pipe'}">${d[2]}</span></td>
+      <td class="num">${d[3]}</td>
+    </tr>`).join('');
+};
+
+// ── TAB 4: RISK & ACTIONS ──
+chartInitFns['risk'] = function () {
+  new Chart(document.getElementById('rarocGauge'), {
+    type: 'doughnut',
+    data: {
+      labels: ['RAROC', 'Remaining'],
+      datasets: [{
+        data: [15.4, 84.6],
+        backgroundColor: [GREEN, dark ? '#262b35' : '#f1f2f5'],
+        borderWidth: 0,
+        circumference: 180, rotation: 270
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '72%',
+      plugins: { legend: { display: false }, tooltip: { enabled: false } }
+    },
+    plugins: [{
+      id: 'gaugeText',
+      afterDraw(chart) {
+        const { ctx, chartArea } = chart;
+        ctx.save();
+        const cx = (chartArea.left + chartArea.right) / 2;
+        const cy = chartArea.bottom - 6;
+        ctx.font = '700 24px Poppins, sans-serif';
+        ctx.fillStyle = dark ? '#fff' : '#1f2430';
+        ctx.textAlign = 'center';
+        ctx.fillText('15.4%', cx, cy - 16);
+        ctx.font = '500 11px Poppins, sans-serif';
+        ctx.fillStyle = txtColor;
+        ctx.fillText('vs 13% hurdle rate', cx, cy + 4);
+        ctx.restore();
+      }
+    }]
+  });
+
+  const actions = [
+    ['High', 'ESG Linked RCF', 'USD 0.8M'],
+    ['High', 'Treasury Hedging Expansion', 'USD 0.7M'],
+    ['High', 'Supply Chain Finance Expansion', 'USD 0.6M'],
+    ['Medium', 'Cash Pooling Regional Mandate', 'USD 0.5M'],
+    ['Medium', 'Green Sukuk Advisory', 'USD 0.5M'],
+    ['Medium', 'Cross Border Collections', 'USD 0.4M'],
+  ];
+  document.getElementById('actions-list').innerHTML = actions.map(a => `
+    <div class="action-row">
+      <span class="priority-pill ${a[0] === 'High' ? 'pr-high' : 'pr-med'}">${a[0]}</span>
+      <span class="action-name">${a[1]}</span>
+      <span class="action-val">${a[2]}</span>
+    </div>`).join('');
+};
+
+// Overview tab is visible by default and has no charts of its own (KPI grid only),
+// so the other tabs' charts lazy-init the first time each tab is opened.
+
+</script>
+</body>
+</html>
