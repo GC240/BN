@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<!-- Theme: set data-theme to "businessnext" (magenta+lime) or "gold" (gold+black) below -->
+<html lang="en" data-theme="businessnext">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BUSINESSNEXT · Account Planning Analytics Cockpit</title>
+<style>
+:root{
+  --accent:#EA1D75; --accent-strong:#C9135F; --accent-2:#CEDE00; --accent-2-strong:#B6C400;
+  --ink:#101010; --ink-soft:#1f1f1f; --muted:#6a6a6a; --label:#5d6b6e;
+  --bg:#f3f4f2; --card:#ffffff; --border:#e8e8e8; --border-strong:#d4d4d4;
+  --tint:#FDEEF5; --dark:#141414; --pos:#1a9e54; --neg:#d33b3b; --warn:#d99100;
+  --r-lg:16px; --r-md:12px; --r-sm:9px;
+  --shadow:0 1px 2px rgba(16,16,16,.04),0 6px 18px rgba(16,16,16,.05);
+  --shadow-hover:0 2px 4px rgba(16,16,16,.06),0 14px 34px rgba(16,16,16,.10);
+  --font:"Calibri","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+}
+html[data-theme="gold"]{
+  --accent:#FDC500; --accent-strong:#E0AE00; --accent-2:#1b1b1b; --accent-2-strong:#000;
+  --tint:#FFF6D6; --bg:#f6f7f9; --border:#e9eaee; --border-strong:#dadce2; --label:#5c7a82;
+  --pos:#16a34a; --neg:#dc2626; --warn:#d97706;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);font-size:14px;line-height:1.4;-webkit-font-smoothing:antialiased}
+.app{display:flex;flex-direction:column}
+
+/* ---------- top chrome ---------- */
+.limebar{height:4px;background:var(--accent-2)}
+.topbar{display:flex;align-items:center;gap:18px;padding:12px 22px;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:40}
+.brand{display:flex;align-items:center;gap:9px;flex-shrink:0}
+.brand .gt{font-weight:800;font-size:17px;color:var(--accent);letter-spacing:-1px}
+.brand .wm{font-weight:800;font-size:15px;letter-spacing:.3px;line-height:1}
+.brand .wm .b{color:var(--ink)} .brand .wm .n{color:var(--accent)}
+.titleblock{border-left:1px solid var(--border);padding-left:16px;line-height:1.15}
+.titleblock h1{font-size:15px;font-weight:700;color:var(--ink)}
+.titleblock p{font-size:11.5px;color:var(--muted);letter-spacing:.2px}
+.topright{margin-left:auto;display:flex;align-items:center;gap:12px}
+.levelpill{display:flex;align-items:center;gap:7px;background:var(--ink);color:#fff;padding:6px 13px;border-radius:999px;font-size:11.5px;font-weight:600;letter-spacing:.3px}
+.levelpill .dot{width:7px;height:7px;border-radius:50%;background:var(--accent-2)}
+.themeswitch{display:flex;border:1px solid var(--border-strong);border-radius:999px;overflow:hidden;font-size:11px;font-weight:700;letter-spacing:.3px}
+.themeswitch button{border:0;background:#fff;color:var(--muted);padding:6px 12px;cursor:pointer;font-family:inherit}
+.themeswitch button.on{background:var(--accent);color:#fff}
+html[data-theme="gold"] .themeswitch button.on{color:#1b1b1b}
+
+/* ---------- breadcrumb / filters ---------- */
+.subchrome{background:#fff;border-bottom:1px solid var(--border);padding:11px 22px;display:flex;flex-direction:column;gap:11px;position:sticky;top:0;z-index:30}
+.crumbs{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.crumb{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border-strong);background:#fff;color:var(--ink-soft);padding:5px 12px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;transition:.15s}
+.crumb:hover{border-color:var(--accent);color:var(--accent)}
+.crumb.cur{background:var(--ink);color:#fff;border-color:var(--ink);cursor:default}
+.crumb.cur .tag{color:var(--accent-2)}
+.crumb .tag{font-size:9.5px;font-weight:700;letter-spacing:.4px;color:var(--muted);text-transform:uppercase}
+.crumb.cur:hover{color:#fff}
+.crumbsep{color:var(--border-strong);font-size:13px;font-weight:700}
+.controls{display:flex;align-items:flex-end;gap:22px;flex-wrap:wrap}
+.ctrl{display:flex;flex-direction:column;gap:5px}
+.ctrl label{font-size:11px;color:var(--label);font-weight:600;letter-spacing:.2px}
+.ctrl .row{display:flex;gap:9px;align-items:center}
+select.sel{appearance:none;border:1px solid var(--border-strong);background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23666' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 11px center;padding:8px 30px 8px 12px;border-radius:var(--r-sm);font-family:inherit;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer;min-width:130px}
+select.sel:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--tint)}
+.btn{border:0;border-radius:var(--r-sm);padding:9px 16px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;background:var(--accent);color:#fff;transition:.15s}
+html[data-theme="gold"] .btn{color:#1b1b1b}
+.btn:hover{background:var(--accent-strong)}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--border-strong)}
+.btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
+.scope{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.scope b{color:var(--ink)}
+.tabs{display:flex;gap:9px}
+.tab{border:1px solid var(--border-strong);background:#fff;color:var(--ink-soft);padding:8px 17px;border-radius:var(--r-sm);font-size:13px;font-weight:700;cursor:pointer;transition:.15s}
+.tab:hover{border-color:var(--accent)}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* ---------- view / grid ---------- */
+.view{padding:20px 22px 40px;flex:1;animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+.c12{grid-column:span 12}.c8{grid-column:span 8}.c7{grid-column:span 7}.c6{grid-column:span 6}.c5{grid-column:span 5}.c4{grid-column:span 4}.c3{grid-column:span 3}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px}
+
+/* ---------- card ---------- */
+.card{position:relative;background:var(--card);border:1px solid var(--border);border-radius:var(--r-md);padding:18px 18px;box-shadow:var(--shadow);overflow:hidden}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent)}
+.card::after{content:"";position:absolute;right:0;top:0;width:54px;height:3px;background:var(--accent-2)}
+.card h3{font-size:13.5px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:8px;margin-bottom:3px}
+.card .csub{font-size:11px;color:var(--muted);letter-spacing:.2px;margin-bottom:13px}
+.card .ico{width:20px;height:20px;flex-shrink:0}
+
+/* KPI card */
+.kpi{position:relative;background:var(--card);border:1px solid var(--border);border-radius:var(--r-md);padding:16px 16px 15px;box-shadow:var(--shadow);overflow:hidden}
+.kpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent)}
+.kpi .klabel{font-size:11.5px;font-weight:700;color:var(--ink);letter-spacing:.2px}
+.kpi .ksub{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
+.kpi .kval{font-size:27px;font-weight:800;letter-spacing:-.6px;margin-top:9px;color:var(--ink);line-height:1}
+.kpi .kfoot{margin-top:9px;padding-top:9px;border-top:1px dashed var(--border-strong);font-size:11px;color:var(--muted);display:flex;justify-content:space-between;gap:6px}
+.kpi .kfoot b{color:var(--ink-soft)}
+.delta{display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:700;margin-left:8px;vertical-align:middle}
+.delta.up{color:var(--pos)} .delta.down{color:var(--neg)} .delta.flat{color:var(--muted)}
+.delta svg{width:11px;height:11px}
+
+/* bar list */
+.barlist{display:flex;flex-direction:column;gap:11px;margin-top:2px}
+.bar{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center;padding:9px 11px;border-radius:var(--r-sm);border:1px solid transparent;transition:.14s;cursor:pointer}
+.bar.nodrill{cursor:default}
+.bar:not(.nodrill):hover{border-color:var(--border-strong);background:#fafafa;transform:translateX(2px)}
+.bar:not(.nodrill):hover .bname{color:var(--accent)}
+.bar:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--tint)}
+.bhead{display:flex;align-items:center;gap:9px;min-width:0}
+.brank{width:22px;height:22px;border-radius:6px;background:var(--ink);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.brank.top{background:var(--accent)}
+.bname{font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bval{font-size:13px;font-weight:800;color:var(--ink);text-align:right;white-space:nowrap}
+.btrack{grid-column:1/-1;height:7px;border-radius:4px;background:#eee;overflow:hidden;margin-top:1px}
+.bfill{height:100%;border-radius:4px;background:var(--accent);width:0;transition:width .7s cubic-bezier(.22,1,.36,1)}
+.bmeta{grid-column:1/-1;display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);margin-top:2px}
+.chev{color:var(--muted);flex-shrink:0}
+.bar:not(.nodrill):hover .chev{color:var(--accent)}
+
+/* donut */
+.donutwrap{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:4px}
+.donut{position:relative;width:168px;height:168px;flex-shrink:0}
+.donut .ctr{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.donut .ctr .v{font-size:22px;font-weight:800;letter-spacing:-.5px}
+.donut .ctr .l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.legend{display:flex;flex-direction:column;gap:8px;flex:1;min-width:150px}
+.lg{display:flex;align-items:center;gap:9px;font-size:12.5px;cursor:default}
+.lg .sw{width:11px;height:11px;border-radius:3px;flex-shrink:0}
+.lg .ln{flex:1;color:var(--ink-soft);font-weight:600}
+.lg .lv{font-weight:800;color:var(--ink)}
+.lg .lp{font-size:11px;color:var(--muted);margin-left:4px}
+
+/* gauges */
+.gaugerow{display:flex;gap:14px;flex-wrap:wrap;margin-top:4px}
+.gauge{flex:1;min-width:150px;text-align:center}
+.gauge .gv{font-size:24px;font-weight:800;letter-spacing:-.5px;margin-top:-30px}
+.gauge .gl{font-size:11.5px;color:var(--muted);font-weight:600;margin-top:2px}
+.gauge .gtag{font-size:10.5px;font-weight:700;margin-top:3px}
+
+/* penetration */
+.pen{display:flex;flex-direction:column;gap:13px;margin-top:4px}
+.penrow .pl{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px}
+.penrow .pl b{font-weight:700}
+.penrow .pt{height:9px;border-radius:5px;background:#eee;overflow:hidden}
+.penrow .pf{height:100%;border-radius:5px;width:0;transition:width .7s cubic-bezier(.22,1,.36,1)}
+
+/* heatmap */
+.heat{overflow-x:auto;margin-top:6px}
+.heat table{border-collapse:separate;border-spacing:4px;width:100%}
+.heat th{font-size:10.5px;color:var(--muted);font-weight:700;text-align:center;padding:2px 4px;text-transform:uppercase;letter-spacing:.3px}
+.heat td.lab{font-size:12px;font-weight:700;color:var(--ink);text-align:left;white-space:nowrap;padding-right:8px}
+.heat td.cell{text-align:center;border-radius:7px;font-size:11.5px;font-weight:800;padding:11px 6px;color:var(--ink);min-width:64px}
+
+/* treemap */
+.tmap{position:relative;width:100%;height:228px;margin-top:6px}
+.tile{position:absolute;border-radius:8px;padding:9px 10px;overflow:hidden;color:#fff;display:flex;flex-direction:column;justify-content:space-between;transition:.15s}
+.tile .tn{font-size:12px;font-weight:700;line-height:1.15;text-shadow:0 1px 2px rgba(0,0,0,.25)}
+.tile .tv{font-size:13px;font-weight:800;text-shadow:0 1px 2px rgba(0,0,0,.25)}
+
+/* trend */
+.trendwrap{margin-top:6px}
+.trendtop{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
+.trendtop .tv{font-size:22px;font-weight:800;letter-spacing:-.5px}
+
+/* AI rail */
+.airail{display:flex;flex-direction:column;gap:12px}
+.ai{position:relative;border:1px solid var(--border);border-radius:var(--r-md);padding:14px 14px 13px;background:linear-gradient(180deg,var(--tint),#fff 70%);overflow:hidden}
+.ai::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent)}
+.ai .ah{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.ai .ah .ico{width:17px;height:17px;color:var(--accent)}
+.ai .ah .at{font-size:12.5px;font-weight:800;color:var(--ink);line-height:1.2}
+.ai .atx{font-size:11.5px;color:var(--muted);line-height:1.45;margin-bottom:10px}
+.ai .abot{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ai .opp{font-size:13px;font-weight:800;color:var(--accent)}
+.ai .opp small{font-size:9.5px;color:var(--muted);font-weight:700;display:block;letter-spacing:.4px;text-transform:uppercase}
+.ai .acta{font-size:11px;font-weight:800;color:var(--ink);border:1px solid var(--border-strong);padding:5px 9px;border-radius:7px;cursor:pointer;transition:.15s}
+.ai .acta:hover{border-color:var(--accent);color:var(--accent)}
+.railhdr{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800;color:var(--ink);margin-bottom:2px}
+.railhdr .ico{width:18px;height:18px;color:var(--accent)}
+
+/* product wallet table (L6) */
+.pw{width:100%;border-collapse:collapse;margin-top:4px}
+.pw th{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;text-align:left;padding:8px 10px;border-bottom:2px solid var(--border)}
+.pw th.r,.pw td.r{text-align:right}
+.pw td{padding:11px 10px;border-bottom:1px solid var(--border);font-size:13px}
+.pw tr:last-child td{border-bottom:0}
+.pw .pname{font-weight:700;display:flex;align-items:center;gap:9px}
+.pw .pdot{width:10px;height:10px;border-radius:3px}
+.pw .sharebar{height:7px;border-radius:4px;background:#eee;overflow:hidden;width:120px;margin-left:auto}
+.pw .sharefill{height:100%;border-radius:4px;width:0;transition:width .7s cubic-bezier(.22,1,.36,1)}
+.pw tfoot td{font-weight:800;padding-top:12px;border-top:2px solid var(--border);font-size:13px}
+
+/* insight list (L6) */
+.insights{display:flex;flex-direction:column;gap:11px;margin-top:4px}
+.ins{display:flex;gap:12px;align-items:flex-start;padding:12px;border:1px solid var(--border);border-radius:var(--r-sm);background:#fff}
+.ins .ic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--tint);color:var(--accent)}
+.ins .ic svg{width:18px;height:18px}
+.ins .it{font-size:13px;font-weight:700;color:var(--ink)}
+.ins .id{font-size:11.5px;color:var(--muted);margin-top:2px}
+.ins .iv{margin-left:auto;text-align:right;flex-shrink:0}
+.ins .iv b{font-size:15px;font-weight:800;color:var(--accent)}
+.ins .iv small{display:block;font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;font-weight:700}
+
+/* misc */
+.stat2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+.minicard{border:1px solid var(--border);border-radius:var(--r-sm);padding:12px}
+.minicard .ml{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;font-weight:700}
+.minicard .mv{font-size:19px;font-weight:800;margin-top:5px;letter-spacing:-.4px}
+.hint{display:flex;align-items:center;gap:9px;background:var(--tint);border:1px dashed var(--accent);border-radius:var(--r-sm);padding:10px 14px;font-size:12px;color:var(--ink-soft);margin-bottom:16px}
+.hint b{color:var(--accent)}
+.hint .ico{width:16px;height:16px;color:var(--accent);flex-shrink:0}
+.footer{padding:14px 22px;background:var(--dark);color:#c8c8c8;font-size:11.5px;text-align:center;letter-spacing:.3px}
+.footer b{color:#fff}
+.tagpill{font-size:9.5px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--tint);color:var(--accent)}
+
+@media (max-width:1100px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .c8,.c7,.c6,.c5,.c4,.c3{grid-column:span 12}
+}
+@media (max-width:620px){
+  .topbar{flex-wrap:wrap;gap:10px}.titleblock{border:0;padding:0}
+  .kpis{grid-template-columns:1fr}.controls{gap:14px}.scope{margin-left:0;width:100%}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="subchrome">
+    <div class="crumbs" id="crumbs"></div>
+    <div class="controls">
+      <div class="ctrl">
+        <label for="timeline">Timeline</label>
+        <div class="row">
+          <select class="sel" id="timeline">
+            <option value="YTD">YTD</option>
+            <option value="QTD">QTD</option>
+            <option value="MTD">MTD</option>
+          </select>
+          <button class="btn" id="resetTimeline">Reset</button>
+        </div>
+      </div>
+      <div class="ctrl" id="jumpCtrl">
+        <label for="jump" id="jumpLabel">Drill into Region</label>
+        <div class="row">
+          <select class="sel" id="jump"><option>Select</option></select>
+          <button class="btn ghost" id="resetDrill">Reset</button>
+        </div>
+      </div>
+      <div class="scope">Scope: <b id="scopeTxt">Group · All Markets</b></div>
+    </div>
+    <div class="tabs" id="tabs">
+      <button class="tab on" data-tab="performance">Performance</button>
+      <button class="tab" data-tab="risk">Risk &amp; ESG</button>
+    </div>
+  </div>
+
+  <main class="view" id="view"></main>
+</div>
+
+<script>
+/* ============================================================
+   THEME PALETTES (drive both CSS vars and SVG chart fills)
+============================================================ */
+const THEMES={
+  businessnext:{accent:'#EA1D75',accent2:'#CEDE00',
+    chart:['#EA1D75','#CEDE00','#2BB6C9','#6C5CE7','#F2A900','#2E8B8B','#9B59B6','#E8615C']},
+  gold:{accent:'#FDC500',accent2:'#1b1b1b',
+    chart:['#FDC500','#2BB6C9','#E0468A','#3B82F6','#14B8A6','#8B5CF6','#F59E0B','#EF4444']}
+};
+let PAL=THEMES[document.documentElement.getAttribute('data-theme')]||THEMES.businessnext;
+
+/* ============================================================
+   DETERMINISTIC RNG + helpers
+============================================================ */
+function hash(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+function rng(seed){let a=hash(seed);return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const between=(r,lo,hi)=>lo+r()*(hi-lo);
+const round=(x,d=0)=>{const p=10**d;return Math.round(x*p)/p};
+function splitWeighted(total,n,r){let w=[];for(let i=0;i<n;i++)w.push(0.5+r());const s=w.reduce((a,b)=>a+b,0);w=w.map(x=>x/s*total);return w.sort((a,b)=>b-a)}
+// round each part to `dec` decimals, then push the residual onto the largest part so the sum equals `total` exactly
+function balRound(arr,dec,total){const f=10**dec;let out=arr.map(v=>Math.round(v*f)/f);const sum=out.reduce((a,b)=>a+b,0);let resid=Math.round((total-sum)*f)/f;if(resid!==0){let mi=0;for(let i=1;i<out.length;i++)if(out[i]>out[mi])mi=i;out[mi]=Math.round((out[mi]+resid)*f)/f;}return out;}
+
+/* ============================================================
+   NAME POOLS
+============================================================ */
+const COUNTRIES={asean:['Malaysia','Singapore','Thailand','Indonesia'],gchina:['China','Hong Kong','Taiwan'],me:['United Arab Emirates','Saudi Arabia','Qatar'],eu:['United Kingdom','Germany','France']};
+const AREAS=['Central','Northern','Southern'];
+const RM_POOL=['Aishah Rahman','Bala Subramaniam','Chen Wei','Daniel Lim','Elena Soh','Farah Idris','Gopal Nair','Hannah Tan','Iqbal Hassan','Joel Wong','Kavita Menon','Liam Ong','Maya Pillai','Noor Aziz'];
+const CORP={
+  Malaysia:['Petronas Chemicals','Tenaga Nasional','Telekom Malaysia','Axiata Group','MISC Berhad','Sime Darby','IOI Corporation','Maxis','Genting','Petronas Gas','Top Glove','YTL Power'],
+  Singapore:['Singtel','Keppel Corp','Sembcorp','Wilmar Intl','Olam Group','ST Engineering','Singapore Airlines','City Developments','Jardine Matheson','Sea Limited'],
+  _generic:['Vanguard Energy','Meridian Telecom','Apex Manufacturing','Crest Logistics','Polaris Utilities','Northwind Chemicals','Solaris Power','Harbour Trade','Summit Industries','Delta Resources','Cardinal Holdings','Ironwood Steel']
+};
+const PRODUCTS=['Credit','Trade','Cash','Treasury','Islamic'];
+const INDUSTRIES=[['Oil & Gas',.28],['Chemicals',.20],['Manufacturing',.18],['Telecom',.14],['Utilities',.12],['Logistics',.08]];
+
+/* ============================================================
+   BUILD TREE  (revenue rolls up exactly; ratios assigned per node)
+============================================================ */
+let UID=0;
+function attrs(id,rev,over={}){
+  const r=rng(id);
+  return Object.assign({
+    rev, share:round(between(r,15,33)), ach:round(between(r,.75,.95),2),
+    yoy:round(between(r,-2,16),1), raroc:round(between(r,11.5,18.8),1),
+    npl:round(between(r,0.8,2.6),1), esg:Math.round(between(r,58,84)),
+    opp:round(rev*between(r,3.6,5.4),0)
+  },over);
+}
+function corpList(country){return CORP[country]||CORP._generic}
+
+function makeAccount(id,name,rev,country,flagship){
+  const r=rng(id);
+  // product split sums to rev
+  let pw;
+  if(flagship){const base=[4.8,3.2,1.8,2.7,0.5];const f=rev/13;pw=balRound(base.map(v=>v*f),2,rev);}
+  else{pw=balRound(splitWeighted(rev,5,r),2,rev);}
+  const pshare=flagship?[32,24,18,21,12]:PRODUCTS.map(()=>Math.round(between(r,12,40)));
+  return {id,name,kind:'account',rev,country,flagship,
+    ...attrs(id,rev,{share:flagship?26:Math.round(between(r,16,34))}),
+    products:PRODUCTS.map((p,i)=>({name:p,rev:pw[i],share:pshare[i]})),
+    trend:trend(id,rev)};
+}
+function makeRM(id,name,rev,country,accountNames){
+  const r=rng(id);const n=accountNames?accountNames.length:5;
+  const names=accountNames||pick(corpList(country),n,r);
+  let revs=accountNames?weightedFor(rev,n,r):splitWeighted(rev,n,r);
+  revs=balRound(revs,1,rev);
+  const accts=names.map((nm,i)=>makeAccount(id+'>'+slug(nm),nm,revs[i],country,accountNames&&i===0));
+  return {id,name,kind:'rm',rev,country,children:accts,...attrs(id,rev),trend:trend(id,rev)};
+}
+function makeArea(id,name,rev,country,showcase){
+  const r=rng(id);
+  let revs,rmNames;
+  if(showcase){rmNames=['Aishah Rahman','Bala Subramaniam','Chen Wei','Daniel Lim','Elena Soh','Farah Idris'];revs=[15.8,13.2,11.4,10.9,10.5,10.2];}
+  else{const n=4+Math.floor(r()*2);rmNames=pick(RM_POOL,n,r);revs=splitWeighted(rev,n,r);}
+  revs=balRound(revs,1,rev);
+  const rms=rmNames.map((nm,i)=>{
+    const sc=showcase&&i===0;
+    return makeRM(id+'>'+slug(nm),nm,revs[i],country,
+      sc?['Petronas Chemicals','Tenaga Nasional','Telekom Malaysia','Axiata Group','MISC Berhad']:null);
+  });
+  return {id,name,kind:'rm-parent',rev,country,children:rms,...attrs(id,rev),trend:trend(id,rev)};
+}
+function makeCountry(id,name,rev){
+  const r=rng(id);const showcaseCountry=(name==='Malaysia');
+  let revs=showcaseCountry?[72,78,60]:splitWeighted(rev,3,r);
+  revs=balRound(revs,1,rev);
+  const areas=AREAS.map((a,i)=>makeArea(id+'>'+slug(a),a+' '+name,revs[i],name,showcaseCountry&&i===0));
+  return {id,name,kind:'country',rev,country:name,children:areas,
+    ...attrs(id,rev,showcaseCountry?{share:28}:{}),
+    penetration:PRODUCTS.map(p=>({name:p,pct:Math.round(between(r,38,93))})),
+    trend:trend(id,rev)};
+}
+function makeRegion(id,name,rev,countryNames,over){
+  const r=rng(id);
+  let revs;
+  if(id==='asean')revs=[210,140,70,100]; else revs=splitWeighted(rev,countryNames.length,r);
+  revs=balRound(revs,0,rev);
+  const countries=countryNames.map((c,i)=>makeCountry(id+'>'+slug(c),c,revs[i]));
+  return {id,name,kind:'region',rev,children:countries,...attrs(id,rev,over),trend:trend(id,rev)};
+}
+function trend(id,end){const r=rng(id+'~t');const pts=[];let v=end*between(r,0.74,0.84);for(let i=0;i<11;i++){pts.push(round(v,1));v*=between(r,1.0,1.055)}pts.push(round(end,1));return pts}
+const slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+function pick(arr,n,r){const a=[...arr];const out=[];for(let i=0;i<n&&a.length;i++){out.push(a.splice(Math.floor(r()*a.length),1)[0])}return out}
+function weightedFor(total,n,r){return splitWeighted(total,n,r)}
+
+const REGIONS=[
+  makeRegion('asean','ASEAN',520,COUNTRIES.asean,{share:26,ach:.87,yoy:12.4,raroc:16.2,npl:1.4,esg:72,opp:2100}),
+  makeRegion('gchina','Greater China',310,COUNTRIES.gchina,{share:19,ach:.81,yoy:8.1,raroc:14.1,npl:2.1,esg:64,opp:1600}),
+  makeRegion('me','Middle East',220,COUNTRIES.me,{share:22,ach:.90,yoy:15.2,raroc:18.4,npl:1.1,esg:69,opp:1200}),
+  makeRegion('eu','Europe',150,COUNTRIES.eu,{share:15,ach:.79,yoy:4.3,raroc:12.6,npl:1.7,esg:78,opp:950})
+];
+const TOTAL_REV=REGIONS.reduce((s,r)=>s+r.rev,0);
+const TOTAL_OPP=REGIONS.reduce((s,r)=>s+r.opp,0);
+const ROOT={id:'root',name:'Group · All Markets',kind:'global',rev:TOTAL_REV,children:REGIONS,
+  share:Math.round(TOTAL_REV/TOTAL_OPP*100),ach:.85,yoy:12.0,raroc:15.8,npl:1.6,esg:71,opp:TOTAL_OPP,
+  trend:trend('root',TOTAL_REV)};
+// customer counts derive from revenue (current stock — not scaled by timeline)
+function cust(n){return Math.round(n.rev*6.208)}
+
+/* ============================================================
+   STATE + NAV
+============================================================ */
+const LEVELS=['Global Head','Regional Head','Country Head','Area Head','Relationship Manager','Account Planning 360'];
+let state={path:[],tab:'performance',timeline:'YTD'};
+function chain(){const out=[ROOT];let n=ROOT;for(const id of state.path){const c=(n.children||[]).find(x=>x.id===id);if(!c)break;n=c;out.push(n)}return out}
+function node(){const c=chain();return c[c.length-1]}
+function depth(){return chain().length-1}
+// resolve the full ancestor path (list of ids, excluding ROOT) to any node id anywhere in the tree
+function pathTo(id){let res=null;(function dfs(n,acc){for(const c of (n.children||[])){const p=acc.concat(c.id);if(c.id===id){res=p;return true}if(dfs(c,p))return true}return false})(ROOT,[]);return res;}
+function drillTo(id){const p=pathTo(id);if(p)state.path=p;render();}
+function TLF(){return state.timeline==='YTD'?1:state.timeline==='QTD'?0.27:0.085}
+
+/* money: rev-family scaled by timeline; opp/gap NOT scaled (annual stock) */
+function fmtM(m){const a=Math.abs(m);if(a>=1000)return '$'+(m/1000).toFixed(2)+'B';if(a>=10)return '$'+Math.round(m)+'M';if(a>=1)return '$'+m.toFixed(1)+'M';return '$'+Math.round(m*1000)+'K'}
+function sRev(v){return v*TLF()}                 // scaled revenue display value
+function fmtRev(v){return fmtM(sRev(v))}
+function fmtPct(x,d=0){return x.toFixed(d)+'%'}
+function fmtNum(n){return Math.round(n).toLocaleString('en-US')}
+
+function deltaHTML(val,suffix='YoY'){
+  const up=val>=0;const dir=val>0?'up':val<0?'down':'flat';
+  const arrow=up?'M6 2l4 5H2z':'M6 10L2 5h8z';
+  return `<span class="delta ${dir}"><svg viewBox="0 0 12 12"><path d="${arrow}" fill="currentColor"/></svg>${up?'+':''}${val}% ${suffix}</span>`;
+}
+
+/* ============================================================
+   SVG WIDGETS
+============================================================ */
+function svgDonut(segs,centerVal,centerLabel){
+  const R=70,C=2*Math.PI*R,sw=26;let off=0;const total=segs.reduce((s,d)=>s+d.value,0)||1;
+  let arcs='';segs.forEach((s,i)=>{const len=s.value/total*C;arcs+=`<circle r="${R}" cx="84" cy="84" fill="none" stroke="${s.color}" stroke-width="${sw}" stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-off}" transform="rotate(-90 84 84)" />`;off+=len});
+  return `<div class="donut"><svg viewBox="0 0 168 168" width="168" height="168"><circle r="${R}" cx="84" cy="84" fill="none" stroke="#eee" stroke-width="${sw}"/>${arcs}</svg><div class="ctr"><span class="v">${centerVal}</span><span class="l">${centerLabel}</span></div></div>`;
+}
+function svgGauge(val,max,label,tag,tagColor){
+  const pct=Math.max(0,Math.min(1,val/max));const A=Math.PI;const start=A,end=A-pct*A;
+  const x1=85+70*Math.cos(start),y1=80+70*Math.sin(start);
+  const x2=85+70*Math.cos(end),y2=80+70*Math.sin(end);
+  const large=pct>0.5?1:0;
+  return `<div class="gauge"><svg viewBox="0 0 170 96" width="100%" height="96">
+    <path d="M15 80 A70 70 0 0 1 155 80" fill="none" stroke="#eee" stroke-width="13" stroke-linecap="round"/>
+    <path d="M${x1.toFixed(1)} ${y1.toFixed(1)} A70 70 0 ${large} 1 ${x2.toFixed(1)} ${y2.toFixed(1)}" fill="none" stroke="${tagColor||PAL.accent}" stroke-width="13" stroke-linecap="round"/>
+  </svg><div class="gv">${val}</div><div class="gl">${label}</div><div class="gtag" style="color:${tagColor||PAL.accent}">${tag}</div></div>`;
+}
+function svgTrend(pts,color){
+  const w=520,h=92,pad=6;const mn=Math.min(...pts),mx=Math.max(...pts);const rng=(mx-mn)||1;
+  const X=i=>pad+i*(w-2*pad)/(pts.length-1);const Y=v=>h-pad-((v-mn)/rng)*(h-2*pad-8)-4;
+  let line='',area='';pts.forEach((v,i)=>{const x=X(i).toFixed(1),y=Y(v).toFixed(1);line+=(i?'L':'M')+x+' '+y+' ';area+=(i?'L':'M')+x+' '+y+' '});
+  area+=`L${X(pts.length-1).toFixed(1)} ${h-pad} L${X(0).toFixed(1)} ${h-pad} Z`;
+  const lx=X(pts.length-1).toFixed(1),ly=Y(pts[pts.length-1]).toFixed(1);
+  return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}" preserveAspectRatio="none"><defs><linearGradient id="tg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${color}" stop-opacity=".22"/><stop offset="1" stop-color="${color}" stop-opacity="0"/></linearGradient></defs><path d="${area}" fill="url(#tg)"/><path d="${line}" fill="none" stroke="${color}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${lx}" cy="${ly}" r="4" fill="${color}"/></svg>`;
+}
+
+/* ============================================================
+   HTML WIDGET BUILDERS
+============================================================ */
+const CHEV='<svg class="chev" width="14" height="14" viewBox="0 0 14 14"><path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function ico(p){return `<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`}
+const I={
+  money:'<path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>',
+  wallet:'<rect x="2" y="6" width="20" height="14" rx="2"/><path d="M16 13h.01M2 10h20"/>',
+  users:'<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8M23 21v-2a4 4 0 00-3-3.87M16 3.13A4 4 0 0119 7a4 4 0 01-3 3.87"/>',
+  shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+  bulb:'<path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12.7c.6.5 1 1.3 1 2.1h6c0-.8.4-1.6 1-2.1A7 7 0 0012 2z"/>',
+  chart:'<path d="M3 3v18h18M7 14l3-4 3 3 4-6"/>',
+  grid:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+  layers:'<path d="M12 2l9 5-9 5-9-5 9-5zM3 12l9 5 9-5M3 17l9 5 9-5"/>',
+  trophy:'<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4zM5 4H3v2a4 4 0 004 4M19 4h2v2a4 4 0 01-4 4"/>',
+  pulse:'<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>',
+  alert:'<path d="M12 9v4M12 17h.01M10.3 3.3L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.3a2 2 0 00-3.4 0z"/>',
+  leaf:'<path d="M11 20A7 7 0 019.8 6.1C15.5 5 17 4.5 19 2c1 2 1 5 1 8 0 5-4 10-9 10zM2 22c0-5 4-9 9-10"/>',
+  flag:'<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7"/>',
+};
+function kpi({label,sub,val,delta,foot}){
+  return `<div class="kpi"><div class="klabel">${label}</div>${sub?`<div class="ksub">${sub}</div>`:''}<div class="kval">${val}${delta||''}</div>${foot?`<div class="kfoot">${foot}</div>`:''}</div>`;
+}
+function card(title,iconKey,body,sub,col='c6'){
+  return `<div class="card ${col}"><h3>${iconKey?`<span style="color:var(--accent)">${ico(I[iconKey])}</span>`:''}${title}</h3>${sub?`<div class="csub">${sub}</div>`:''}${body}</div>`;
+}
+function barList(items,{drill=true,money=true,rank=false,sub}={}){
+  const max=Math.max(...items.map(i=>i.value))||1;
+  return `<div class="barlist">`+items.map((it,idx)=>{
+    const pct=Math.max(3,it.value/max*100);
+    const color=it.color||PAL.accent;
+    const vtext=it.vtext||(money?fmtRev(it.value):fmtNum(it.value));
+    const dr=drill&&it.drill;
+    return `<div class="bar ${dr?'':'nodrill'}" ${dr?`data-drill="${it.drill}" tabindex="0" role="button" aria-label="Drill into ${it.name}"`:''}>
+      <div class="bhead">${rank?`<span class="brank ${idx===0?'top':''}">${idx+1}</span>`:''}<span class="bname">${it.name}</span></div>
+      <span class="bval">${vtext}</span>
+      <div class="btrack"><span class="bfill" style="background:${color}" data-w="${pct}"></span></div>
+      <div class="bmeta"><span>${it.meta||''}</span><span>${dr?'Drill down '+CHEV:(it.right||'')}</span></div>
+    </div>`;
+  }).join('')+`</div>`;
+}
+function donutCard(title,segs,total,label,sub,col='c4'){
+  const cols=segs.map((s,i)=>({...s,color:PAL.chart[i%PAL.chart.length]}));
+  const tot=segs.reduce((a,b)=>a+b.value,0)||1;
+  const legend=cols.map(s=>`<div class="lg"><span class="sw" style="background:${s.color}"></span><span class="ln">${s.name}</span><span class="lv">${s.vtext||fmtRev(s.value)}</span><span class="lp">${Math.round(s.value/tot*100)}%</span></div>`).join('');
+  return card(title,'chart',`<div class="donutwrap">${svgDonut(cols,total,label)}<div class="legend">${legend}</div></div>`,sub,col);
+}
+function treemapCard(title,items,sub,col='c8'){
+  const data=items.map((it,i)=>({...it,color:PAL.chart[i%PAL.chart.length]})).sort((a,b)=>b.value-a.value);
+  const W=100,H=228;const out=[];tmap(data,0,0,W,H,out);
+  const tiles=out.map(t=>`<div class="tile" style="left:${t.x}%;top:${t.y}px;width:${t.w}%;height:${t.h}px;background:${t.color}"><span class="tn">${t.name}</span><span class="tv">${t.vtext||fmtRev(t.value)}</span></div>`).join('');
+  return card(title,'grid',`<div class="tmap">${tiles}</div>`,sub,col);
+}
+function tmap(items,x,y,w,h,out){
+  if(!items.length)return;
+  if(items.length===1){out.push({...items[0],x,y,w,h});return}
+  const tot=items.reduce((s,d)=>s+d.value,0);let a=[],b=[],sa=0;
+  for(const it of items){if(sa<tot/2||a.length===0){a.push(it);sa+=it.value}else b.push(it)}
+  const ratio=sa/tot;
+  if(w*2.4>=h){const wa=w*ratio;tmap(a,x,y,wa-0.6,h,out);tmap(b,x+wa,y,w-wa-0.6,h,out)}
+  else{const ha=h*ratio;tmap(a,x,y,w,ha-2,out);tmap(b,x,y+ha,w,h-ha-2,out)}
+}
+function heatCard(title,rows,cols,sub,colW='c8'){
+  const all=rows.flatMap(r=>r.vals);const mx=Math.max(...all)||1;
+  const head=`<tr><th></th>${cols.map(c=>`<th>${c}</th>`).join('')}</tr>`;
+  const body=rows.map(r=>`<tr><td class="lab">${r.name}</td>${r.vals.map(v=>{
+    const t=v/mx;const bg=mixHex(PAL.accent,t*0.85+0.08);return `<td class="cell" style="background:${bg};color:${t>0.55?'#fff':'var(--ink)'}">${fmtRev(v)}</td>`}).join('')}</tr>`).join('');
+  return card(title,'grid',`<div class="heat"><table>${head}${body}</table></div>`,sub,colW);
+}
+function mixHex(hex,a){const c=hex.replace('#','');const r=parseInt(c.substr(0,2),16),g=parseInt(c.substr(2,2),16),b=parseInt(c.substr(4,2),16);const m=(x)=>Math.round(255+(x-255)*a);return `rgb(${m(r)},${m(g)},${m(b)})`}
+function penCard(title,items,sub,col='c4'){
+  const body=`<div class="pen">`+items.map((it,i)=>{const color=it.color||PAL.chart[i%PAL.chart.length];return `<div class="penrow"><div class="pl"><span>${it.name}</span><b>${it.pct}%</b></div><div class="pt"><span class="pf" style="background:${color}" data-w="${it.pct}"></span></div></div>`}).join('')+`</div>`;
+  return card(title,'layers',body,sub,col);
+}
+function trendCard(node,col='c8'){
+  const pts=node.trend.map(v=>sRev(v));const last=pts[pts.length-1],first=pts[0];const g=round((last-first)/first*100,1);
+  return card('Revenue Trend','pulse',`<div class="trendwrap"><div class="trendtop"><span class="tv">${fmtM(last)}</span>${deltaHTML(g,'vs start')}<span style="font-size:11.5px;color:var(--muted);margin-left:auto">12-period · ${state.timeline}</span></div>${svgTrend(pts,PAL.accent)}</div>`,null,col);
+}
+function aiRail(items){
+  return `<div class="card c4" style="padding:16px"><div class="railhdr">${ico(I.bulb)} AI Opportunity Insights</div><div class="csub" style="margin-bottom:12px">Next-best revenue plays for this scope</div><div class="airail">`+
+    items.map(a=>`<div class="ai"><div class="ah">${ico(I.target)}<span class="at">${a.title}</span></div><div class="atx">${a.text}</div><div class="abot"><div class="opp"><small>Revenue Potential</small>${a.val}</div><span class="acta">View play</span></div></div>`).join('')
+  +`</div></div>`;
+}
+
+/* ============================================================
+   AI INSIGHTS per scope
+============================================================ */
+function aiFor(n,d){
+  const o=n.opp*(1-n.share/100);const big=v=>fmtM(v);
+  if(d===0)return[
+    {title:'Scale Treasury cross-sell in ASEAN',text:'Treasury penetration trails peer banks by ~11pts across strategic ASEAN names. Hedging & rates whitespace concentrated in Oil & Gas.',val:big(o*0.06)},
+    {title:'ESG-linked financing pipeline',text:'Sustainability-linked loans under-utilised in Greater China & Europe. Strong appetite signalled by 140+ accounts.',val:big(o*0.045)},
+    {title:'Supply Chain Finance whitespace',text:'Anchor-supplier programs missing for 30% of Manufacturing & Logistics clients. High activation probability.',val:big(o*0.038)}
+  ];
+  if(d===1)return[
+    {title:'Lift wallet share in Malaysia',text:'Malaysia holds the largest captured revenue but a 28% share — Treasury & Trade are the fastest paths to +5pts.',val:big(o*0.07)},
+    {title:'Activate dormant Trade limits',text:'Approved Trade facilities sit unused across mid-corporate names. Re-engagement campaign recommended.',val:big(o*0.05)},
+    {title:'ESG advisory mandate',text:'Three GLCs publishing transition plans this year — pre-empt with sustainability-linked structures.',val:big(o*0.04)}
+  ];
+  if(d===2)return[
+    {title:'GLC Treasury hedging mandate',text:'GLC segment shows lowest Treasury penetration vs revenue contribution. Prioritise rate & FX hedging.',val:big(o*0.08)},
+    {title:'Top-20 account deepening',text:'Concentration risk is healthy — deepen product holding in your top names before chasing new logos.',val:big(o*0.055)},
+    {title:'Islamic finance conversion',text:'Islamic penetration at 39%; Shariah-compliant refinancing demand rising among large corporates.',val:big(o*0.035)}
+  ];
+  if(d===3)return[
+    {title:'Reallocate coverage to high-wallet names',text:'Top quartile RMs capture 40%+ wallet share. Rebalance mid-tier portfolios toward strategic accounts.',val:big(o*0.06)},
+    {title:'Pipeline acceleration',text:'Several late-stage Treasury & SCF opportunities are stalled — schedule senior sponsor calls.',val:big(o*0.045)},
+    {title:'Cross-sell Cash Management',text:'Cash penetration lags peers in this area; bundle with existing Credit relationships.',val:big(o*0.03)}
+  ];
+  return[];
+}
+
+/* ============================================================
+   RISK & ESG tab (all levels)
+============================================================ */
+function renderRisk(n){
+  const exposure=n.opp*(n.npl/100)*1.6;
+  const idx=round(2+ (n.npl-1.6)*0.8 + (4-n.raroc/5)*0.1,1);
+  const riskTag=n.npl<1.5?['Low risk','var(--pos)']:n.npl<2.2?['Moderate','var(--warn)']:['Elevated','var(--neg)'];
+  const esgTag=n.esg>=75?['Leader','var(--pos)']:n.esg>=65?['On track','var(--warn)']:['Lagging','var(--neg)'];
+  const env=Math.round(n.esg*0.95),soc=Math.round(n.esg*1.02),gov=Math.round(n.esg*1.05);
+  const r=rng(n.id+'~risk');
+  const hr=(n.children||[]).slice(0,5).map((c,i)=>({name:c.name,value:c.rev*between(r,0.02,0.08),vtext:c.npl?('NPL '+c.npl+'%'):'',color:PAL.chart[2]}));
+  return `
+  <div class="kpis">
+    ${kpi({label:'Portfolio RAROC',sub:'Risk-adjusted return',val:n.raroc+'%',foot:`<span>Hurdle</span><b>12.0%</b>`})}
+    ${kpi({label:'NPL Ratio',sub:'Non-performing loans',val:n.npl+'%',foot:`<span>Status</span><b style="color:${riskTag[1]}">${riskTag[0]}</b>`})}
+    ${kpi({label:'High-Risk Exposure',sub:'Watchlist & impaired',val:fmtRev(exposure),foot:`<span>Of portfolio</span><b>${round(exposure/n.rev*100,1)}%</b>`})}
+    ${kpi({label:'ESG Risk Score',sub:'0–100, higher = better',val:n.esg,foot:`<span>Rating</span><b style="color:${esgTag[1]}">${esgTag[0]}</b>`})}
+  </div>
+  <div class="grid">
+    ${card('Risk Posture','shield',`<div class="gaugerow">${svgGauge(n.raroc,25,'RAROC %','vs 12% hurdle',PAL.accent)}${svgGauge(idx,5,'Risk Index','1=low · 5=high',PAL.chart[4])}${svgGauge(n.esg,100,'ESG Score',esgTag[0],PAL.chart[2])}</div>`,'Capital efficiency, concentration risk and sustainability at a glance','c6')}
+    ${penCard('ESG Breakdown',[{name:'Environmental',pct:env},{name:'Social',pct:soc>100?100:soc},{name:'Governance',pct:gov>100?100:gov}],'Pillar-level sustainability scoring','c3')}
+    ${aiRiskCard(n)}
+    ${(n.children&&n.children.length)?card('Highest-Risk Sub-Portfolios','alert',barList(hr,{drill:false,money:true}),'Largest watchlist exposure within this scope','c8'):card('Concentration','alert',`<div class="stat2"><div class="minicard"><div class="ml">Single-name limit</div><div class="mv">${fmtRev(n.rev*0.18)}</div></div><div class="minicard"><div class="ml">Sector cap (O&amp;G)</div><div class="mv">28%</div></div></div>`,'Within board-approved limits','c8')}
+    ${trendCard(n,'c4')}
+  </div>`;
+}
+function aiRiskCard(n){
+  const txt=n.npl<1.6?'Risk profile is healthy. Redeploy capital into higher-RAROC Treasury & Trade rather than de-risking.':'Two impaired names drive most of the NPL ratio. Recommend early-warning review and collateral top-up.';
+  return `<div class="card c3" style="padding:16px"><div class="railhdr">${ico(I.bulb)} AI Risk Insight</div><div class="ai" style="margin-top:12px"><div class="ah">${ico(I.shield)}<span class="at">Capital & risk action</span></div><div class="atx">${txt}</div><div class="abot"><div class="opp"><small>RAROC uplift</small>+${round((18-n.raroc)*0.3,1)}pts</div><span class="acta">Open review</span></div></div></div>`;
+}
+
+/* ============================================================
+   PERFORMANCE renderers per depth
+============================================================ */
+function childBars(n,drillable){
+  return (n.children||[]).slice().sort((a,b)=>b.rev-a.rev).map(c=>({
+    name:c.name,value:c.rev,drill:drillable?c.id:null,
+    meta:`Wallet share ${c.share}%`,right:`Achv ${Math.round(c.ach*100)}%`
+  }));
+}
+function productSegsFromChildren(n){
+  // aggregate product mix from leaves if account-level, else assign from global mix varied
+  const r=rng(n.id+'~pm');const base=[38,22,15,18,7];
+  return PRODUCTS.map((p,i)=>({name:p,value:round(n.rev*(base[i]/100)*between(r,0.85,1.15),1)}));
+}
+function industrySegs(n){const r=rng(n.id+'~ind');return INDUSTRIES.map(([nm,w])=>({name:nm,value:round(n.rev*w*between(r,0.9,1.12),1)}))}
+
+function renderGlobal(n){
+  return `
+  ${hintBar('This is the Group cockpit. Click any region bar to drill down → ASEAN ▸ Malaysia ▸ Central Malaysia ▸ Aishah Rahman ▸ Petronas Chemicals reaches Account Planning 360.')}
+  <div class="kpis">
+    ${kpi({label:'Total Revenue',sub:'Group · all markets',val:fmtRev(n.rev)+deltaHTML(n.yoy),foot:`<span>vs Target</span><b>${Math.round(n.ach*100)}% achieved</b>`})}
+    ${kpi({label:'Wallet Share',sub:`Opportunity ${fmtM(n.opp)}`,val:n.share+'%',foot:`<span>Wallet gap</span><b>${fmtM(n.opp-n.rev)}</b>`})}
+    ${kpi({label:'Active Customers',sub:'Across all regions',val:fmtNum(cust(n)*0.93),foot:`<span>Strategic</span><b>${fmtNum(cust(n)*0.04)} accounts</b>`})}
+    ${kpi({label:'Portfolio RAROC',sub:'Risk-adjusted return',val:n.raroc+'%',foot:`<span>NPL ratio</span><b>${n.npl}%</b>`})}
+  </div>
+  <div class="grid">
+    ${card('Revenue by Region','chart',barList(childBars(n,true),{rank:false}),'Click a region to drill into the Regional Head view','c8')}
+    ${donutCard('Product Revenue Mix',productSegsFromChildren(n),fmtRev(n.rev),'Total',null,'c4')}
+    ${treemapCard('Industry Revenue',industrySegs(n),'Revenue concentration by sector','c8')}
+    ${aiRail(aiFor(n,0))}
+    ${trendCard(n,'c8')}
+    ${miniStatsGlobal(n)}
+  </div>`;
+}
+function miniStatsGlobal(n){
+  return card('Group Scorecard','target',`<div class="stat2">
+    <div class="minicard"><div class="ml">Net Interest Income</div><div class="mv">${fmtRev(n.rev*0.66)}</div></div>
+    <div class="minicard"><div class="ml">Fee Income</div><div class="mv">${fmtRev(n.rev*0.34)}</div></div>
+    <div class="minicard"><div class="ml">Strategic Accounts</div><div class="mv">${fmtNum(cust(n)*0.04)}</div></div>
+    <div class="minicard"><div class="ml">High-Risk Accounts</div><div class="mv">${fmtNum(cust(n)*0.018)}</div></div>
+  </div>`,'YoY '+(n.yoy>0?'+':'')+n.yoy+'% · '+state.timeline,'c4');
+}
+
+function renderRegion(n){
+  return `
+  <div class="kpis">
+    ${kpi({label:'Region Revenue',sub:n.name,val:fmtRev(n.rev)+deltaHTML(n.yoy),foot:`<span>Target ${fmtRev(n.rev/n.ach)}</span><b>${Math.round(n.ach*100)}%</b>`})}
+    ${kpi({label:'Wallet Captured',sub:`Opportunity ${fmtM(n.opp)}`,val:fmtRev(n.rev),foot:`<span>Share</span><b>${n.share}%</b>`})}
+    ${kpi({label:'Strategic Accounts',sub:'Coverage tiers',val:fmtNum(cust(n)*0.04),foot:`<span>Watchlist</span><b>${fmtNum(cust(n)*0.012)}</b>`})}
+    ${kpi({label:'Portfolio RAROC',sub:'Risk-adjusted',val:n.raroc+'%',foot:`<span>NPL</span><b>${n.npl}%</b>`})}
+  </div>
+  <div class="grid">
+    ${card('Country Revenue','chart',barList(childBars(n,true)),'Click a country to drill into the Country Head view','c8')}
+    ${donutCard('Revenue by Product',productSegsFromChildren(n),fmtRev(n.rev),'Total',null,'c4')}
+    ${heatCard('Wallet Opportunity Heatmap',walletHeat(n),PRODUCTS,'Untapped wallet ($) by country × product — darker = bigger prize','c8')}
+    ${aiRail(aiFor(n,1))}
+    ${trendCard(n,'c8')}
+    ${miniStatsGlobal(n)}
+  </div>`;
+}
+function walletHeat(n){const r=rng(n.id+'~wh');return (n.children||[]).map(c=>({name:c.name,vals:PRODUCTS.map((p,i)=>round(c.opp*(1-c.share/100)*[.2,.18,.16,.28,.18][i]*between(r,0.7,1.3),1))}))}
+
+function renderCountry(n){
+  const topAccts=collectAccounts(n).sort((a,b)=>b.rev-a.rev).slice(0,8)
+    .map(a=>({name:a.name,value:a.rev,drill:a.id,meta:`Wallet ${a.share}%`,right:'Account 360'}));
+  return `
+  <div class="kpis">
+    ${kpi({label:'Country Revenue',sub:n.name,val:fmtRev(n.rev)+deltaHTML(n.yoy),foot:`<span>Target ${fmtRev(n.rev/n.ach)}</span><b>${Math.round(n.ach*100)}%</b>`})}
+    ${kpi({label:'Wallet Share',sub:`Opportunity ${fmtM(n.opp)}`,val:n.share+'%',foot:`<span>Gap</span><b>${fmtM(n.opp-n.rev)}</b>`})}
+    ${kpi({label:'Strategic Clients',sub:'Large Corp / MNC / GLC',val:fmtNum(cust(n)*0.05),foot:`<span>Watchlist</span><b>${fmtNum(cust(n)*0.012)}</b>`})}
+    ${kpi({label:'Active RMs',sub:'Relationship managers',val:fmtNum(rmCount(n)),foot:`<span>Areas</span><b>${(n.children||[]).length}</b>`})}
+  </div>
+  <div class="grid">
+    ${card('Revenue by Area','chart',barList(childBars(n,true)),'Click an area to drill into the Area Head view','c8')}
+    ${penCard('Product Penetration',n.penetration.map(p=>({name:p.name,pct:p.pct})),'% of strategic clients holding each product','c4')}
+    ${card('Top Accounts','trophy',barList(topAccts,{rank:true}),'Jump straight to Account Planning 360 for any flagship name','c8')}
+    ${aiRail(aiFor(n,2))}
+    ${donutCard('Revenue by Segment',segmentSegs(n),fmtRev(n.rev),'Total','Large Corporate · MNC · GLC · Mid Corporate','c4')}
+    ${trendCard(n,'c8')}
+  </div>`;
+}
+function segmentSegs(n){const r=rng(n.id+'~seg');const w=[.34,.26,.22,.18];return['Large Corporate','MNC','GLC','Mid Corporate'].map((s,i)=>({name:s,value:round(n.rev*w[i]*between(r,0.9,1.1),1)}))}
+function rmCount(n){let c=0;(n.children||[]).forEach(a=>c+=(a.children||[]).length);return c}
+
+function renderArea(n){
+  const rms=(n.children||[]).slice().sort((a,b)=>b.rev-a.rev).map(rm=>({
+    name:rm.name,value:rm.rev,drill:rm.id,meta:`Wallet ${rm.share}% · ${(rm.children||[]).length} accounts`,right:'RM dashboard'}));
+  return `
+  <div class="kpis">
+    ${kpi({label:'Area Revenue',sub:n.name,val:fmtRev(n.rev)+deltaHTML(n.yoy),foot:`<span>Target ${fmtRev(n.rev/n.ach)}</span><b>${Math.round(n.ach*100)}%</b>`})}
+    ${kpi({label:'Target Achievement',sub:'Against plan',val:Math.round(n.ach*100)+'%',foot:`<span>Gap to plan</span><b>${fmtRev(n.rev/n.ach-n.rev)}</b>`})}
+    ${kpi({label:'Wallet Share',sub:`Opportunity ${fmtM(n.opp)}`,val:n.share+'%',foot:`<span>RAROC</span><b>${n.raroc}%</b>`})}
+    ${kpi({label:'Active RMs',sub:'In this area',val:(n.children||[]).length,foot:`<span>Avg / RM</span><b>${fmtRev(n.rev/((n.children||[]).length||1))}</b>`})}
+  </div>
+  <div class="grid">
+    ${card('RM Leaderboard','trophy',barList(rms,{rank:true}),'Ranked by portfolio revenue — click an RM to open their dashboard','c8')}
+    ${donutCard('Revenue by Product',productSegsFromChildren(n),fmtRev(n.rev),'Total',null,'c4')}
+    ${heatCard('RM × Product Contribution',rmProdHeat(n),PRODUCTS,'Where each RM is strong (and where coverage gaps sit)','c8')}
+    ${aiRail(aiFor(n,3))}
+    ${trendCard(n,'c12')}
+  </div>`;
+}
+function rmProdHeat(n){const r=rng(n.id+'~rp');return (n.children||[]).slice(0,6).map(rm=>({name:rm.name,vals:PRODUCTS.map((p,i)=>round(rm.rev*[.34,.22,.15,.2,.09][i]*between(r,0.6,1.4),1))}))}
+
+function renderRM(n){
+  const accts=(n.children||[]).slice().sort((a,b)=>b.rev-a.rev).map(a=>({
+    name:a.name,value:a.rev,drill:a.id,meta:`Wallet ${a.share}%`,right:'Account 360'}));
+  const r=rng(n.id+'~pipe');
+  const pipe=PRODUCTS.map((p,i)=>({name:p,value:round(n.opp*(1-n.share/100)*[.22,.18,.16,.28,.16][i]*between(r,0.6,1.2),2)}));
+  const target=n.rev/n.ach;const gap=target-n.rev;
+  return `
+  <div class="kpis">
+    ${kpi({label:'Portfolio Revenue',sub:n.name,val:fmtRev(n.rev)+deltaHTML(n.yoy),foot:`<span>Accounts</span><b>${(n.children||[]).length}</b>`})}
+    ${kpi({label:'Wallet Share',sub:`Opportunity ${fmtM(n.opp)}`,val:n.share+'%',foot:`<span>Rank</span><b>Top quartile</b>`})}
+    ${kpi({label:'Revenue Target',sub:'Annual plan',val:fmtRev(target),foot:`<span>Achieved</span><b>${Math.round(n.ach*100)}%</b>`})}
+    ${kpi({label:'Revenue Gap',sub:'To close this year',val:fmtRev(gap),foot:`<span>Pipeline cover</span><b>${Math.round(pipe.reduce((s,p)=>s+p.value,0)/gap*100)}%</b>`})}
+  </div>
+  <div class="grid">
+    ${card('Portfolio Distribution','users',barList(accts,{rank:true}),'Click an account to open Account Planning 360','c7')}
+    ${aiForRM(n)}
+    ${card('Opportunity Pipeline','target',barList(pipe.map((p,i)=>({...p,color:PAL.chart[i%PAL.chart.length]})),{drill:false}),'Identified whitespace by product across the portfolio','c5')}
+    ${donutCard('Pipeline by Product',pipe,fmtM(pipe.reduce((s,p)=>s+p.value,0)),'Pipeline',null,'c4')}
+    ${trendCard(n,'c8')}
+  </div>`;
+}
+function aiForRM(n){
+  const o=n.opp*(1-n.share/100);
+  return aiRailInline([
+    {title:'Target Treasury Hedging',text:'Largest single play in the book — rate & FX hedging for your top energy/utility names.',val:fmtM(o*0.16)},
+    {title:'ESG Financing',text:'Sustainability-linked refinancing demand across two flagship accounts publishing transition plans.',val:fmtM(o*0.21)},
+    {title:'Supply Chain Finance',text:'Anchor-supplier program missing — high activation probability with existing Credit relationships.',val:fmtM(o*0.13)}
+  ]);
+}
+function aiRailInline(items){
+  return `<div class="card c4" style="padding:16px"><div class="railhdr">${ico(I.bulb)} AI Recommendations</div><div class="csub" style="margin-bottom:12px">Next-best plays for this RM portfolio</div><div class="airail">`+
+    items.map(a=>`<div class="ai"><div class="ah">${ico(I.target)}<span class="at">${a.title}</span></div><div class="atx">${a.text}</div><div class="abot"><div class="opp"><small>Revenue Potential</small>${a.val}</div><span class="acta">Build plan</span></div></div>`).join('')
+  +`</div></div>`;
+}
+
+function renderAccount(n){
+  const total=n.products.reduce((s,p)=>s+p.rev,0);
+  const targetShare=Math.min(45,n.share+14);
+  const revOpp=n.opp*(targetShare-n.share)/100;
+  const maxShare=Math.max(...n.products.map(p=>p.share));
+  const pwBody=`<table class="pw"><thead><tr><th>Product</th><th class="r">Revenue</th><th class="r">Wallet Share</th></tr></thead><tbody>`+
+    n.products.map((p,i)=>{const color=PAL.chart[i%PAL.chart.length];return `<tr><td class="pname"><span class="pdot" style="background:${color}"></span>${p.name}</td><td class="r">${fmtRev(p.rev)}</td><td class="r"><div style="display:flex;align-items:center;gap:9px;justify-content:flex-end"><b style="min-width:34px">${p.share}%</b><span class="sharebar"><span class="sharefill" style="background:${color}" data-w="${p.share/maxShare*100}"></span></span></div></td></tr>`}).join('')+
+    `</tbody><tfoot><tr><td>Total relationship</td><td class="r">${fmtRev(total)}</td><td class="r">${n.share}% blended</td></tr></tfoot></table>`;
+  const insights=accountInsights(n);
+  return `
+  ${hintBar(`Account Planning 360 — the leaf of the drill. <b>${n.name}</b>${n.flagship?' · flagship relationship':''}. Use breadcrumbs above to climb back up.`)}
+  <div class="kpis">
+    ${kpi({label:'Account Revenue',sub:n.name,val:fmtRev(n.rev)+deltaHTML(n.yoy),foot:`<span>Country</span><b>${n.country}</b>`})}
+    ${kpi({label:'Wallet Share',sub:'Current capture',val:n.share+'%',foot:`<span>Target share</span><b>${targetShare}%</b>`})}
+    ${kpi({label:'Revenue Opportunity',sub:'To reach target share',val:fmtRev(revOpp),foot:`<span>Share gap</span><b>${targetShare-n.share}pts</b>`})}
+    ${kpi({label:'Relationship RAROC',sub:'Risk-adjusted',val:n.raroc+'%',foot:`<span>ESG score</span><b>${n.esg}</b>`})}
+  </div>
+  <div class="grid">
+    ${card('Product Wallet','wallet',pwBody,'Revenue and wallet share captured per product line','c7')}
+    ${card('Wallet Share vs Target','target',`<div class="gaugerow">${svgGauge(n.share,targetShare+8,'Current %','of '+targetShare+'% target',PAL.accent)}${svgGauge(targetShare,targetShare+8,'Target %','board ambition',PAL.chart[2])}</div><div class="stat2" style="margin-top:14px"><div class="minicard"><div class="ml">Captured revenue</div><div class="mv">${fmtRev(n.rev)}</div></div><div class="minicard"><div class="ml">Untapped wallet</div><div class="mv">${fmtRev(revOpp)}</div></div></div>`,'How much of the client\u2019s spend we hold vs the ambition','c5')}
+    ${card('Account Planning Insights','bulb',`<div class="insights">${insights.map(x=>`<div class="ins"><div class="ic">${ico(I[x.icon])}</div><div><div class="it">${x.title}</div><div class="id">${x.text}</div></div><div class="iv"><b>${x.val}</b><small>opportunity</small></div></div>`).join('')}</div>`,'Prioritised whitespace and coverage actions for this relationship','c8')}
+    ${card('Relationship Snapshot','flag',`<div class="stat2"><div class="minicard"><div class="ml">Coverage RM</div><div class="mv" style="font-size:15px">${rmName()}</div></div><div class="minicard"><div class="ml">Tier</div><div class="mv" style="font-size:15px">${n.flagship?'Strategic':'Growth'}</div></div><div class="minicard"><div class="ml">YoY revenue</div><div class="mv">${n.yoy>0?'+':''}${n.yoy}%</div></div><div class="minicard"><div class="ml">Products held</div><div class="mv">${n.products.filter(p=>p.rev>0.05).length} / 5</div></div></div>`,'Ownership & engagement','c4')}
+    ${trendCard(n,'c12')}
+  </div>`;
+}
+function rmName(){const c=chain();const rm=c.find(x=>x.kind==='rm');return rm?rm.name:'\u2014'}
+function accountInsights(n){
+  const trez=n.products.find(p=>p.name==='Treasury'),isl=n.products.find(p=>p.name==='Islamic');
+  return [
+    {icon:'alert',title:'Treasury penetration below peer benchmark',text:'Hedging holding trails comparable names by ~10pts despite high FX/rate exposure.',val:fmtRev(n.rev*0.12)},
+    {icon:'layers',title:'Supply Chain Finance missing',text:'No anchor-supplier program in place — strong fit given trade volumes.',val:fmtRev(n.rev*0.06)},
+    {icon:'leaf',title:'ESG financing not adopted',text:'Sustainability-linked structure unused; client has a published transition plan.',val:fmtRev(n.rev*0.09)}
+  ];
+}
+
+/* helpers for accounts */
+function collectAccounts(n){const out=[];(function w(x){if(x.kind==='account'){out.push(x);return}(x.children||[]).forEach(w)})(n);return out}
+
+/* ============================================================
+   shared bits
+============================================================ */
+function hintBar(html){return `<div class="hint">${ico(I.target)}<span>${html}</span></div>`}
+
+/* ============================================================
+   RENDER ORCHESTRATION
+============================================================ */
+function render(){
+  const n=node(),d=depth();
+  {const _ll=document.getElementById('levelLabel');if(_ll)_ll.textContent=LEVELS[d];}
+  document.getElementById('scopeTxt').textContent=d===0?'Group · All Markets':n.name;
+  // breadcrumbs
+  const ch=chain();
+  document.getElementById('crumbs').innerHTML=ch.map((c,i)=>{
+    const cur=i===ch.length-1;const tag=LEVELS[i];
+    return (i?`<span class="crumbsep">/</span>`:'')+
+    `<span class="crumb ${cur?'cur':''}" data-crumb="${i}"><span class="tag">${shortLvl(i)}</span>${i===0?'Global':c.name}</span>`;
+  }).join('');
+  // jump dropdown
+  const jc=document.getElementById('jumpCtrl');const jsel=document.getElementById('jump');const jl=document.getElementById('jumpLabel');
+  if(n.children&&n.children.length){
+    jc.style.display='';
+    jl.textContent='Drill into '+childKind(d);
+    jsel.innerHTML='<option value="">Select</option>'+n.children.slice().sort((a,b)=>b.rev-a.rev).map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+  }else{jc.style.display='none'}
+  // tabs availability (account has both but relabel? keep both)
+  // body
+  const view=document.getElementById('view');
+  if(state.tab==='risk'){view.innerHTML=renderRisk(n)}
+  else{
+    view.innerHTML=({0:renderGlobal,1:renderRegion,2:renderCountry,3:renderArea,4:renderRM,5:renderAccount})[d](n);
+  }
+  animate();
+}
+function shortLvl(i){return['GROUP','REGION','COUNTRY','AREA','RM','ACCOUNT'][i]}
+function childKind(d){return['Region','Country','Area','RM','Account',''][d]}
+
+function animate(){
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('.bfill,.pf,.sharefill').forEach(el=>{el.style.width=el.dataset.w+'%'});
+    document.querySelectorAll('.kval').forEach(el=>countUp(el));
+  });
+}
+function countUp(el){
+  // animate the leading numeric token only
+  const full=el.innerHTML;const m=full.match(/(\$?)([\d,]+(?:\.\d+)?)(B|M|K|%)?/);
+  if(!m)return;const prefix=m[1]||'';const suffix=m[3]||'';const raw=parseFloat(m[2].replace(/,/g,''));
+  if(!isFinite(raw))return;const rest=full.slice(m.index+m[0].length);
+  const dec=(m[2].split('.')[1]||'').length;const dur=520;const t0=performance.now();
+  function step(t){const k=Math.min(1,(t-t0)/dur);const e=1-Math.pow(1-k,3);const v=raw*e;
+    const txt=(suffix?v.toFixed(dec):Math.round(v).toLocaleString('en-US'));
+    el.innerHTML=prefix+txt+suffix+rest;if(k<1)requestAnimationFrame(step)}
+  requestAnimationFrame(step);
+}
+
+/* ============================================================
+   EVENTS
+============================================================ */
+document.getElementById('view').addEventListener('click',e=>{
+  const b=e.target.closest('[data-drill]');if(b){drillTo(b.dataset.drill)}
+});
+document.getElementById('view').addEventListener('keydown',e=>{
+  if((e.key==='Enter'||e.key===' ')){const b=e.target.closest('[data-drill]');if(b){e.preventDefault();drillTo(b.dataset.drill)}}
+});
+document.getElementById('crumbs').addEventListener('click',e=>{
+  const c=e.target.closest('[data-crumb]');if(!c)return;const i=+c.dataset.crumb;state.path=state.path.slice(0,i);render();
+});
+document.getElementById('jump').addEventListener('change',e=>{if(e.target.value){drillTo(e.target.value)}});
+document.getElementById('resetDrill').addEventListener('click',()=>{state.path=[];render()});
+document.getElementById('tabs').addEventListener('click',e=>{const t=e.target.closest('[data-tab]');if(!t)return;state.tab=t.dataset.tab;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));render()});
+document.getElementById('timeline').addEventListener('change',e=>{state.timeline=e.target.value;render()});
+document.getElementById('resetTimeline').addEventListener('click',()=>{state.timeline='YTD';document.getElementById('timeline').value='YTD';render()});
+const _ts=document.getElementById('themeswitch');
+if(_ts)_ts.addEventListener('click',e=>{
+  const b=e.target.closest('[data-theme-btn]');if(!b)return;const t=b.dataset.themeBtn;
+  PAL=THEMES[t];document.documentElement.setAttribute('data-theme',t);
+  document.querySelectorAll('[data-theme-btn]').forEach(x=>x.classList.toggle('on',x===b));
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
