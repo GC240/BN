@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Account Planning Dashboard — Petronas Chemicals Malaysia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Poppins',sans-serif;background:#fff;color:#1f2430;font-size:14px;-webkit-font-smoothing:antialiased;line-height:1.45}
+
+/* ── TABS ── */
+.bn-tabs-inline{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid #e1e3e8;padding-bottom:0;background:#fff}
+.bn-tab-sm{padding:9px 16px;border-radius:9px 9px 0 0;font-size:12.5px;font-weight:500;color:#6b7280;white-space:nowrap;cursor:pointer;border:1px solid transparent;background:none;font-family:'Poppins',sans-serif}
+.bn-tab-sm.active{background:#14181f;color:#fff;font-weight:600}
+.bn-tab-sm:not(.active):hover{background:#eef0f4}
+
+/* ── BODY ── */
+.bn-body{background:#fff;padding:20px 22px}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* ── LAYOUT HELPERS ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px}
+.g21{display:grid;grid-template-columns:2fr 1fr;gap:14px}
+.g12{display:grid;grid-template-columns:1fr 2fr;gap:14px}
+.mb{margin-bottom:16px}
+
+/* ── KPI CARD ── */
+.kpi-card{background:#fff;border-radius:12px;border:1px solid #ebecf0;padding:15px 17px}
+.kpi-card .k-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
+.kpi-card .k-label{font-size:13px;font-weight:600;color:#1f2430;line-height:1.3}
+.k-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.kpi-card .k-val{font-size:13px;color:#1f2430;margin-bottom:5px}
+.kpi-card .k-val::before{content:'\2022';margin-right:6px;color:#c4c8d1}
+.kpi-card .k-val b{font-size:20px;font-weight:700}
+.kpi-card .k-trend{font-size:12px;font-weight:600}
+.kpi-card .k-bar{height:4px;background:#f1f2f5;border-radius:20px;margin-top:8px;overflow:hidden}
+.kpi-card .k-bar-fill{height:100%;border-radius:20px}
+.tr-up{color:#22c55e}.tr-dn{color:#ef4444}.tr-fl{color:#9aa1ae}.tr-am{color:#d97706}
+
+/* ── CARD ── */
+.card{background:#fff;border-radius:12px;border:1px solid #ebecf0;padding:16px}
+.card-title{font-size:13.5px;font-weight:600;color:#1f2430;margin-bottom:2px}
+.card-sub{font-size:11px;color:#9aa1ae;margin-bottom:12px}
+
+/* ── CHART BOXES ── */
+.ch{position:relative;width:100%}
+.ch.h200{height:200px}.ch.h220{height:220px}.ch.h240{height:240px}.ch.h160{height:160px}
+
+/* ── TABLES ── */
+table.dt{width:100%;border-collapse:collapse;font-size:12px}
+table.dt th{padding:7px 10px;font-size:10px;font-weight:600;color:#9aa1ae;text-transform:uppercase;letter-spacing:.3px;background:#f8f9fb;border-bottom:1px solid #ebecf0;text-align:left;white-space:nowrap}
+table.dt th.r{text-align:right}
+table.dt td{padding:7px 10px;border-bottom:1px solid #f1f2f5;color:#1f2430;vertical-align:middle}
+table.dt td.r{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+table.dt tbody tr:last-child td{border-bottom:none}
+table.dt tbody tr:hover td{background:#fafbfc}
+.ts{overflow-x:auto}
+
+/* ── PILLS ── */
+.pill{font-size:10.5px;font-weight:600;padding:2px 9px;border-radius:20px;white-space:nowrap;display:inline-block}
+.p-won{background:#E7F8EE;color:#15803d}
+.p-pipe{background:#FFF4DE;color:#a15c07}
+.p-hi{background:#FCE8EA;color:#c0273f}
+.p-md{background:#FFF4DE;color:#a15c07}
+.p-blue{background:#E6F1FB;color:#2563A8}
+.p-pur{background:#F3EEFE;color:#7C5FD4}
+
+/* ── SCORE RING ── */
+.ring-wrap{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.ring-svg{position:relative;width:120px;height:120px;flex-shrink:0}
+.ring-svg svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring-ctr{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.ring-num{font-size:26px;font-weight:700;color:#1f2430}
+.ring-lbl{font-size:9.5px;color:#9aa1ae;text-transform:uppercase;letter-spacing:.4px}
+.ring-rows{flex:1;min-width:200px}
+.ring-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.ring-row:last-child{margin-bottom:0}
+.rr-name{font-size:11.5px;color:#4b5163;width:125px;flex-shrink:0}
+.rr-w{font-size:10px;color:#9aa1ae;width:28px;flex-shrink:0}
+.rr-track{flex:1;height:6px;background:#f1f2f5;border-radius:20px;overflow:hidden}
+.rr-fill{height:100%;border-radius:20px}
+.rr-score{font-size:11px;font-weight:700;color:#1f2430;width:22px;text-align:right;flex-shrink:0}
+
+/* ── ACTIVITY ── */
+.act-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f1f2f5}
+.act-row:last-child{border-bottom:none}
+.act-date{font-size:10.5px;color:#9aa1ae;width:76px;flex-shrink:0}
+.act-name{font-size:12.5px;flex:1}
+.act-val{font-size:12.5px;font-weight:700;flex-shrink:0}
+
+/* ── ACTION ROWS ── */
+.ar{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f1f2f5}
+.ar:last-child{border-bottom:none}
+.ar-name{font-size:12.5px;flex:1}
+.ar-val{font-size:12.5px;font-weight:700;color:#22c55e;flex-shrink:0}
+.upside-bar{background:#14181f;border-radius:9px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;margin-top:12px}
+.upside-bar .ul{font-size:12px;color:rgba(255,255,255,.6);font-weight:500}
+.upside-bar .uv{font-size:18px;font-weight:700;color:#FFD23F}
+
+/* ── WALLET BARS ── */
+.wb-row{margin-bottom:11px}
+.wb-row:last-child{margin-bottom:0}
+.wb-head{display:flex;justify-content:space-between;margin-bottom:4px}
+.wb-name{font-size:12.5px;font-weight:600}
+.wb-fig{font-size:11px;color:#6b7280}
+.wb-track{height:8px;background:#f1f2f5;border-radius:20px;overflow:hidden}
+.wb-fill{height:100%;border-radius:20px}
+
+/* ── INSIGHT ROWS ── */
+.ir{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #f1f2f5;gap:10px}
+.ir:last-child{border-bottom:none}
+.ir-k{font-size:12px;color:#4b5163;font-weight:500}
+.ir-v{font-size:12.5px;font-weight:700;text-align:right}
+
+@media(max-width:1100px){.g4{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr}.g21,.g12{grid-template-columns:1fr}}
+@media(max-width:640px){.g4,.g3,.g2,.g21,.g12{grid-template-columns:1fr}.bn-body{padding:12px}}
+</style>
+</head>
+<body>
+
+<div class="bn-tabs-inline">
+  <button class="bn-tab-sm active" data-tab="overview" onclick="switchTab('overview',this)">Overview &amp; KPIs</button>
+  <button class="bn-tab-sm" data-tab="revenue" onclick="switchTab('revenue',this)">Revenue &amp; Wallet</button>
+  <button class="bn-tab-sm" data-tab="activity" onclick="switchTab('activity',this)">Transactions &amp; Deals</button>
+  <button class="bn-tab-sm" data-tab="risk" onclick="switchTab('risk',this)">Risk &amp; Actions</button>
+</div>
+
+<div class="bn-body">
+
+<!-- ═══ TAB 1: OVERVIEW ═══ -->
+<div class="tab-panel active" id="panel-overview">
+
+  <!-- 12 KPI cards in 4 columns — fills 3 complete rows -->
+  <div class="g4 mb" id="kpi-grid"></div>
+
+  <!-- Row of 3 mini-charts below KPIs -->
+  <div class="g3">
+    <div class="card">
+      <div class="card-title">NII Actual vs Target</div>
+      <div class="card-sub">USD million &middot; FY 2025-26</div>
+      <div class="ch h200"><canvas id="niiChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Revenue Achievement</div>
+      <div class="card-sub">Quarterly progress against plan</div>
+      <div class="ch h200"><canvas id="achievChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Product Penetration by Division</div>
+      <div class="card-sub">% of Maybank products held vs available</div>
+      <div class="ch h200"><canvas id="penetChart"></canvas></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 2: REVENUE & WALLET ═══ -->
+<div class="tab-panel" id="panel-revenue">
+  <div class="g21 mb">
+    <div class="card">
+      <div class="card-title">Revenue realized vs plan vs forecast</div>
+      <div class="card-sub">FY 2026 by quarter &middot; USD million</div>
+      <div class="ch h240"><canvas id="revChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Revenue mix by product</div>
+      <div class="card-sub">Total USD 13.0M planned</div>
+      <div class="ch h240"><canvas id="mixChart"></canvas></div>
+    </div>
+  </div>
+  <div class="g3 mb">
+    <div class="card">
+      <div class="card-title">Wallet share by product line</div>
+      <div class="card-sub">Maybank revenue vs total addressable wallet</div>
+      <div id="wallet-bars" style="margin-top:4px"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">NII vs NoII Split</div>
+      <div class="card-sub">FY 2025-26 actual &middot; USD million</div>
+      <div class="ch h200"><canvas id="niiNoiiChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Revenue Growth Trend</div>
+      <div class="card-sub">Monthly NII + NoII &middot; Dec 2025 – May 2026</div>
+      <div class="ch h200"><canvas id="revTrendChart"></canvas></div>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="card-title">Top 5 Revenue Contributors</div>
+      <div class="card-sub">FY 2025-26 by product &middot; RM million</div>
+      <div class="ts">
+        <table class="dt">
+          <thead><tr><th>Product</th><th>Division</th><th class="r">NII (M)</th><th class="r">NoII (M)</th><th class="r">Growth</th></tr></thead>
+          <tbody id="rev-tbl"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Whitespace Opportunity — Top Picks</div>
+      <div class="card-sub">Non-held products with highest estimated revenue potential</div>
+      <div class="ts">
+        <table class="dt">
+          <thead><tr><th>Product</th><th>Est. Revenue</th><th>Prob.</th><th>Owner</th></tr></thead>
+          <tbody id="white-tbl"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TAB 3: TRANSACTIONS & DEALS ═══ -->
+<div class="tab-panel" id="panel-activity">
+  <div class="g2 mb">
+    <div class="card">
+      <div class="card-title">Transaction volume trend</div>
+      <div class="card-sub">Last 6 months &middot; RM billion</div>
+      <div class="ch h220"><canvas id="txnTrendChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Transaction mix by type</div>
+      <div class="card-sub">TTM &middot; % share of total RM 18.4B volume</div>
+      <div class="ch h220"><canvas id="txnMixChart"></canvas></div>
+    </div>
+  </div>
+  <div class="g3 mb">
+    <div class="card">
+      <div class="card-title">Latest transaction activity</div>
+      <div class="card-sub">Most recent postings</div>
+      <div id="activity-list"></div>
+    </div>
+    <div class="card" style="grid-column:span 2">
+      <div class="card-title">Past deal summary</div>
+      <div class="card-sub">Won and pipeline deals &middot; current planning cycle</div>
+      <div class="ts">
+        <table class="dt">
+          <thead><tr><th>Deal</th><th class="r">Amount</th><th>Status</th><th class="r">Revenue</th></tr></thead>
+          <tbody id="deals-tbl"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="g3">
+    <div class="card">
+      <div class="card-title">Deal pipeline summary</div>
+      <div class="card-sub">FY 2026-27 &middot; by stage</div>
+      <div class="ch h180"><canvas id="pipelineChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Transaction stats</div>
+      <div class="card-sub">Trailing 12 months</div>
+      <div id="txn-stats"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Inflow vs Outflow</div>
+      <div class="card-sub">Last 6 months &middot; RM billion</div>
+      <div class="ch h180"><canvas id="inOutChart"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TAB 4: RISK & ACTIONS ═══ -->
+<div class="tab-panel" id="panel-risk">
+  <div class="g2 mb">
+    <div class="card">
+      <div class="card-title">Relationship health score</div>
+      <div class="card-sub">Weighted composite &middot; 6 components</div>
+      <div class="ring-wrap">
+        <div class="ring-svg">
+          <svg viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="52" fill="none" stroke="#f1f2f5" stroke-width="11"/>
+            <circle cx="60" cy="60" r="52" fill="none" stroke="#22c55e" stroke-width="11" stroke-linecap="round" stroke-dasharray="326.73" stroke-dashoffset="71.9"/>
+          </svg>
+          <div class="ring-ctr"><div class="ring-num">78</div><div class="ring-lbl">/ 100</div></div>
+        </div>
+        <div class="ring-rows">
+          <div class="ring-row"><span class="rr-name">Revenue trend</span><span class="rr-w">25%</span><div class="rr-track"><div class="rr-fill" style="width:74%;background:#2563A8"></div></div><span class="rr-score">74</span></div>
+          <div class="ring-row"><span class="rr-name">Wallet share</span><span class="rr-w">20%</span><div class="rr-track"><div class="rr-fill" style="width:65%;background:#E8732D"></div></div><span class="rr-score">65</span></div>
+          <div class="ring-row"><span class="rr-name">Product penetration</span><span class="rr-w">15%</span><div class="rr-track"><div class="rr-fill" style="width:72%;background:#2563A8"></div></div><span class="rr-score">72</span></div>
+          <div class="ring-row"><span class="rr-name">Credit performance</span><span class="rr-w">15%</span><div class="rr-track"><div class="rr-fill" style="width:81%;background:#22c55e"></div></div><span class="rr-score">81</span></div>
+          <div class="ring-row"><span class="rr-name">Compliance</span><span class="rr-w">10%</span><div class="rr-track"><div class="rr-fill" style="width:92%;background:#22c55e"></div></div><span class="rr-score">92</span></div>
+          <div class="ring-row"><span class="rr-name">Transaction activity</span><span class="rr-w">15%</span><div class="rr-track"><div class="rr-fill" style="width:88%;background:#22c55e"></div></div><span class="rr-score">88</span></div>
+        </div>
+      </div>
+      <span class="pill p-won" style="margin-top:12px;display:inline-flex;align-items:center;gap:6px"><span style="width:7px;height:7px;border-radius:50%;background:#22c55e;display:inline-block"></span>Strong relationship</span>
+    </div>
+    <div class="card">
+      <div class="card-title">RAROC &amp; credit risk</div>
+      <div class="card-sub">Portfolio-level against 13% hurdle rate</div>
+      <div class="ch h220"><canvas id="rarocChart"></canvas></div>
+      <div id="credit-kpis" style="margin-top:10px"></div>
+    </div>
+  </div>
+  <div class="g3 mb">
+    <div class="card">
+      <div class="card-title">Risk trend — 7 months</div>
+      <div class="card-sub">Market · Credit · Operational (1-10 scale)</div>
+      <div class="ch h200"><canvas id="riskTrendChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Compliance status</div>
+      <div class="card-sub">Live from compliance module</div>
+      <div id="compliance-rows"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">ESG readiness</div>
+      <div class="card-sub">By framework &middot; June 2026</div>
+      <div id="esg-rows"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Planning actions &mdash; RM focus</div>
+    <div class="card-sub">Prioritised next-best-actions for this planning cycle</div>
+    <div id="actions-list"></div>
+    <div class="upside-bar">
+      <span class="ul">Total identified upside</span>
+      <span class="uv">USD 3.5M</span>
+    </div>
+  </div>
+</div>
+
+</div>
+<script>
+const gc='rgba(0,0,0,.05)',tc='#9aa1ae';
+const C={CYAN:'#2DD4E8',PINK:'#D4527E',AMBER:'#F0A93B',BLUE:'#2563A8',ORANGE:'#E8732D',PURPLE:'#7C5FD4',NAVY:'#14181f',GREEN:'#22c55e'};
+
+const ciF={};const ciD={};
+function switchTab(id,btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.bn-tab-sm').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(!ciD[id]&&ciF[id]){ciF[id]();ciD[id]=true;}
+}
+
+function iconS(t,c){const i={coin:'<circle cx="12" cy="12" r="8" stroke="'+c+'" stroke-width="1.6"/><path d="M9 12h6M12 9v6" stroke="'+c+'" stroke-width="1.6" stroke-linecap="round"/>',chart:'<rect x="5" y="13" width="3" height="6" rx="1" fill="'+c+'"/><rect x="10.5" y="9" width="3" height="10" rx="1" fill="'+c+'"/><rect x="16" y="5" width="3" height="14" rx="1" fill="'+c+'"/>',cash:'<rect x="4" y="7" width="16" height="10" rx="2" stroke="'+c+'" stroke-width="1.6"/><circle cx="12" cy="12" r="2.3" stroke="'+c+'" stroke-width="1.4"/>',pct:'<circle cx="7.5" cy="7.5" r="2.3" stroke="'+c+'" stroke-width="1.6"/><circle cx="16.5" cy="16.5" r="2.3" stroke="'+c+'" stroke-width="1.6"/><path d="M17 7L7 17" stroke="'+c+'" stroke-width="1.6" stroke-linecap="round"/>',eye:'<path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6Z" stroke="'+c+'" stroke-width="1.6"/><circle cx="12" cy="12" r="2.3" stroke="'+c+'" stroke-width="1.6"/>',gauge:'<path d="M5 16a7 7 0 0 1 14 0" stroke="'+c+'" stroke-width="1.6" stroke-linecap="round"/><path d="M12 16l3-4" stroke="'+c+'" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="16" r="1.3" fill="'+c+'"/>',card:'<rect x="3.5" y="6" width="17" height="12" rx="2" stroke="'+c+'" stroke-width="1.6"/><path d="M3.5 10h17" stroke="'+c+'" stroke-width="1.6"/>',user:'<circle cx="12" cy="9" r="3.3" stroke="'+c+'" stroke-width="1.6"/><path d="M5.5 19c1-3.2 3.8-5 6.5-5s5.5 1.8 6.5 5" stroke="'+c+'" stroke-width="1.6" stroke-linecap="round"/>',leaf:'<path d="M5 21c0-6 3-10 7-13 4 3 7 7 7 13" stroke="'+c+'" stroke-width="1.6" stroke-linecap="round"/><path d="M12 8v13" stroke="'+c+'" stroke-width="1.4" stroke-linecap="round"/>',shield:'<path d="M12 3L4 7v5c0 5 4 9 8 10 4-1 8-5 8-10V7z" stroke="'+c+'" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>',star:'<polygon points="12,2 15.1,8.3 22,9.3 17,14.1 18.2,21 12,17.8 5.8,21 7,14.1 2,9.3 8.9,8.3" stroke="'+c+'" stroke-width="1.6" stroke-linejoin="round" fill="none"/>'};
+return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none">'+i[t]+'</svg>';}
+
+// ── TAB 1 KPIs — 12 cards, 4×3 grid, no section label ──
+const kpis=[
+  {l:'Total Wallet Opportunity',v:'USD 1.96B',t:'↑ 14% YoY',tc:'tr-up',ic:'coin',bg:'#FCE8EA',ic2:'#D4527E',bar:0},
+  {l:'Current Wallet Share',v:'26%',t:'↑ 3pp YoY',tc:'tr-up',ic:'pct',bg:'#E6F1FB',ic2:'#2563A8',bar:26},
+  {l:'Revenue Target FY26/27',v:'USD 13.0M',t:'Active plan',tc:'tr-fl',ic:'eye',bg:'#E6F1FB',ic2:'#2563A8',bar:0},
+  {l:'Realized Revenue (YTD)',v:'USD 9.6M',t:'74% achievement',tc:'tr-am',ic:'cash',bg:'#FFF4DE',ic2:'#a15c07',bar:74},
+  {l:'Pipeline Revenue',v:'USD 10.8M',t:'Gap USD 2.2M',tc:'tr-dn',ic:'gauge',bg:'#FCE8EA',ic2:'#c0273f',bar:0},
+  {l:'Deal Win Rate (LTM)',v:'62%',t:'↑ 7pp YoY',tc:'tr-up',ic:'star',bg:'#E7F8EE',ic2:'#15803d',bar:62},
+  {l:'Product Penetration',v:'58%',t:'↑ 4pp YoY',tc:'tr-up',ic:'chart',bg:'#F3EEFE',ic2:'#7C5FD4',bar:58},
+  {l:'Credit Utilization',v:'72%',t:'Stable',tc:'tr-fl',ic:'gauge',bg:'#FFF4DE',ic2:'#a15c07',bar:72},
+  {l:'RAROC Portfolio',v:'15.4%',t:'Above 13% hurdle',tc:'tr-up',ic:'card',bg:'#FCE8EA',ic2:'#c0273f',bar:0},
+  {l:'ESG Readiness',v:'78%',t:'Improving',tc:'tr-up',ic:'leaf',bg:'#E7F8EE',ic2:'#15803d',bar:78},
+  {l:'AML / Compliance',v:'96/100',t:'1 non-compliant',tc:'tr-am',ic:'shield',bg:'#FFF4DE',ic2:'#a15c07',bar:96},
+  {l:'Revenue per RM',v:'USD 4.8M',t:'Ahmad Firdaus',tc:'tr-fl',ic:'user',bg:'#E6F1FB',ic2:'#2563A8',bar:0},
+];
+document.getElementById('kpi-grid').innerHTML=kpis.map(k=>`
+  <div class="kpi-card">
+    <div class="k-top"><span class="k-label">${k.l}</span><span class="k-icon" style="background:${k.bg}">${iconS(k.ic,k.ic2)}</span></div>
+    <div class="k-val"><b>${k.v}</b></div>
+    <div class="k-trend ${k.tc}">${k.t}</div>
+    ${k.bar?`<div class="k-bar"><div class="k-bar-fill" style="width:${k.bar}%;background:${k.ic2}"></div></div>`:''}
+  </div>`).join('');
+
+// ── TAB 1 CHARTS (visible immediately) ──
+new Chart(document.getElementById('niiChart'),{type:'bar',data:{labels:['Credit','Cash Mgmt','Trade','Treasury','IB'],datasets:[{label:'NII Actual',data:[9.85,0,0,3.44,0],backgroundColor:C.BLUE,borderRadius:3},{label:'NII Target',data:[11.8,0,0,4.3,0],backgroundColor:C.CYAN,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:9,font:{size:10},color:tc,padding:8}}},scales:{x:{grid:{display:false},ticks:{color:tc,font:{size:10.5}}},y:{grid:{color:gc},ticks:{color:tc,font:{size:10.5}},title:{display:true,text:'USD M',color:tc,font:{size:10}}}}}});
+
+new Chart(document.getElementById('achievChart'),{type:'bar',data:{labels:['Q1','Q2','Q3','Q4'],datasets:[{label:'Plan',data:[3.0,3.2,3.4,3.4],backgroundColor:C.NAVY+'CC',borderRadius:3},{label:'Realized',data:[2.8,3.0,2.7,null],backgroundColor:C.CYAN,borderRadius:3},{label:'Forecast',data:[null,null,3.0,2.9],backgroundColor:C.AMBER+'88',borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:9,font:{size:10},color:tc,padding:8}}},scales:{x:{grid:{display:false},ticks:{color:tc,font:{size:10.5}}},y:{grid:{color:gc},ticks:{color:tc,font:{size:10.5}},title:{display:true,text:'USD M',color:tc,font:{size:10}}}}}});
+
+new Chart(document.getElementById('penetChart'),{type:'bar',data:{labels:['Credit','Cash Mgmt','Trade','Treasury & FX','IB','Securities'],datasets:[{label:'% Held',data:[57,52,61,47,29,0],backgroundColor:[C.BLUE,C.CYAN,C.PINK,C.AMBER,C.PURPLE,C.ORANGE],borderRadius:3}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:gc},ticks:{color:tc,font:{size:10}},max:100},y:{grid:{display:false},ticks:{color:tc,font:{size:10}}}}}});
+
+// ── TAB 2 CHARTS ──
+ciF['revenue']=function(){
+  new Chart(document.getElementById('revChart'),{data:{labels:['Q1 FY26','Q2 FY26','Q3 FY26','Q4 FY26'],datasets:[{type:'bar',label:'Plan',data:[3.0,3.2,3.4,3.4],backgroundColor:C.NAVY+'CC',borderRadius:3,order:2},{type:'bar',label:'Realized',data:[2.8,3.0,2.7,null],backgroundColor:C.CYAN,borderRadius:3,order:1},{type:'line',label:'Forecast',data:[3.0,3.1,3.0,2.9],borderColor:C.AMBER,backgroundColor:C.AMBER,borderWidth:2.5,pointRadius:4,tension:.25,order:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:9,font:{size:10},color:tc,padding:8}}},scales:{x:{grid:{display:false},ticks:{color:tc,font:{size:10.5}}},y:{grid:{color:gc},ticks:{color:tc,font:{size:10.5}},title:{display:true,text:'USD M',color:tc,font:{size:10}}}}}});
+  new Chart(document.getElementById('mixChart'),{type:'doughnut',data:{labels:['Trade Finance','Treasury & Markets','Cash Mgmt','Islamic Financing','Corporate Lending','Advisory/ESG'],datasets:[{data:[3.1,2.8,2.6,2.3,1.8,0.4],backgroundColor:[C.BLUE,C.CYAN,C.PINK,C.AMBER,C.PURPLE,C.ORANGE],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:9,font:{size:10},color:tc,padding:8}}}}});
+  const wd=[{name:'Cash Management',w:8.5,r:2.6,sh:31,c:C.PINK},{name:'Trade Finance',w:12.0,r:3.1,sh:26,c:C.BLUE},{name:'Treasury',w:10.5,r:2.8,sh:27,c:C.CYAN},{name:'Islamic Banking',w:9.0,r:2.3,sh:26,c:C.AMBER},{name:'Lending',w:10.0,r:2.2,sh:22,c:C.ORANGE}];
+  document.getElementById('wallet-bars').innerHTML=wd.map(w=>`<div class="wb-row"><div class="wb-head"><span class="wb-name">${w.name}</span><span class="wb-fig">USD ${w.r.toFixed(1)}M / USD ${w.w.toFixed(1)}M <b style="color:${w.c}">${w.sh}%</b></span></div><div class="wb-track"><div class="wb-fill" style="width:${w.sh}%;background:${w.c}"></div></div></div>`).join('');
+  new Chart(document.getElementById('niiNoiiChart'),{type:'doughnut',data:{labels:['NII','NoII'],datasets:[{data:[13.3,2.0],backgroundColor:[C.BLUE,C.CYAN],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'66%',plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:9,font:{size:10},color:tc}}}}});
+  new Chart(document.getElementById('revTrendChart'),{type:'line',data:{labels:['Dec','Jan','Feb','Mar','Apr','May'],datasets:[{label:'Total Revenue',data:[2.1,2.3,2.5,2.7,2.6,2.8],borderColor:C.BLUE,backgroundColor:C.BLUE+'18',fill:true,tension:.3,pointRadius:3,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:tc,font:{size:10.5}}},y:{grid:{color:gc},ticks:{color:tc,font:{size:10.5}},title:{display:true,text:'USD M',color:tc,font:{size:10}}}}}});
+  document.getElementById('rev-tbl').innerHTML=[['STRC-i / CMTF-i','Credit','9.85','—','+21%'],['FX Forward','Treasury','—','1.84','+45%'],['LC Import-i','Trade','—','3.98','+20%'],['Notional Pooling','Cash Mgmt','—','0.75','+67%'],['MMD Placements','Treasury','1.84','—','+44%']].map(r=>`<tr><td>${r[0]}</td><td><span class="pill p-blue">${r[1]}</span></td><td class="r">${r[2]}</td><td class="r">${r[3]}</td><td class="r" style="color:#22c55e">${r[4]}</td></tr>`).join('');
+  document.getElementById('white-tbl').innerHTML=[['Green Sukuk-i','USD 1.5M','50%','Maybank IB'],['ESG-Linked RCF','USD 0.8M','70%','Ahmad Firdaus'],['IRS / PRS-i','USD 0.4M','65%','Wei Zhang'],['China SCF Corridor','USD 0.5M','55%','James Ward'],['Trust Receipt-i','USD 1.0M','45%','Ahmad Firdaus']].map(r=>`<tr><td>${r[0]}</td><td class="r">${r[1]}</td><td class="r"><span class="pill p-pur">${r[2]}</span></td><td>${r[3]}</td></tr>`).join('');
+};
+
+// ── TAB 3 CHARTS ──
+ciF['activity']=function(){
+  new Chart(document.getElementById('txnTrendChart'),{type:'line',data:{labels:['Jan','Feb','Mar','Apr','May','Jun'],datasets:[{label:'Volume (RM B)',data:[1.35,1.42,1.58,1.61,1.49,1.63],borderColor:C.BLUE,backgroundColor:C.BLUE+'22',fill:true,tension:.3,pointRadius:4,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:tc,font:{size:10.5}}},y:{grid:{color:gc},ticks:{color:tc,font:{size:10.5}},title:{display:true,text:'RM B',color:tc,font:{size:10}}}}}});
+  new Chart(document.getElementById('txnMixChart'),{type:'doughnut',data:{labels:['Cross-border','Trade Finance','FX','Cash Pooling','Other'],datasets:[{data:[27.7,20.7,22.8,13.1,15.7],backgroundColor:[C.BLUE,C.PINK,C.AMBER,C.CYAN,C.PURPLE],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:9,font:{size:10},color:tc,padding:8}}}}});
+  const act=[['18-Jun-2026','LNG Export Collections','RM 148M'],['17-Jun-2026','USD/MYR FX Hedge','RM 96M'],['15-Jun-2026','Supplier Payment Batch','RM 84M'],['13-Jun-2026','Murabahah Drawdown','RM 120M'],['12-Jun-2026','Trade LC Issuance','RM 65M'],['10-Jun-2026','Cash Pooling Sweep','RM 180M']];
+  document.getElementById('activity-list').innerHTML=act.map(a=>`<div class="act-row"><span class="act-date">${a[0]}</span><span class="act-name">${a[1]}</span><span class="act-val">${a[2]}</span></div>`).join('');
+  document.getElementById('deals-tbl').innerHTML=[['Islamic Revolving Credit Facility','RM 1.5B','Won','RM 1.8M'],['Supply Chain Financing Program','RM 800M','Won','RM 1.2M'],['Commodity Murabahah Facility','RM 600M','Won','RM 0.9M'],['FX Hedging Mandate','RM 1.2B','Won','RM 1.1M'],['ESG Linked Financing Proposal','RM 500M','Pipeline','RM 0.7M'],['Green Sukuk Advisory','RM 1.0B','Pipeline','RM 1.0M']].map(d=>`<tr><td>${d[0]}</td><td class="r">${d[1]}</td><td><span class="pill ${d[2]==='Won'?'p-won':'p-pipe'}">${d[2]}</span></td><td class="r">${d[3]}</td></tr>`).join('');
+  new Chart(document.getElementById('pipelineChart'),{type:'bar',data:{labels:['Prospect','Qualify','Propose','Negotiate','Close'],datasets:[{data:[4,3,3,2,2],backgroundColor:[C.PURPLE,C.BLUE,C.CYAN,C.AMBER,C.GREEN],borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:tc,font:{size:10}}},y:{grid:{color:gc},ticks:{color:tc,font:{size:10.5}}}}}});
+  document.getElementById('txn-stats').innerHTML=[['Annual Volume','RM 18.4B'],['Monthly Average','RM 1.53B'],['Incoming','RM 9.8B'],['Outgoing','RM 8.6B'],['FX Transactions','RM 4.2B'],['Cross-border','RM 5.1B'],['Treasury Deals','468']].map(r=>`<div class="ir"><span class="ir-k">${r[0]}</span><span class="ir-v">${r[1]}</span></div>`).join('');
+  new Chart(document.getElementById('inOutChart'),{type:'bar',data:{labels:['Jan','Feb','Mar','Apr','May','Jun'],datasets:[{label:'Inflow',data:[0.72,0.76,0.85,0.86,0.78,0.88],backgroundColor:C.GREEN,borderRadius:3},{label:'Outflow',data:[0.63,0.66,0.73,0.75,0.71,0.75],backgroundColor:C.PINK,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:9,font:{size:10},color:tc,padding:8}}},scales:{x:{grid:{display:false},ticks:{color:tc,font:{size:10}}},y:{grid:{color:gc},ticks:{color:tc,font:{size:10}},title:{display:true,text:'RM B',color:tc,font:{size:10}}}}}});
+};
+
+// ── TAB 4 CHARTS ──
+ciF['risk']=function(){
+  new Chart(document.getElementById('rarocChart'),{type:'doughnut',data:{labels:['RAROC','Remaining'],datasets:[{data:[15.4,84.6],backgroundColor:[C.GREEN,'#f1f2f5'],borderWidth:0,circumference:180,rotation:270}]},options:{responsive:true,maintainAspectRatio:false,cutout:'72%',plugins:{legend:{display:false},tooltip:{enabled:false}}},plugins:[{id:'gt',afterDraw(c){const{ctx,chartArea}=c;const cx=(chartArea.left+chartArea.right)/2,cy=chartArea.bottom-4;ctx.save();ctx.font='700 22px Poppins,sans-serif';ctx.fillStyle='#1f2430';ctx.textAlign='center';ctx.fillText('15.4%',cx,cy-14);ctx.font='500 10.5px Poppins,sans-serif';ctx.fillStyle=tc;ctx.fillText('vs 13% hurdle rate',cx,cy+4);ctx.restore();}}]});
+  document.getElementById('credit-kpis').innerHTML=[['Credit utilisation','72% · stable'],['RAROC portfolio','15.4% · above hurdle','#22c55e'],['ESG readiness','78% · improving'],['Deal win rate (LTM)','62% · +7pp YoY']].map(r=>`<div class="ir"><span class="ir-k">${r[0]}</span><span class="ir-v"${r[2]?' style="color:'+r[2]+'"':''}>${r[1]}</span></div>`).join('');
+  new Chart(document.getElementById('riskTrendChart'),{type:'line',data:{labels:['Jan','Feb','Mar','Apr','May','Jun','Jul'],datasets:[{label:'Market',data:[7.2,7.4,7.8,7.6,7.5,7.4,7.5],borderColor:C.BLUE,tension:.3,pointRadius:3,borderWidth:2,fill:false},{label:'Credit',data:[6.2,6.5,7.0,7.8,8.2,8.4,8.5],borderColor:C.PINK,tension:.3,pointRadius:3,borderWidth:2,fill:false},{label:'Operational',data:[4.1,4.0,4.2,4.1,4.0,4.1,4.2],borderColor:C.AMBER,tension:.3,pointRadius:3,borderWidth:2,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:9,font:{size:10},color:tc,padding:8}}},scales:{x:{grid:{display:false},ticks:{color:tc,font:{size:10}}},y:{grid:{color:gc},ticks:{color:tc,font:{size:10}},min:0,max:10}}}});
+  document.getElementById('compliance-rows').innerHTML=[['Board Governance','Compliant','p-won'],['Environmental (EMS)','Compliant','p-won'],['Shariah Compliance','Compliant','p-won'],['AML / Sanctions','Compliant','p-won'],['ESG / Sustainability','Non-Compliant','p-hi'],['Labor & HRSD','At Risk','p-pipe'],['PDPL Privacy','Pending','p-pipe'],['Corp. Tax Filing','Delayed','p-pipe']].map(r=>`<div class="ir"><span class="ir-k">${r[0]}</span><span class="ir-v"><span class="pill ${r[2]}">${r[1]}</span></span></div>`).join('');
+  document.getElementById('esg-rows').innerHTML=[['FTSE4Good Bursa MY','Included','p-won'],['Dow Jones Best-in-Class','Included','p-won'],['Bursa NSRF / IFRS S2','Non-Compliant','p-hi'],['Net Zero 2050 Target','On track','p-won'],['GHG Scope 1+2 Verified','Compliant','p-won'],['TCFD Framework','In progress','p-pipe'],['Green Financing %','18% of book','p-blue']].map(r=>`<div class="ir"><span class="ir-k">${r[0]}</span><span class="ir-v"><span class="pill ${r[2]}">${r[1]}</span></span></div>`).join('');
+  document.getElementById('actions-list').innerHTML=[['High','ESG Linked RCF','USD 0.8M'],['High','Treasury Hedging Expansion','USD 0.7M'],['High','Supply Chain Finance Expansion','USD 0.6M'],['Medium','Cash Pooling Regional Mandate','USD 0.5M'],['Medium','Green Sukuk Advisory','USD 0.5M'],['Medium','Cross Border Collections','USD 0.4M']].map(a=>`<div class="ar"><span class="pill ${a[0]==='High'?'p-hi':'p-pipe'}">${a[0]}</span><span class="ar-name">${a[1]}</span><span class="ar-val">${a[2]}</span></div>`).join('');
+};
+</script>
+</body>
+</html>
