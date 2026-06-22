@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Product Holdings & Exposure — Petronas Chemicals Malaysia</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Poppins',sans-serif;background:#fff;color:#1f2430;font-size:14px;-webkit-font-smoothing:antialiased}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid #e1e3e8;background:#fff}
+.tab{padding:9px 16px;border-radius:9px 9px 0 0;font-size:12.5px;font-weight:500;color:#6b7280;cursor:pointer;border:none;background:none;font-family:'Poppins',sans-serif}
+.tab.on{background:#14181f;color:#FFD23F;font-weight:600}
+.tab:not(.on):hover{background:#f1f2f5}
+.body{background:#fff;padding:18px 20px}
+.panel{display:none}.panel.on{display:block}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.g21{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:14px}
+.g31{display:grid;grid-template-columns:3fr 1fr;gap:14px;margin-bottom:14px}
+.mb{margin-bottom:14px}
+.kg{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border:1px solid #ebecf0;border-radius:10px;overflow:hidden;margin-bottom:14px}
+.kc{padding:13px 15px;border-right:1px solid #ebecf0}
+.kc:last-child{border-right:none}
+.kl{font-size:10px;font-weight:600;color:#9aa1ae;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px}
+.kv{font-size:19px;font-weight:700;color:#1f2430;line-height:1.2}
+.ks{font-size:11px;margin-top:3px;font-weight:500}
+.up{color:#22c55e}.dn{color:#ef4444}.am{color:#d97706}.bl{color:#2563A8}.fl{color:#9aa1ae}
+.card{background:#fff;border-radius:10px;border:1px solid #ebecf0;padding:15px}
+.ct{font-size:13.5px;font-weight:600;color:#1f2430;margin-bottom:2px}
+.cs{font-size:11px;color:#9aa1ae;margin-bottom:11px}
+.ch{position:relative;width:100%}
+.ch.h160{height:160px}.ch.h180{height:180px}.ch.h200{height:200px}.ch.h220{height:220px}.ch.h240{height:240px}.ch.h280{height:280px}
+table.t{width:100%;border-collapse:collapse;font-size:12px}
+table.t th{padding:7px 10px;font-size:10px;font-weight:600;color:#9aa1ae;text-transform:uppercase;letter-spacing:.3px;background:#f8f9fb;border-bottom:1px solid #ebecf0;text-align:left;white-space:nowrap}
+table.t th.r{text-align:right}
+table.t td{padding:7px 10px;border-bottom:1px solid #f1f2f5;color:#1f2430;vertical-align:middle}
+table.t td.r{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+table.t tbody tr:last-child td{border-bottom:none}
+table.t tbody tr:hover td{background:#fafbfc}
+.ts{overflow-x:auto}
+.pill{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;white-space:nowrap;display:inline-block}
+.pw{background:#E7F8EE;color:#15803d}.pp{background:#FFF4DE;color:#a15c07}
+.pb{background:#E6F1FB;color:#2563A8}.pr{background:#FCE8EA;color:#c0273f}
+.ppu{background:#F3EEFE;color:#7C5FD4}.pc{background:#f1f2f5;color:#6b7280}
+.sr{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f2f5;gap:8px}
+.sr:last-child{border-bottom:none}
+.sk{font-size:12px;color:#4b5163;font-weight:500}
+.sv{font-size:12.5px;font-weight:700;color:#1f2430}
+/* Exposure bar */
+.exp-row{margin-bottom:10px}
+.exp-row:last-child{margin-bottom:0}
+.exp-head{display:flex;justify-content:space-between;margin-bottom:4px;align-items:baseline}
+.exp-name{font-size:12.5px;font-weight:600}
+.exp-fig{font-size:11px;color:#6b7280}
+.exp-track{height:9px;background:#f1f2f5;border-radius:20px;overflow:hidden;position:relative}
+.exp-actual{height:100%;border-radius:20px;position:absolute;left:0;top:0}
+.exp-target{height:2px;background:#14181f;position:absolute;top:50%;transform:translateY(-50%);border-radius:1px}
+/* Holding cards */
+.hcard{border:1px solid #ebecf0;border-radius:10px;padding:13px;margin-bottom:10px}
+.hcard:last-child{margin-bottom:0}
+.hc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.hc-name{font-size:12.5px;font-weight:600;color:#1f2430}
+.hc-id{font-size:10px;color:#9aa1ae}
+.hc-body{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.hc-cell .hl{font-size:9.5px;color:#9aa1ae;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px}
+.hc-cell .hv{font-size:13px;font-weight:600;color:#1f2430}
+.hc-cell .hs{font-size:10.5px;font-weight:500;margin-top:1px}
+@media(max-width:1100px){.kg{grid-template-columns:repeat(3,1fr)}.g3,.g4{grid-template-columns:1fr 1fr}.g21,.g31{grid-template-columns:1fr}}
+@media(max-width:640px){.kg,.g2,.g3,.g4,.g21,.g31{grid-template-columns:1fr}.body{padding:12px}.hc-body{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<div class="tabs">
+  <button class="tab on" data-tab="summary" onclick="sw('summary',this)">Portfolio Summary</button>
+  <button class="tab" data-tab="credit" onclick="sw('credit',this)">Credit Facilities</button>
+  <button class="tab" data-tab="trade" onclick="sw('trade',this)">Trade Finance</button>
+  <button class="tab" data-tab="treasury" onclick="sw('treasury',this)">Treasury &amp; FX</button>
+  <button class="tab" data-tab="cash" onclick="sw('cash',this)">Cash Management</button>
+  <button class="tab" data-tab="whitespace" onclick="sw('whitespace',this)">Whitespace &amp; Opportunities</button>
+</div>
+
+<div class="body">
+
+<!-- PORTFOLIO SUMMARY -->
+<div class="panel on" id="p-summary">
+  <div class="kg">
+    <div class="kc"><div class="kl">Total Held Products</div><div class="kv">24</div><div class="ks fl">of 87 Maybank products</div></div>
+    <div class="kc"><div class="kl">Total Exposure</div><div class="kv">RM 4.82B</div><div class="ks up">↑ 3.2% vs prior year</div></div>
+    <div class="kc"><div class="kl">NII Generated TTM</div><div class="kv">RM 15.3M</div><div class="ks fl">Credit + MMD</div></div>
+    <div class="kc"><div class="kl">NoII Generated TTM</div><div class="kv">RM 13.3M</div><div class="ks up">↑ 18% vs plan</div></div>
+    <div class="kc"><div class="kl">Product Penetration</div><div class="kv">28%</div><div class="ks am">63 whitespace products</div></div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="ct">Exposure by Division</div>
+      <div class="cs">RM million · FY25-26 actual vs FY26-27 target</div>
+      <div class="ch h240"><canvas id="divChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ct">Revenue Mix — NII vs NoII by Division</div>
+      <div class="cs">RM million TTM · 24 held products</div>
+      <div class="ch h240"><canvas id="revMixChart"></canvas></div>
+    </div>
+  </div>
+  <div class="g3">
+    <div class="card">
+      <div class="ct">Holdings Growth — Actual vs Target</div>
+      <div class="cs">RM million · 6 key products</div>
+      <div id="growth-bars"></div>
+    </div>
+    <div class="card">
+      <div class="ct">Revenue by Division</div>
+      <div class="cs">NoII (M) actual — all 24 holdings</div>
+      <div class="ch h200"><canvas id="revByDiv"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ct">Portfolio Health Scorecard</div>
+      <div class="cs">Key metrics · June 2026</div>
+      <div id="health-rows"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CREDIT FACILITIES -->
+<div class="panel" id="p-credit">
+  <div class="kg">
+    <div class="kc"><div class="kl">CMTF-i Outstanding</div><div class="kv">RM 1,320M</div><div class="ks up">Target: RM 1,600M</div></div>
+    <div class="kc"><div class="kl">STRC-i Outstanding</div><div class="kv">RM 210M</div><div class="ks up">Target: RM 260M</div></div>
+    <div class="kc"><div class="kl">Credit NII TTM</div><div class="kv">RM 13.45M</div><div class="ks up">↑ 21% YoY</div></div>
+    <div class="kc"><div class="kl">Credit Utilisation</div><div class="kv">72%</div><div class="ks am">Stable · within policy</div></div>
+    <div class="kc"><div class="kl">RAROC — Corp Loan</div><div class="kv">11.9%</div><div class="ks dn">Below 13% hurdle</div></div>
+  </div>
+  <div class="g21">
+    <div class="card">
+      <div class="ct">Credit Facility Holdings — Detail</div>
+      <div class="cs">All held credit products · RM million · FY25-26 actuals</div>
+      <div class="ts">
+        <table class="t">
+          <thead><tr><th>Product</th><th>Type</th><th class="r">Outstanding</th><th class="r">FY26-27 Target</th><th class="r">NII (M)</th><th class="r">NII Target</th><th class="r">RAROC</th><th>Booking Entity</th></tr></thead>
+          <tbody id="credit-tbl"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ct">Credit Utilisation</div>
+      <div class="cs">Facility limit vs outstanding</div>
+      <div class="ch h220"><canvas id="creditUtil"></canvas></div>
+      <div id="credit-stats" style="margin-top:10px"></div>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="ct">CMTF-i Drawdown History</div>
+      <div class="cs">Monthly outstanding · RM million</div>
+      <div class="ch h200"><canvas id="cmtfTrend"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ct">RAROC vs Hurdle Rate — Credit Portfolio</div>
+      <div class="cs">By product · 13% hurdle rate</div>
+      <div class="ch h200"><canvas id="rarocBar"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- TRADE FINANCE HOLDINGS -->
+<div class="panel" id="p-trade">
+  <div class="kg">
+    <div class="kc"><div class="kl">Total Trade Exposure</div><div class="kv">RM 3.61B</div><div class="ks up">Target: RM 4.59B</div></div>
+    <div class="kc"><div class="kl">Trade Finance NoII</div><div class="kv">RM 10.43M</div><div class="ks up">↑ 20% YoY</div></div>
+    <div class="kc"><div class="kl">Active LCs</div><div class="kv">14</div><div class="ks fl">HLD-LC-000124 · RM 650M</div></div>
+    <div class="kc"><div class="kl">SCF Suppliers Onboarded</div><div class="kv">6 / 10</div><div class="ks am">4 remaining to target</div></div>
+    <div class="kc"><div class="kl">Largest Holding</div><div class="kv">UPAS</div><div class="ks fl">RM 1,200M · Trade Loan-i</div></div>
+  </div>
+  <div class="g31">
+    <div class="card">
+      <div class="ct">Trade Finance Holdings — All Products</div>
+      <div class="cs">7 held products · RM million · actual vs target · NoII</div>
+      <div class="ts">
+        <table class="t">
+          <thead><tr><th>Product</th><th class="r">FY25-26 Actual</th><th class="r">FY26-27 Target</th><th class="r">Growth</th><th class="r">NoII Actual (M)</th><th class="r">NoII Target (M)</th><th>Region</th><th>Entity</th></tr></thead>
+          <tbody id="trade-tbl"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ct">Trade Revenue by Product</div>
+      <div class="cs">NoII (M) actual</div>
+      <div class="ch h240"><canvas id="tradeNoii"></canvas></div>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="ct">Exposure Waterfall — Actual vs Target</div>
+      <div class="cs">RM million per product</div>
+      <div class="ch h220"><canvas id="tradeWfall"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ct">LC Holding — HLD-LC-000124 Detail</div>
+      <div class="cs">Import LC-i · BASF SE · Maybank Islamic</div>
+      <div id="lc-detail"></div>
+    </div>
+  </div>
+</div>
+
+<!-- TREASURY & FX HOLDINGS -->
+<div class="panel" id="p-treasury">
+  <div class="kg">
+    <div class="kc"><div class="kl">FX Forward Notional</div><div class="kv">RM 550M</div><div class="ks up">Target: RM 800M</div></div>
+    <div class="kc"><div class="kl">Treasury NII (MMD)</div><div class="kv">RM 1.84M</div><div class="ks up">Target: RM 2.6M</div></div>
+    <div class="kc"><div class="kl">Treasury NoII TTM</div><div class="kv">RM 3.04M</div><div class="ks up">↑ 45% YoY</div></div>
+    <div class="kc"><div class="kl">IRS / PRS-i Notional</div><div class="kv">RM 100M</div><div class="ks up">Target: RM 300M</div></div>
+    <div class="kc"><div class="kl">Unhedged Exposure</div><div class="kv">~USD 120M</div><div class="ks am">IRS cross-sell window</div></div>
+  </div>
+  <div class="g21">
+    <div class="card">
+      <div class="ct">Treasury &amp; FX Holdings — All Products</div>
+      <div class="cs">5 held products · FY25-26 actuals</div>
+      <div class="ts">
+        <table class="t">
+          <thead><tr><th>Product</th><th class="r">Actual</th><th class="r">Target FY26-27</th><th class="r">NII (M)</th><th class="r">NoII (M)</th><th class="r">Growth</th><th>Entity</th></tr></thead>
+          <tbody id="tsy-tbl"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ct">Treasury Revenue Breakdown</div>
+      <div class="cs">NII + NoII by product · actual</div>
+      <div class="ch h240"><canvas id="tsyRev"></canvas></div>
+    </div>
+  </div>
+  <div class="g3">
+    <div class="card">
+      <div class="ct">FX Forward Trend</div>
+      <div class="cs">Notional outstanding · RM million</div>
+      <div class="ch h180"><canvas id="fwdTrend"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ct">Hedging Maturity Profile</div>
+      <div class="cs">FX Forward outstanding by tenor</div>
+      <div class="ch h180"><canvas id="tenorChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ct">MMD Placement Trend</div>
+      <div class="cs">Balance · RM million</div>
+      <div class="ch h180"><canvas id="mmdTrend"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- CASH MANAGEMENT HOLDINGS -->
+<div class="panel" id="p-cash">
+  <div class="kg">
+    <div class="kc"><div class="kl">CASA Balance</div><div class="kv">RM 48M</div><div class="ks up">Target: RM 65M</div></div>
+    <div class="kc"><div class="kl">Collections & Rec.</div><div class="kv">RM 850M</div><div class="ks up">Target: RM 950M</div></div>
+    <div class="kc"><div class="kl">Notional Pooling-i</div><div class="kv">RM 180M</div><div class="ks up">Target: RM 300M</div></div>
+    <div class="kc"><div class="kl">Cash NoII TTM</div><div class="kv">RM 1.35M</div><div class="ks fl">8 active products</div></div>
+    <div class="kc"><div class="kl">Virtual Accounts</div><div class="kv">120</div><div class="ks up">Target: 200 accounts</div></div>
+  </div>
+  <div class="g21">
+    <div class="card">
+      <div class="ct">Cash Management Holdings — All Products</div>
+      <div class="cs">8 held products · actuals vs targets</div>
+      <div class="ts">
+        <table class="t">
+          <thead><tr><th>Product</th><th class="r">Actual</th><th class="r">Target FY26-27</th><th class="r">NoII (M)</th><th class="r">NoII Target</th><th>Entity</th></tr></thead>
+          <tbody id="cash-tbl"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ct">Cash NoII by Product</div>
+      <div class="cs">Actual RM million</div>
+      <div class="ch h240"><canvas id="cashRev"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- WHITESPACE & OPPORTUNITIES -->
+<div class="panel" id="p-whitespace">
+  <div class="kg">
+    <div class="kc"><div class="kl">Whitespace Products</div><div class="kv">63</div><div class="ks am">Cross-sell opportunity</div></div>
+    <div class="kc"><div class="kl">High-priority targets</div><div class="kv">12</div><div class="ks bl">Identified by RM + AI</div></div>
+    <div class="kc"><div class="kl">Est. Additional NoII</div><div class="kv">USD 5.2M</div><div class="ks up">If top 12 converted</div></div>
+    <div class="kc"><div class="kl">Revenue Gap to Target</div><div class="kv">USD 2.2M</div><div class="ks dn">FY26-27 plan gap</div></div>
+    <div class="kc"><div class="kl">Renewal Probability</div><div class="kv">95%</div><div class="ks up">All existing facilities</div></div>
+  </div>
+  <div class="g21">
+    <div class="card">
+      <div class="ct">Whitespace Opportunities — Prioritised</div>
+      <div class="cs">Non-held Maybank products · ranked by estimated revenue + probability</div>
+      <div class="ts">
+        <table class="t">
+          <thead><tr><th>#</th><th>Product</th><th>Division</th><th>Priority</th><th class="r">Est. Revenue</th><th class="r">Prob.</th><th>RM Owner</th><th>Action</th></tr></thead>
+          <tbody id="ws-tbl"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ct">Whitespace by Division</div>
+      <div class="cs">Count of non-held products</div>
+      <div class="ch h240"><canvas id="wsDiv"></canvas></div>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="ct">Revenue Bridge — Actual to Target FY26-27</div>
+      <div class="cs">USD million · where the USD 2.2M gap will be closed</div>
+      <div class="ch h220"><canvas id="bridgeChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ct">Top Competitor Wallet Analysis</div>
+      <div class="cs">Estimated wallet held by competitor banks</div>
+      <div class="ts">
+        <table class="t">
+          <thead><tr><th>Bank</th><th>Product Area</th><th class="r">Est. Wallet</th><th>Strategy</th></tr></thead>
+          <tbody id="comp-tbl"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+<script>
+const gc='rgba(0,0,0,.05)',tc='#9aa1ae';
+const C={CYAN:'#2DD4E8',PINK:'#D4527E',AMBER:'#F0A93B',BLUE:'#2563A8',ORANGE:'#E8732D',PURPLE:'#7C5FD4',NAVY:'#14181f',GREEN:'#22c55e'};
+const cif={},cid={};
+function sw(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('p-'+id).classList.add('on');
+  btn.classList.add('on');
+  if(!cid[id]&&cif[id]){cif[id]();cid[id]=true;}
+}
+
+// SUMMARY
+new Chart(document.getElementById('divChart'),{type:'bar',data:{labels:['Credit','Trade Finance','Treasury & FX','Cash Mgmt','IB'],datasets:[{label:'Actual',data:[1530,3605,1130,1620,1.5],backgroundColor:[C.BLUE,C.PINK,C.AMBER,C.CYAN,C.PURPLE],borderRadius:3},{label:'Target',data:[1860,4590,1450,2015,2],backgroundColor:[C.BLUE+'44',C.PINK+'44',C.AMBER+'44',C.CYAN+'44',C.PURPLE+'44'],borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:9,font:{size:10},color:tc,padding:8}}},scales:{x:{grid:{display:false},ticks:{color:tc,font:{size:10.5}}},y:{grid:{color:gc},ticks:{color:tc,font:{size:10.5}},title:{display:true,text:'RM M',color:tc,font:{size:10}}}}}});
+new Chart(document.getElementById('revMixChart'),{type:'bar',data:{labels:['Credit','Trade Finance','Treasury & FX','Cash Mgmt','IB'],datasets:[{label:'NII (M)',data:[13.45,0,1.84,0,0],backgroundColor:C.BLUE,borderRadius:3},{label:'NoII (M)',data:[0.6,10.43,3.04,1.35,1.5],backgroundColor:C.CYAN,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:9,font:{size:10},color:tc,padding:8}}},scales:{x:{grid:{display:false},ticks:{color:tc,font:{size:10.5}}},y:{grid:{color:gc},ticks:{color:tc,font:{size:10.5}},title:{display:true,text:'RM M',color:tc,font:{size:10}}}}}});
+const gbd=[
+  {n:'CMTF-i',a:1320,t:1600,c:C.BLUE},{n:'UPAS/Trade Loan',a:1200,t:1500,c:C.PINK},
+  {n:'SCF-i',a:780,t:1100,c:C.CYAN},{n:'FX Forward',a:550,t:800,c:C.AMBER},
+  {n:'BG-i',a:450,t:550,c:C.PURPLE},{n:'Notional Pool',a:180,t:300,c:C.ORANGE},
+];
+document.getElementById('growth-bars').innerHTML=gbd.map(g=>`
+  <div class="exp-row">
+    <div class="exp-head"><span class="exp-name">${g.n}</span><span class="exp-fig">RM ${g.a}M → <b style="color:#22c55e">RM ${g.t}M</b></span></div>
+    <div class="exp-track"><div class="exp-actual" style="width:${(g.a/g.t*100).toFixed(0)}%;background:${g.c}"></div><div class="exp-target" style="left:100%;width:2px"></div></div>
+  </div>`).join('');
+new Chart(document.getElementById('revByDiv'),{type:'doughnut',data:{labels:['Credit NII','Trade NoII','Treasury NoII','Cash NoII','IB NoII'],datasets:[{data:[13.45,10.43,3.04,1.35,1.5],backgroundColor:[C.BLUE,C.PINK,C.AMBER,C.CYAN,C.PURPLE],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:9,font:{size:10},color:tc,padding:8}}}}});
+document.getElementById('health-rows').innerHTML=[
+  ['Total Exposure','RM 4.82B'],['Held Products','24 / 87 (28%)'],
+  ['NII TTM','RM 15.3M'],['NoII TTM','RM 13.3M'],
+  ['FY26-27 Revenue Target','USD 13.0M (RM 57.5M)'],['YTD Achievement','74% (USD 9.6M)'],
+  ['Credit Utilisation','72% — Stable'],['RAROC (Portfolio)','15.4% — Above hurdle'],
+].map(r=>`<div class="sr"><span class="sk">${r[0]}</span><span class="sv" style="font-size:11.5px">${r[1]}</span></div>`).join('');
+
+// CREDIT
+cif['credit']=function(){
+  document.getElementById('credit-tbl').innerHTML=[
+    ['Short-Term Revolving Credit (STRC-i)','Revolving','210M','260M','3.6','4.3','1.8%','Maybank MY'],
+    ['Term Loan / CMTF-i','Term','1,320M','1,600M','9.85','11.8','2.1%','Maybank MY'],
+  ].map(r=>`<tr><td>${r[0]}</td><td><span class="pill pb">${r[1]}</span></td><td class="r">${r[2]}</td><td class="r" style="color:#22c55e">${r[3]}</td><td class="r">${r[4]}</td><td class="r" style="color:#22c55e">${r[5]}</td><td class="r">${r[6]}</td><td style="font-size:11px">${r[7]}</td></tr>`).join('');
+  new Chart(document.getElementById('creditUtil'),{type:'doughnut',data:{labels:['Outstanding','Available'],datasets:[{data:[1530,570],backgroundColor:[C.BLUE,'#f1f2f5'],borderWidth:0,circumference:180,rotation:270}]},options:{responsive:true,maintainAspectRatio:false,cutout:'70%',plugins:{legend:{display:false},tooltip:{enabled:false}}},plugins:[{id:'gt',afterDraw(c){const{ctx,chartArea}=c;const cx=(chartArea.left+chartArea.right)/2,cy=chartArea.bottom;ctx.save();ctx.font='700 16px Poppins,sans-serif';ctx.fillStyle='#1f2430';ctx.textAlign='center';ctx.fillText('RM 1,530M',cx,cy-12);ctx.font='500 10px Poppins,sans-serif';ctx.fillStyle=tc;ctx.fillText('72% of RM 2,100M limit',cx,cy+4);ctx.restore();}}]});
+  document.getElementById('credit-stats').innerHTML=[
+    ['Total Limit','RM 2,100M'],['Outstanding','RM 1,530M'],['Available','RM 570M'],
+    ['Utilisation','72% — Stable'],['Next Review','30-Sep-2025'],
+  ].map(r=>`<div class="sr"><span class="sk">${r[0]}</span><span class="sv" style="font-size:11.5px">${r[1]}</span></div>`).join('');
+  new Chart(document.getElementById('cmtfTrend'),{type:'line',data:{labels:['Dec','Jan','Feb','Mar','Apr','May'],datasets:[{label:'CMTF-i',data:[1200,1220,1250,1280,1300,1320],borderColor:C.BLUE,backgroundColor:C.BLUE+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2},{label:'STRC-i',data:[180,185,190,195,205,210],borderColor:C.CYAN,tension:.3,pointRadius:4,borderWidth:2,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:9,font:{size:10},color:tc,padding:8}}},scales:{x:{grid:{display:false},ticks:{color:tc,font:{size:10.5}}},y:{grid:{color:gc},ticks:{color:tc,font:{size:10.5}},title:{display:true,text:'RM M',color:tc,font:{size:10}}}}}});
+  new Chart(document.getElementById('rarocBar'),{type:'bar',data:{labels:['LT Loan','Work. Cap','Trade Fin.','Project','Equipment','Corp Loan'],datasets:[{label:'RAROC',data:[18.6,15.2,14.1,13.8,16.4,11.9],backgroundColor:[C.GREEN,C.GREEN,C.GREEN,C.GREEN+'88',C.GREEN,'#ef4444'],borderRadius:3},{label:'Hurdle',data:[13,13,13,13,13,13],type:'line',borderColor:'#ef4444',borderDash:[4,3],borderWidth:2,pointRadius:0,tension:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:tc,font:{size:10}}},y:{grid:{color:gc},ticks:{color:tc,font:{size:10.5}},title:{display:true,text:'%',color:tc,font:{size:10}}}}}});
+};
+
+// TRADE
+cif['trade']=function(){
+  const td=[
+    ['LC Import / LC Import-i','650M','780M','+20%','—','3.98','5.20','APAC','Maybank MY/SG'],
+    ['UPAS / Trade Loan-i','1,200M','1,500M','+25%','—','2.10','2.80','APAC','Maybank MY'],
+    ['Supplier Finance-i (SCF)','780M','1,100M','+41%','—','1.45','2.10','APAC','Maybank MY'],
+    ['Bank Guarantee-i','450M','550M','+22%','—','1.20','1.50','APAC','Maybank MY'],
+    ['LC Export / LC Export-i','25M','60M','+140%','—','0.80','1.60','EMEA','Maybank SG'],
+    ['Shipping Guarantee / SG-i','120M','160M','+33%','—','0.35','0.48','APAC','Maybank MY'],
+    ['Inward Bills for Collection-i','380M','450M','+18%','—','0.55','0.68','APAC','Maybank MY'],
+  ];
+  document.getElementById('trade-tbl').innerHTML=td.map(r=>`<tr><td>${r[0]}</td><td class="r">${r[1]}</td><td class="r" style="color:#22c55e">${r[2]}</td><td class="r" style="color:#22c55e">${r[3]}</td><td class="r">${r[4]}</td><td class="r" style="color:#22c55e">${r[5]}</td><td>${r[7]}</td><td style="font-size:11px">${r[8]}</td></tr>`).join('');
+  new Chart(document.getElementById('tradeNoii'),{type:'bar',data:{labels:['LC Import','UPAS','SCF','BG-i','LC Export','Ship. BG','Bills Coll.'],datasets:[{data:[3.98,2.10,1.45,1.20,0.80,0.35,0.55],backgroundColor:[C.BLUE,C.PINK,C.CYAN,C.PURPLE,C.AMBER,C.ORANGE,C.GREEN],borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:tc,font:{size:10}}},y:{grid:{color:gc},ticks:{color:tc,font:{size:10.5}},title:{display:true,text:'RM M',color:tc,font:{size:10}}}}}});
+  new Chart(document.getElementById('tradeWfall'),{type:'bar',data:{labels:['LC Import','UPAS','SCF','BG-i','LC Export','Ship. BG','Bills Coll.'],datasets:[{label:'Actual',data:[650,1200,780,450,25,120,380],backgroundColor:C.PINK,borderRadius:3},{label:'Target',data:[780,1500,1100,550,60,160,450],backgroundColor:C.PINK+'44',borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:9,font:{size:10},color:tc,padding:8}}},scales:{x:{grid:{display:false},ticks:{color:tc,font:{size:10}}},y:{grid:{color:gc},ticks:{color:tc,font:{size:10.5}},title:{display:true,text:'RM M',color:tc,font:{size:10}}}}}});
+  document.getElementById('lc-detail').innerHTML=[
+    ['Holding ID','HLD-LC-000124'],['Product','Import Letter of Credit-i'],
+    ['LC Type','Usance LC · 180 Days'],['Issuing Bank','Maybank Islamic Berhad'],
+    ['Beneficiary','BASF SE Germany'],['Facility Limit','RM 650M'],
+    ['Outstanding','RM 532M (81.8% utilised)'],['Expiry Date','31-Dec-2025'],
+    ['Revenue Generated','RM 720,000 TTM'],['ESG Screening','Passed'],
+    ['AML Status','Clear'],['Next Review','30-Sep-2025'],
+  ].map(r=>`<div class="sr"><span class="sk">${r[0]}</span><span class="sv" style="font-size:11.5px">${r[1]}</span></div>`).join('');
+};
+
+// TREASURY
+cif['treasury']=function(){
+  document.getElementById('tsy-tbl').innerHTML=[
+    ["FX Forward / Bay' al-Sarf",'550M','800M','—','1.84','+45%','Maybank MY/SG'],
+    ['FX Swap-i','120M','160M','—','0.25','+33%','Maybank SG'],
+    ['Interest Rate Swap / PRS-i','100M IRS','300M IRS','—','0.40','+200%','Maybank MY'],
+    ['Commodity Hedging','180M','230M','—','0.55','+28%','Maybank MY'],
+    ['Money Market Deposit (MMD)','180M','260M','1.84','—','+44%','Maybank MY'],
+  ].map(r=>`<tr><td>${r[0]}</td><td class="r">${r[1]}</td><td class="r" style="color:#22c55e">${r[2]}</td><td class="r">${r[3]}</td><td class="r">${r[4]}</td><td class="r" style="color:#22c55e">${r[5]}</td><td style="font-size:11px">${r[6]}</td></tr>`).join('');
+  new Chart(document.getElementById('tsyRev'),{type:'bar',data:{labels:['FX Forward','FX Swap-i','IRS/PRS-i','Commodity Hdg','MMD (NII)'],datasets:[{label:'NII',data:[0,0,0,0,1.84],backgroundColor:C.BLUE,borderRadius:3},{label:'NoII',data:[1.84,0.25,0.40,0.55,0],backgroundColor:C.AMBER,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:9,font:{size:10},color:tc,padding:8}}},scales:{x:{grid:{display:false},ticks:{color:tc,font:{size:10}}},y:{grid:{color:gc},ticks:{color:tc,font:{size:10.5}},title:{display:true,text:'RM M',color:tc,font:{size:10}}}}}});
+  new Chart(document.getElementById('fwdTrend'),{type:'line',data:{labels:['Dec','Jan','Feb','Mar','Apr','May'],datasets:[{data:[350,370,390,410,450,550],borderColor:C.AMBER,backgroundColor:C.AMBER+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:tc,font:{size:10.5}}},y:{grid:{color:gc},ticks:{color:tc,font:{size:10.5}},title:{display:true,text:'RM M',color:tc,font:{size:10}}}}}});
+  new Chart(document.getElementById('tenorChart'),{type:'bar',data:{labels:['< 30D','30-90D','90-180D','180-365D','> 1Y'],datasets:[{data:[85,180,165,80,40],backgroundColor:C.AMBER,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:tc,font:{size:10}}},y:{grid:{color:gc},ticks:{color:tc,font:{size:10.5}},title:{display:true,text:'RM M',color:tc,font:{size:10}}}}}});
+  new Chart(document.getElementById('mmdTrend'),{type:'line',data:{labels:['Dec','Jan','Feb','Mar','Apr','May'],datasets:[{data:[100,120,130,150,165,180],borderColor:C.PURPLE,backgroundColor:C.PURPLE+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:tc,font:{size:10.5}}},y:{grid:{color:gc},ticks:{color:tc,font:{size:10.5}},title:{display:true,text:'RM M',color:tc,font:{size:10}}}}}});
+};
+
+// CASH
+cif['cash']=function(){
+  document.getElementById('cash-tbl').innerHTML=[
+    ['Current Account-i','48M','65M','0.18','0.25','Maybank MY'],
+    ['M2E Regional Cash Platform','Active','Active','0.15','0.22','Maybank MY/SG'],
+    ['Multi-bank Reporting (MT940)','Active','Active','0.08','0.10','Maybank MY'],
+    ['RENTAS/IBG/DuitNow Corp','—','—','0.20','0.28','Maybank MY'],
+    ['SWIFT Cross-border','—','—','0.30','0.42','Maybank MY/SG'],
+    ['ERP H2H AP (Vendor Pmts)','720M','850M','0.22','0.30','Maybank MY'],
+    ['Virtual Account (e-Coll)','120 accts','200 accts','0.04','0.07','Maybank MY'],
+    ['Cash Pooling — Notional-i','180M','300M','0.45','0.75','Maybank MY'],
+  ].map(r=>`<tr><td>${r[0]}</td><td class="r">${r[1]}</td><td class="r" style="color:#22c55e">${r[2]}</td><td class="r">${r[3]}</td><td class="r" style="color:#22c55e">${r[4]}</td><td style="font-size:11px">${r[5]}</td></tr>`).join('');
+  new Chart(document.getElementById('cashRev'),{type:'bar',data:{labels:['Notional Pool','SWIFT Pmts','ERP H2H','RENTAS/IBG','CASA-i','M2E Platform','MT940','Virtual Accts'],datasets:[{data:[0.45,0.30,0.22,0.20,0.18,0.15,0.08,0.04],backgroundColor:C.CYAN,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:gc},ticks:{color:tc,font:{size:10}},title:{display:true,text:'RM M',color:tc,font:{size:10}}},y:{grid:{display:false},ticks:{color:tc,font:{size:10.5}}}}}});
+};
+
+// WHITESPACE
+cif['whitespace']=function(){
+  document.getElementById('ws-tbl').innerHTML=[
+    ['1','Green Sukuk-i','Investment Banking','High','USD 1.5M','50%','Nirmala Kumar','Pitch by 30-Jun'],
+    ['2','ESG-Linked RCF','Credit','High','USD 0.8M','70%','Ahmad Firdaus','NSRF compliance trigger'],
+    ['3','Trust Receipt-i','Trade Finance','High','USD 1.0M','45%','James Ward','Post-import financing'],
+    ['4','Interest Rate Swap (IRS)','Treasury & FX','High','USD 0.4M','65%','Wei Zhang','USD 100M float confirmed'],
+    ['5','China SCF Corridor','Trade Finance','Med','USD 0.5M','55%','James Ward','China corridor expansion'],
+    ['6','ESG Advisory','Investment Banking','High','USD 0.3M','65%','Nirmala Kumar','NSRF + TCFD gap'],
+    ['7','Cash Pooling — Zero Balance','Cash Mgmt','Med','USD 0.15M','60%','Hazim Hassan','Bundle with notional'],
+    ['8','Corporate FD / GIA-i','Cash Mgmt','Med','USD 0.12M','55%','Hazim Hassan','Post capex review'],
+    ['9','Regional Pooling SG/UAE','Cash Mgmt','Med','USD 0.30M','50%','Hazim Hassan','FY27 roadmap'],
+    ['10','FCFD (Foreign Currency FD)','Treasury & FX','Low','USD 0.08M','40%','Wei Zhang','Yield enhancement offer'],
+    ['11','Syndicated Murabahah-i','Credit','Low','USD 0.20M','35%','Ahmad Firdaus','Thailand JV trigger'],
+    ['12','BEP / Export Bills','Trade Finance','Low','USD 0.15M','45%','James Ward','EU corridor expansion'],
+  ].map(r=>`<tr><td style="color:#9aa1ae">${r[0]}</td><td>${r[1]}</td><td><span class="pill pb">${r[2]}</span></td><td><span class="pill ${r[3]==='High'?'pr':r[3]==='Med'?'pp':'pc'}">${r[3]}</span></td><td class="r" style="color:#22c55e">${r[4]}</td><td class="r">${r[5]}</td><td style="font-size:11px">${r[6]}</td><td style="font-size:11px;color:#2563A8">${r[7]}</td></tr>`).join('');
+  new Chart(document.getElementById('wsDiv'),{type:'doughnut',data:{labels:['Trade Finance (22)','Treasury & FX (15)','Cash Mgmt (14)','IB (13)','Credit (6)','Securities (7)'],datasets:[{data:[22,15,14,13,6,7],backgroundColor:[C.PINK,C.AMBER,C.CYAN,C.PURPLE,C.BLUE,C.ORANGE],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'58%',plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:9,font:{size:10},color:tc,padding:8}}}}});
+  new Chart(document.getElementById('bridgeChart'),{type:'bar',data:{labels:['YTD Actual','ESG-RCF','Green Sukuk','SCF Expand','IRS Pitch','Cash Pool','Other Wins','FY26-27 Target'],datasets:[{data:[9.6,0.8,1.0,0.6,0.4,0.5,0.1,13.0],backgroundColor:[C.BLUE,C.GREEN,C.GREEN,C.GREEN,C.GREEN,C.GREEN,C.GREEN,C.CYAN],borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:tc,font:{size:10}}},y:{grid:{color:gc},ticks:{color:tc,font:{size:10.5}},title:{display:true,text:'USD M',color:tc,font:{size:10}}}}}});
+  document.getElementById('comp-tbl').innerHTML=[
+    ['CIMB Bank','Trade Finance (LC)','USD 2.1M','Displace with UPAS pricing'],
+    ['DBS Singapore','SCF Programme','USD 1.8M','API integration via SAP S4HANA'],
+    ['Citibank','FX / IRS Hedging','USD 1.2M','IRS pitch + FX forward bundle'],
+    ['HSBC Malaysia','Cross-border Payments','USD 0.9M','M2E SWIFT integration'],
+    ['RHB Banking','Term Lending','USD 0.6M','Islamic conversion — CMTF-i'],
+  ].map(r=>`<tr><td><b>${r[0]}</b></td><td>${r[1]}</td><td class="r" style="color:#c0273f">${r[2]}</td><td style="font-size:11px;color:#2563A8">${r[3]}</td></tr>`).join('');
+};
+</script>
+</body>
+</html>
