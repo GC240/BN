@@ -1,0 +1,683 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BRG Secretariat — RDMS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#edeef1;--card:#fff;--ink:#1e2a3a;--ink2:#3d4f65;--muted:#7b8a9e;--line:#e4e8ee;
+  --link:#2563eb;--cimb:#d41920;--green:#16a34a;--amber:#e89b0c;--red:#dc2626;
+  --blue:#2563eb;--violet:#7c3aed;--teal:#0d9488;
+  --tb:#eef3ff;--tg:#e9f7ef;--ta:#fef4e6;--tr:#fdecec;--tv:#f2ecfd;--tt:#e6f6f4;
+  --sh:0 1px 3px rgba(0,0,0,.06);--sh2:0 4px 16px rgba(0,0,0,.09);--r:14px;
+}
+*{box-sizing:border-box;margin:0}
+body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--ink);font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:var(--link);text-decoration:none}
+/* ---- header strip ---- */
+.hdr{background:linear-gradient(90deg,#1e2a3a 0%,#2d3a4d 100%);color:#fff;padding:0 24px;height:48px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:30}
+.hdr h1{font-size:16px;font-weight:800;letter-spacing:-.2px;white-space:nowrap}
+.hdr .sep{width:1px;height:22px;background:rgba(255,255,255,.18)}
+.hdr .who{font-size:12px;color:rgba(255,255,255,.65);font-weight:500}
+.hdr .sp{flex:1}
+.hb{height:32px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.06);border-radius:8px;padding:0 12px;display:inline-flex;align-items:center;gap:6px;color:#fff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:inherit}
+.hb:hover{background:rgba(255,255,255,.12)}
+.hb svg{width:14px;height:14px}
+.hb.wn{border:0;background:linear-gradient(90deg,#f97316,#ec4899,#7c3aed);font-weight:700;box-shadow:0 3px 10px rgba(124,58,237,.35)}
+/* ---- page ---- */
+.page{padding:16px 24px 48px;max-width:1520px;margin:0 auto}
+@media(max-width:640px){.page{padding:12px 10px 40px}}
+/* ---- tabs ---- */
+.tabs{display:flex;gap:2px;background:#fff;border-radius:12px;box-shadow:var(--sh);padding:4px;margin-bottom:16px;overflow-x:auto}
+.tab{border:0;background:0;padding:9px 16px;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;border-radius:9px;white-space:nowrap;font-family:inherit;display:flex;align-items:center;gap:7px;transition:.15s}
+.tab:hover{color:var(--ink);background:#f5f7fa}
+.tab.on{color:#fff;background:var(--cimb);box-shadow:0 2px 8px rgba(212,25,32,.25)}
+.tab .cnt{background:rgba(0,0,0,.08);font-size:10px;padding:1px 7px;border-radius:10px;font-weight:700}
+.tab.on .cnt{background:rgba(255,255,255,.25)}
+/* ---- filters ---- */
+.fbar{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:16px}
+.fg{display:flex;flex-direction:column;gap:3px}
+.fg label{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+select,.inp{height:34px;border:1px solid var(--line);border-radius:9px;background:#fff;padding:0 10px;font-size:12px;color:var(--ink);font-family:inherit;outline:0}
+select:focus,.inp:focus{border-color:#94b4f4}
+.fbar .sp{flex:1}
+.chip{font-size:11px;padding:5px 11px;border-radius:20px;background:#fff;border:1px solid var(--line);color:var(--ink2);cursor:pointer;font-weight:600}
+.chip.on{background:var(--cimb);border-color:var(--cimb);color:#fff}
+/* ---- grid ---- */
+.g{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+.s12{grid-column:span 12}.s8{grid-column:span 8}.s7{grid-column:span 7}
+.s6{grid-column:span 6}.s5{grid-column:span 5}.s4{grid-column:span 4}.s3{grid-column:span 3}
+@media(max-width:1080px){.s8,.s7,.s6,.s5{grid-column:span 12}.s4,.s3{grid-column:span 6}}
+@media(max-width:640px){.s4,.s3{grid-column:span 12}}
+/* ---- card ---- */
+.cd{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:16px;min-width:0}
+.cd .ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.cd h3{font-size:14px;font-weight:700;letter-spacing:-.1px}
+.cd .sub{color:var(--muted);font-size:11px;font-weight:500}
+.mbb{width:26px;height:26px;border-radius:7px;border:0;background:0;color:var(--muted);display:grid;place-items:center;cursor:pointer}
+.mbb:hover{background:#f2f4f7;color:var(--ink2)}
+.mbb svg{width:15px;height:15px}
+.dots svg{width:15px;height:15px}
+/* ---- KPI tiles ---- */
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:16px}
+.kp{background:#fff;border-radius:var(--r);box-shadow:var(--sh);padding:14px;display:flex;flex-direction:column;gap:4px;position:relative;overflow:hidden}
+.kp .kl{font-size:11.5px;color:var(--ink2);font-weight:600}
+.kp .kv{font-size:24px;font-weight:800;letter-spacing:-.5px;line-height:1.1}
+.kp .ks{font-size:11px;font-weight:600}
+.kp .ki{position:absolute;top:11px;right:11px;width:32px;height:32px;border-radius:8px;display:grid;place-items:center}
+.kp .ki svg{width:16px;height:16px}
+.up{color:var(--green)}.dn{color:var(--red)}.mu{color:var(--muted)}
+/* ---- table ---- */
+.tw{overflow-x:auto}
+.tb{width:100%;border-collapse:collapse;font-size:12px}
+.tb th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:700;padding:8px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tb td{padding:10px 8px;border-bottom:1px solid #f2f4f7;vertical-align:middle}
+.tb tbody tr:hover{background:#fafbfd}
+.did{font-weight:700;font-variant-numeric:tabular-nums}
+.bdg{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:20px;white-space:nowrap}
+.b-d{background:#eef1f6;color:#64748b}.b-c{background:var(--tb);color:var(--blue)}.b-b{background:#fff3e0;color:#d97706}
+.b-v{background:var(--tv);color:var(--violet)}.b-g{background:var(--tg);color:var(--green)}.b-m{background:var(--tt);color:var(--teal)}
+.b-e{background:#e8f0fe;color:#1a56db}.b-r{background:var(--tr);color:var(--red)}
+.ctry{font-weight:700;font-size:10px;letter-spacing:.4px;color:var(--ink2);background:#f2f4f7;padding:2px 6px;border-radius:5px}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:5px}
+.dg{background:var(--green)}.da{background:var(--amber)}.dr{background:var(--red)}
+/* ---- funnel ---- */
+.fun{display:flex;flex-direction:column;gap:7px}
+.fs{display:flex;align-items:center;gap:10px}
+.fn{width:72px;flex:0 0 72px;font-size:11.5px;color:var(--ink2);font-weight:600;text-align:right}
+.fb{flex:1;background:#f0f2f6;border-radius:6px;height:28px;overflow:hidden}
+.fi{height:100%;border-radius:6px;display:flex;align-items:center;padding:0 10px;color:#fff;font-size:11px;font-weight:700;min-width:28px;justify-content:flex-end}
+.fv{width:70px;flex:0 0 70px;font-size:11px;color:var(--muted);font-weight:600;text-align:right}
+/* ---- bars ---- */
+.hb2{display:flex;flex-direction:column;gap:10px}
+.hr{display:flex;align-items:center;gap:8px}
+.hn{width:80px;flex:0 0 80px;font-size:11.5px;font-weight:600;color:var(--ink2)}
+.ht{flex:1;background:#f0f2f6;border-radius:5px;height:14px;overflow:hidden}
+.hf{height:100%;border-radius:5px}
+.hv{width:60px;flex:0 0 60px;text-align:right;font-size:11px;font-weight:700;font-variant-numeric:tabular-nums}
+/* ---- alerts ---- */
+.al{display:flex;gap:11px;padding:11px 13px;border-radius:11px;margin-bottom:8px;align-items:flex-start}
+.al.ar{background:var(--tr)}.al.aa{background:var(--ta)}
+.al .ai{width:28px;height:28px;border-radius:7px;flex:0 0 28px;display:grid;place-items:center;background:#fff}
+.al.ar .ai{color:var(--red)}.al.aa .ai{color:var(--amber)}
+.al .at{font-weight:700;font-size:12px}.al .as{font-size:11px;color:var(--ink2)}
+.al .sp{flex:1}
+.al .ax{font-size:10px;font-weight:800;padding:3px 8px;border-radius:5px;background:#fff;white-space:nowrap}
+.al.ar .ax{color:var(--red)}.al.aa .ax{color:#b45309}
+/* ---- list ---- */
+.li{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f2f4f7}
+.li:last-child{border-bottom:0}
+.lip{width:40px;flex:0 0 40px;text-align:center;background:#f7f9fc;border:1px solid var(--line);border-radius:8px;padding:4px 0}
+.lip .m{font-size:9px;color:var(--amber);font-weight:800;letter-spacing:.4px}
+.lip .d{font-size:14px;font-weight:800;line-height:1}
+.li .lt{flex:1;min-width:0}.lt .t{font-weight:700;color:var(--link);font-size:12px}.lt .s{font-size:11px;color:var(--muted)}
+/* ---- buttons ---- */
+.btn{height:30px;font-size:11px;padding:0 11px;border-radius:8px;border:1px solid var(--line);background:#fff;font-weight:700;color:var(--ink2);cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:5px}
+.btn:hover{background:#f7f9fc}.btn.pr{background:var(--cimb);border-color:var(--cimb);color:#fff}
+.btn.pr:hover{filter:brightness(1.08)}
+.btn svg{width:13px;height:13px}
+/* ---- donut ---- */
+.dw{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.lg{display:flex;flex-direction:column;gap:7px}
+.lg span{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--ink2)}
+.lg i{width:10px;height:10px;border-radius:3px;flex:0 0 10px;display:inline-block}
+/* ---- stat grid ---- */
+.sg4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:560px){.sg4{grid-template-columns:repeat(2,1fr)}}
+.st{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:10px}
+.st .n{font-size:20px;font-weight:800}.st .l{font-size:10.5px;color:var(--muted);font-weight:600}
+/* ---- user drill ---- */
+.udrill{margin-bottom:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.udrill label{font-size:11px;font-weight:700;color:var(--ink2)}
+.uc{display:flex;gap:6px;flex-wrap:wrap}
+.uc .u{height:30px;padding:0 12px;border-radius:8px;border:1px solid var(--line);background:#fff;font-size:11px;font-weight:600;color:var(--ink2);cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px}
+.uc .u:hover{border-color:#b0bcd4}.uc .u.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.uc .u .av{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:9px;font-weight:800;color:#fff}
+/* ---- panes ---- */
+.pane{display:none}.pane.on{display:block;animation:fd .2s ease}
+@keyframes fd{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+/* ---- mini pie / ring for inline use ---- */
+.rpie{display:inline-flex;flex-direction:column;align-items:center;gap:4px}
+.rpie .rl{font-size:10px;color:var(--muted);font-weight:600}
+/* ---- toast ---- */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(18px);background:#111827;color:#fff;padding:10px 16px;border-radius:10px;font-size:12px;font-weight:600;box-shadow:var(--sh2);opacity:0;pointer-events:none;transition:.25s;z-index:80;display:flex;align-items:center;gap:8px}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast svg{width:14px;height:14px;color:#4ade80}
+</style>
+
+<!-- ============ HEADER STRIP ============ -->
+<div class="hdr">
+  <h1>Summary</h1>
+  <div class="sep"></div>
+  <span class="who">BRG Secretariat — <strong>Julia Tan</strong> · Regional (MY / ID / SG / TH)</span>
+  <div class="sp"></div>
+  <button class="hb" onclick="toast('Synced')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>Sync</button>
+  <button class="hb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v6H4zM4 14h10v6H4z"/></svg>Customize Home Page</button>
+  <button class="hb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>Home Page Designer</button>
+  <button class="hb wn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 4.6L18 8l-4.2 1.4L12 14l-1.8-4.6L6 8l4.2-1.4z"/></svg>WORKNEXT</button>
+</div>
+
+<div class="page">
+  <!-- TABS -->
+  <div class="tabs" id="tabs">
+    <button class="tab on" data-t="dash">📊 Dashboard</button>
+    <button class="tab" data-t="lead">🔵 Lead Pipeline</button>
+    <button class="tab" data-t="deal">🟠 Deal Pipeline</button>
+    <button class="tab" data-t="brf">✅ BRF Approval <span class="cnt">6</span></button>
+    <button class="tab" data-t="rpt">📋 Reporting <span class="cnt">2</span></button>
+    <button class="tab" data-t="kpi">📈 KPI</button>
+    <button class="tab" data-t="rfp">🎯 RFPs & Pitches</button>
+  </div>
+
+  <!-- USER DRILL-DOWN -->
+  <div class="udrill">
+    <label>Drill by user:</label>
+    <div class="uc" id="userChips">
+      <button class="u on" data-u="all"><span class="av" style="background:#64748b">All</span>All users</button>
+      <button class="u" data-u="ar"><span class="av" style="background:#2563eb">AR</span>A. Rahman</button>
+      <button class="u" data-u="sl"><span class="av" style="background:#7c3aed">SL</span>S. Lim</button>
+      <button class="u" data-u="nt"><span class="av" style="background:#0d9488">NT</span>N. Tan</button>
+      <button class="u" data-u="rp"><span class="av" style="background:#dc2626">RP</span>R. Putra</button>
+      <button class="u" data-u="dw"><span class="av" style="background:#e89b0c">DW</span>D. Wijaya</button>
+      <button class="u" data-u="jn"><span class="av" style="background:#16a34a">JN</span>J. Ng</button>
+      <button class="u" data-u="ps"><span class="av" style="background:#ec4899">PS</span>P. Somsak</button>
+    </div>
+  </div>
+
+  <!-- ======== TAB: DASHBOARD ======== -->
+  <section class="pane on" id="dash">
+    <div class="fbar">
+      <div class="fg"><label>Country</label><select id="fC" onchange="af()"><option value="">All regions</option><option>MY</option><option>ID</option><option>SG</option><option>TH</option></select></div>
+      <div class="fg"><label>Deal Type</label><select id="fT" onchange="af()"><option value="">All products</option><option>M&A</option><option>ECM-IPO</option><option>DCM-Sukuk</option><option>DCM-Bond</option><option>Advisory</option></select></div>
+      <div class="fg"><label>Milestone</label><select id="fS" onchange="af()"><option value="">All stages</option><option>Draft</option><option>Coverage Approved</option><option>BRF Submitted</option><option>BRG Review</option><option>Mandate</option><option>Executed</option></select></div>
+      <div class="sp"></div>
+      <span class="chip on" onclick="pre(this,'')">All</span>
+      <span class="chip" onclick="pre(this,'BRG Review')">Pending BRG</span>
+      <span class="chip" onclick="pre(this,'MY')">MY only</span>
+    </div>
+
+    <div class="kpis" id="dashKpis"></div>
+
+    <div class="g">
+      <div class="cd s8">
+        <div class="ch"><div><h3>Organization-wide Deal Register</h3></div><div style="display:flex;gap:2px"><button class="mbb" onclick="toast('Refreshed')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></button><button class="mbb" onclick="toast('Exported')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M8 11l4 4 4-4"/><path d="M4 21h16"/></svg></button></div></div>
+        <div class="tw"><table class="tb" id="dtbl"><thead><tr><th>Deal ID</th><th>Deal Name</th><th>Client</th><th>Type</th><th>Country</th><th>Milestone</th><th>Owner</th><th>Days</th><th>SLA</th></tr></thead><tbody></tbody></table></div>
+      </div>
+
+      <div class="cd s4">
+        <div class="ch"><h3>Mandate Status</h3></div>
+        <div class="dw">
+          <svg width="130" height="130" viewBox="0 0 42 42" id="don"></svg>
+          <div class="lg" id="donL"></div>
+        </div>
+      </div>
+
+      <div class="cd s4">
+        <div class="ch"><h3>Fee Income vs Cost</h3><div class="sub">RM M by quarter</div></div>
+        <svg id="bc" viewBox="0 0 310 170" width="100%" height="170"></svg>
+        <div style="display:flex;gap:12px;margin-top:8px;flex-wrap:wrap">
+          <span style="display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--ink2)"><i style="width:10px;height:10px;border-radius:3px;background:var(--blue);display:inline-block"></i>Income</span>
+          <span style="display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--ink2)"><i style="width:10px;height:10px;border-radius:3px;background:var(--amber);display:inline-block"></i>Cost</span>
+          <span style="display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--ink2)"><i style="width:10px;height:10px;border-radius:3px;background:var(--green);display:inline-block"></i>Margin %</span>
+        </div>
+      </div>
+
+      <div class="cd s4">
+        <div class="ch"><h3>Deals by Country</h3></div>
+        <svg id="ctyPie" width="130" height="130" viewBox="0 0 42 42"></svg>
+        <div class="lg" id="ctyL" style="margin-top:10px;flex-direction:row;flex-wrap:wrap;display:flex;gap:10px"></div>
+      </div>
+
+      <div class="cd s4">
+        <div class="ch"><h3>Value by Product Line</h3><div class="sub">RM M · YTD</div></div>
+        <div class="hb2" id="pBars"></div>
+      </div>
+
+      <div class="cd s4">
+        <div class="ch"><h3>SLA Performance</h3></div>
+        <div class="sg4" style="grid-template-columns:repeat(3,1fr)">
+          <div class="st"><div class="n" style="color:var(--green)">76%</div><div class="l">On Track</div></div>
+          <div class="st"><div class="n" style="color:var(--amber)">16%</div><div class="l">At Risk</div></div>
+          <div class="st"><div class="n" style="color:var(--red)">8%</div><div class="l">Breached</div></div>
+        </div>
+        <div style="margin-top:12px">
+          <div class="hr"><div class="hn">BRF Review</div><div class="ht"><div class="hf" style="width:65%;background:var(--amber)"></div></div><div class="hv" style="color:var(--amber)">48h avg</div></div>
+          <div class="hr" style="margin-top:8px"><div class="hn">Mandate</div><div class="ht"><div class="hf" style="width:40%;background:var(--green)"></div></div><div class="hv" style="color:var(--green)">2.1d avg</div></div>
+          <div class="hr" style="margin-top:8px"><div class="hn">Invoice</div><div class="ht"><div class="hf" style="width:82%;background:var(--red)"></div></div><div class="hv" style="color:var(--red)">5.6d avg</div></div>
+        </div>
+      </div>
+
+      <div class="cd s4">
+        <div class="ch"><h3>Monthly Deal Trend</h3><div class="sub">Created vs Closed · last 6 mo</div></div>
+        <svg id="trend" viewBox="0 0 310 140" width="100%" height="140"></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== TAB: LEAD PIPELINE ======== -->
+  <section class="pane" id="lead">
+    <div class="kpis" style="grid-template-columns:repeat(5,1fr)">
+      <div class="kp"><div class="kl">Total Leads</div><div class="kv">134</div><div class="ks up">▲ 22 this month</div><div class="ki" style="background:var(--tb);color:var(--blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg></div></div>
+      <div class="kp"><div class="kl">Qualified</div><div class="kv">62</div><div class="ks mu">46% conversion</div><div class="ki" style="background:var(--tg);color:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div></div>
+      <div class="kp"><div class="kl">Nurturing</div><div class="kv">38</div><div class="ks mu">Follow-up pending</div><div class="ki" style="background:var(--ta);color:var(--amber)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div></div>
+      <div class="kp"><div class="kl">Converted to Deal</div><div class="kv">28</div><div class="ks up">▲ 8 this month</div><div class="ki" style="background:var(--tt);color:var(--teal)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+      <div class="kp"><div class="kl">Disqualified</div><div class="kv">6</div><div class="ks dn">Did not proceed</div><div class="ki" style="background:var(--tr);color:var(--red)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></div></div>
+    </div>
+    <div class="g">
+      <div class="cd s6">
+        <div class="ch"><h3>Lead Pipeline Funnel</h3></div>
+        <div class="fun" id="leadFun"></div>
+      </div>
+      <div class="cd s6">
+        <div class="ch"><h3>Lead Aging by Stage</h3><div class="sub">avg days in stage</div></div>
+        <div class="hb2" id="leadAge"></div>
+        <div style="margin-top:14px;padding:10px;background:#fef4e6;border-radius:9px;font-size:11.5px;color:#92400e;font-weight:600">⚠ 12 leads stuck in "Screening" for >14 days — review required</div>
+      </div>
+      <div class="cd s6">
+        <div class="ch"><h3>Lead Source Breakdown</h3></div>
+        <div class="hb2" id="leadSrc"></div>
+      </div>
+      <div class="cd s6">
+        <div class="ch"><h3>Lead Conversion by Owner</h3></div>
+        <div class="tw"><table class="tb"><thead><tr><th>Owner</th><th>Leads</th><th>Qualified</th><th>Converted</th><th>Conv %</th></tr></thead><tbody>
+          <tr><td><strong>A. Rahman</strong></td><td>28</td><td>14</td><td>7</td><td><strong style="color:var(--green)">25%</strong></td></tr>
+          <tr><td><strong>S. Lim</strong></td><td>24</td><td>12</td><td>6</td><td><strong style="color:var(--green)">25%</strong></td></tr>
+          <tr><td><strong>N. Tan</strong></td><td>20</td><td>9</td><td>4</td><td><strong style="color:var(--amber)">20%</strong></td></tr>
+          <tr><td><strong>R. Putra</strong></td><td>22</td><td>10</td><td>5</td><td><strong style="color:var(--green)">23%</strong></td></tr>
+          <tr><td><strong>D. Wijaya</strong></td><td>18</td><td>7</td><td>3</td><td><strong style="color:var(--amber)">17%</strong></td></tr>
+          <tr><td><strong>P. Somsak</strong></td><td>14</td><td>6</td><td>2</td><td><strong style="color:var(--red)">14%</strong></td></tr>
+          <tr><td><strong>J. Ng</strong></td><td>8</td><td>4</td><td>1</td><td><strong style="color:var(--red)">13%</strong></td></tr>
+        </tbody></table></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== TAB: DEAL PIPELINE ======== -->
+  <section class="pane" id="deal">
+    <div class="kpis" style="grid-template-columns:repeat(5,1fr)">
+      <div class="kp"><div class="kl">Active Deals</div><div class="kv">47</div><div class="ks up">▲ 6 new</div><div class="ki" style="background:var(--tb);color:var(--blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg></div></div>
+      <div class="kp"><div class="kl">BRF Submitted</div><div class="kv">9</div><div class="ks mu">Pending review</div><div class="ki" style="background:var(--ta);color:var(--amber)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/></svg></div></div>
+      <div class="kp"><div class="kl">Mandated</div><div class="kv">18</div><div class="ks up">RM 312M value</div><div class="ki" style="background:var(--tg);color:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></div></div>
+      <div class="kp"><div class="kl">In Execution</div><div class="kv">14</div><div class="ks mu">Across 4 countries</div><div class="ki" style="background:var(--tv);color:var(--violet)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div></div>
+      <div class="kp"><div class="kl">Avg Days to Close</div><div class="kv">64</div><div class="ks dn">▲ 3 vs last Q</div><div class="ki" style="background:var(--tr);color:var(--red)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div></div>
+    </div>
+    <div class="g">
+      <div class="cd s5">
+        <div class="ch"><h3>Deal Pipeline Funnel</h3><div class="sub">Deal Creation → Execution</div></div>
+        <div class="fun" id="dealFun"></div>
+      </div>
+      <div class="cd s7">
+        <div class="ch"><h3>Deal Pipeline Workflow</h3><div class="sub">Stage flow from the process map</div></div>
+        <div id="wflow" style="overflow-x:auto;padding:8px 0"></div>
+      </div>
+      <div class="cd s6">
+        <div class="ch"><h3>Deal Value by Stage</h3><div class="sub">RM M</div></div>
+        <svg id="dealBar" viewBox="0 0 340 160" width="100%" height="160"></svg>
+      </div>
+      <div class="cd s6">
+        <div class="ch"><h3>Deals by Owner</h3></div>
+        <div class="tw"><table class="tb"><thead><tr><th>Owner</th><th>Active</th><th>BRF</th><th>Mandated</th><th>Value (RM M)</th><th>Win Rate</th></tr></thead>
+        <tbody>
+          <tr><td><strong>A. Rahman</strong></td><td>8</td><td>2</td><td>4</td><td>86</td><td><strong style="color:var(--green)">50%</strong></td></tr>
+          <tr><td><strong>S. Lim</strong></td><td>7</td><td>1</td><td>3</td><td>72</td><td><strong style="color:var(--green)">43%</strong></td></tr>
+          <tr><td><strong>R. Putra</strong></td><td>9</td><td>2</td><td>3</td><td>64</td><td><strong style="color:var(--amber)">33%</strong></td></tr>
+          <tr><td><strong>N. Tan</strong></td><td>6</td><td>1</td><td>2</td><td>48</td><td><strong style="color:var(--amber)">33%</strong></td></tr>
+          <tr><td><strong>D. Wijaya</strong></td><td>7</td><td>2</td><td>2</td><td>55</td><td><strong style="color:var(--amber)">29%</strong></td></tr>
+          <tr><td><strong>P. Somsak</strong></td><td>5</td><td>1</td><td>2</td><td>38</td><td><strong style="color:var(--green)">40%</strong></td></tr>
+          <tr><td><strong>J. Ng</strong></td><td>5</td><td>0</td><td>2</td><td>41</td><td><strong style="color:var(--green)">40%</strong></td></tr>
+        </tbody></table></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== TAB: BRF APPROVAL ======== -->
+  <section class="pane" id="brf">
+    <div class="kpis" style="grid-template-columns:repeat(4,1fr)">
+      <div class="kp"><div class="kl">BRFs Tabled</div><div class="kv">19</div><div class="ks mu">Next BRG: 14 Jul</div><div class="ki" style="background:var(--tv);color:var(--violet)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h8"/></svg></div></div>
+      <div class="kp"><div class="kl">Approved</div><div class="kv">12</div><div class="ks up">63% rate</div><div class="ki" style="background:var(--tg);color:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></div></div>
+      <div class="kp"><div class="kl">Awaiting Decision</div><div class="kv">6</div><div class="ks dn">2 overdue</div><div class="ki" style="background:var(--ta);color:var(--amber)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div></div>
+      <div class="kp"><div class="kl">Cross-region</div><div class="kv">9</div><div class="ks mu">View only</div><div class="ki" style="background:var(--tb);color:var(--blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M2 12h20"/></svg></div></div>
+    </div>
+    <div class="g">
+      <div class="cd s8">
+        <div class="ch"><div><h3>BRG Committee Workbench</h3></div><div style="display:flex;gap:2px"><button class="mbb" onclick="toast('Minutes generated')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3v5h5M8 3h6l5 5v13H8z"/></svg></button></div></div>
+        <div class="tw"><table class="tb"><thead><tr><th>BRF Ref</th><th>Deal</th><th>#</th><th>Region</th><th>Decision</th><th style="text-align:right">Action</th></tr></thead><tbody id="brfB"></tbody></table></div>
+      </div>
+      <div class="cd s4">
+        <div class="ch"><h3>Cycle Decisions</h3><div class="sub">BRG · 14 Jul 2026</div></div>
+        <div class="sg4"><div class="st"><div class="n" style="color:var(--green)">12</div><div class="l">Approved</div></div><div class="st"><div class="n" style="color:var(--amber)">4</div><div class="l">Conditional</div></div><div class="st"><div class="n" style="color:var(--violet)">2</div><div class="l">Deferred</div></div><div class="st"><div class="n" style="color:var(--red)">1</div><div class="l">Rejected</div></div></div>
+        <div style="margin-top:12px;font-size:12px;color:var(--ink2)">7 of 9 members present · quorum met ✔</div>
+      </div>
+      <div class="cd s7">
+        <div class="ch"><h3>Cross-Regional BRF Queue</h3><div class="sub">View & download only</div></div>
+        <div class="tw"><table class="tb"><thead><tr><th>BRF</th><th>Deal</th><th>Region</th><th>By</th><th>Days</th><th></th></tr></thead><tbody>
+          <tr><td class="did">BRF-ID-0442</td><td>Green Bond — PLN</td><td><span class="ctry">ID</span></td><td>D. Wijaya</td><td>3</td><td><a href="#" onclick="toast('Downloaded');return false">⬇</a></td></tr>
+          <tr><td class="did">BRF-SG-0311</td><td>M&A — Keppel</td><td><span class="ctry">SG</span></td><td>J. Ng</td><td>1</td><td><a href="#" onclick="toast('Downloaded');return false">⬇</a></td></tr>
+          <tr><td class="did">BRF-TH-0208</td><td>Rights Issue — Bangkok Bk</td><td><span class="ctry">TH</span></td><td>P. Somsak</td><td>4</td><td><a href="#" onclick="toast('Downloaded');return false">⬇</a></td></tr>
+          <tr><td class="did">BRF-ID-0447</td><td>Acq Fin — Mandiri</td><td><span class="ctry">ID</span></td><td>R. Putra</td><td>2</td><td><a href="#" onclick="toast('Downloaded');return false">⬇</a></td></tr>
+        </tbody></table></div>
+      </div>
+      <div class="cd s5">
+        <div class="ch"><h3>BRF Archive</h3></div>
+        <div style="display:flex;gap:6px;margin-bottom:10px"><input class="inp" style="flex:1" placeholder='Search e.g. "Sukuk BRF decisions"'><button class="btn pr" onclick="toast('23 matches found')">Search</button></div>
+        <div class="li"><div class="lip"><div class="m">MAY</div><div class="d">28</div></div><div class="lt"><div class="t">BRF-MY-0391 · Sukuk — Khazanah</div><div class="s">Approved · RM 1.0B</div></div></div>
+        <div class="li"><div class="lip"><div class="m">APR</div><div class="d">15</div></div><div class="lt"><div class="t">BRF-MY-0377 · IPO — Farm Fresh</div><div class="s">Conditional · 2 conditions</div></div></div>
+        <div class="li"><div class="lip"><div class="m">MAR</div><div class="d">02</div></div><div class="lt"><div class="t">BRF-MY-0362 · Wakalah — Cagamas</div><div class="s">Approved · RM 500M</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== TAB: REPORTING ======== -->
+  <section class="pane" id="rpt">
+    <div class="cd s12" style="margin-bottom:14px">
+      <div class="ch"><h3>⚠ At-Risk Report Alerts</h3></div>
+      <div class="al ar"><div class="ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9L2 18a2 2 0 0 0 1.7 3h16.6A2 2 0 0 0 22 18L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></div><div><div class="at">BNM Quarterly Return — Q2 2026</div><div class="as">Due in 1 day · ID data incomplete</div></div><div class="sp"></div><div class="ax">T-1 DAY</div></div>
+      <div class="al aa"><div class="ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><div><div class="at">SC Malaysia Monthly — Jun 2026</div><div class="as">Due in 3 days · pending Compliance sign-off</div></div><div class="sp"></div><div class="ax">T-3 DAYS</div></div>
+    </div>
+    <div class="g">
+      <div class="cd s5">
+        <div class="ch"><h3>Report Templates</h3><button class="mbb" onclick="toast('New template')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button></div>
+        <div class="li"><div class="lip" style="background:var(--tr);border:0"><svg width="18" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><path d="M14 3v5h5M8 3h6l5 5v13H8z"/></svg></div><div class="lt"><div class="t">BNM Quarterly Return</div><div class="s">Regulatory · Quarterly</div></div><button class="btn pr" onclick="toast('Generating…')">Run</button></div>
+        <div class="li"><div class="lip" style="background:var(--tb);border:0"><svg width="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M14 3v5h5M8 3h6l5 5v13H8z"/></svg></div><div class="lt"><div class="t">SC Monthly Activity</div><div class="s">Regulatory · Monthly</div></div><button class="btn pr" onclick="toast('Generating…')">Run</button></div>
+        <div class="li"><div class="lip" style="background:var(--tg);border:0"><svg width="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M14 3v5h5M8 3h6l5 5v13H8z"/></svg></div><div class="lt"><div class="t">Shariah Compliance</div><div class="s">Internal · Per deal</div></div><button class="btn pr" onclick="toast('Generating…')">Run</button></div>
+        <div class="li"><div class="lip" style="background:var(--ta);border:0"><svg width="18" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><path d="M14 3v5h5M8 3h6l5 5v13H8z"/></svg></div><div class="lt"><div class="t">Bursa Disclosure</div><div class="s">Regulatory · Event-driven</div></div><button class="btn pr" onclick="toast('Generating…')">Run</button></div>
+      </div>
+      <div class="cd s7">
+        <div class="ch"><h3>Ad-hoc Report Builder</h3></div>
+        <div class="g" style="gap:10px">
+          <div class="s6"><label class="sub" style="font-weight:700;display:block;margin-bottom:4px">Object</label><select style="width:100%"><option>Deal</option><option>BRF</option><option>Mandate</option><option>Invoice</option></select></div>
+          <div class="s6"><label class="sub" style="font-weight:700;display:block;margin-bottom:4px">Group by</label><select style="width:100%"><option>Country</option><option>Product</option><option>Team</option><option>Quarter</option></select></div>
+          <div class="s6"><label class="sub" style="font-weight:700;display:block;margin-bottom:4px">Range</label><select style="width:100%"><option>YTD 2026</option><option>Q2 2026</option><option>Last 12 mo</option></select></div>
+          <div class="s6"><label class="sub" style="font-weight:700;display:block;margin-bottom:4px">Format</label><select style="width:100%"><option>XLSX</option><option>PDF</option><option>CSV</option></select></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn pr" onclick="toast('Report generated')">Generate</button><button class="btn" onclick="toast('Preset saved')">Save preset</button><button class="btn" onclick="toast('Exported for auditor · logged')">Auditor export</button></div>
+      </div>
+      <div class="cd s12">
+        <div class="ch"><h3>Report Aging Tracker</h3></div>
+        <div class="tw"><table class="tb"><thead><tr><th>Report</th><th>Cycle</th><th>Due</th><th>Days left</th><th>Status</th></tr></thead><tbody>
+          <tr><td style="font-weight:600">BNM Quarterly — Q2</td><td>Quarterly</td><td>07 Jul 2026</td><td>1</td><td><span class="bdg b-r">Overdue risk</span></td></tr>
+          <tr><td style="font-weight:600">SC Monthly — Jun</td><td>Monthly</td><td>09 Jul 2026</td><td>3</td><td><span class="bdg b-b">Due soon</span></td></tr>
+          <tr><td style="font-weight:600">Shariah — Khazanah</td><td>Per deal</td><td>18 Jul 2026</td><td>12</td><td><span class="bdg b-g">On track</span></td></tr>
+          <tr><td style="font-weight:600">Mgmt Pipeline Review</td><td>Monthly</td><td>31 Jul 2026</td><td>25</td><td><span class="bdg b-g">On track</span></td></tr>
+        </tbody></table></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== TAB: KPI ======== -->
+  <section class="pane" id="kpi">
+    <div class="kpis" style="grid-template-columns:repeat(4,1fr)">
+      <div class="kp"><div class="kl">Total Revenue (RM M)</div><div class="kv">228</div><div class="ks up">▲ 14% YoY</div><div class="ki" style="background:var(--tg);color:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></div></div>
+      <div class="kp"><div class="kl">Total Assets (RM M)</div><div class="kv">39</div><div class="ks mu">Under management</div><div class="ki" style="background:var(--tb);color:var(--blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="10" width="4" height="10"/><rect x="10" y="5" width="4" height="15"/><rect x="17" y="8" width="4" height="12"/></svg></div></div>
+      <div class="kp"><div class="kl">Cross-Sell Index</div><div class="kv">32%</div><div class="ks up">▲ 5pp vs H1</div><div class="ki" style="background:var(--tv);color:var(--violet)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M4 20L21 3"/></svg></div></div>
+      <div class="kp"><div class="kl">Portfolio RAROC (%)</div><div class="kv">14</div><div class="ks up">Above hurdle</div><div class="ki" style="background:var(--tt);color:var(--teal)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div></div>
+    </div>
+    <div class="g">
+      <div class="cd s6">
+        <div class="ch"><h3>Revenue by Product (RM M)</h3></div>
+        <div class="hb2" id="kpiProd"></div>
+      </div>
+      <div class="cd s6">
+        <div class="ch"><h3>Revenue by Country (RM M)</h3></div>
+        <div class="hb2" id="kpiCtry"></div>
+      </div>
+      <div class="cd s6">
+        <div class="ch"><h3>Team Performance Scorecard</h3></div>
+        <div class="tw"><table class="tb"><thead><tr><th>Owner</th><th>Revenue</th><th>Deals Won</th><th>Win Rate</th><th>Avg Days</th><th>RAROC</th></tr></thead><tbody>
+          <tr><td><strong>A. Rahman</strong></td><td>42M</td><td>4</td><td><strong style="color:var(--green)">50%</strong></td><td>52</td><td><strong style="color:var(--green)">18%</strong></td></tr>
+          <tr><td><strong>S. Lim</strong></td><td>38M</td><td>3</td><td><strong style="color:var(--green)">43%</strong></td><td>58</td><td><strong style="color:var(--green)">16%</strong></td></tr>
+          <tr><td><strong>R. Putra</strong></td><td>34M</td><td>3</td><td><strong style="color:var(--amber)">33%</strong></td><td>71</td><td><strong style="color:var(--amber)">12%</strong></td></tr>
+          <tr><td><strong>N. Tan</strong></td><td>28M</td><td>2</td><td><strong style="color:var(--amber)">33%</strong></td><td>66</td><td><strong style="color:var(--green)">15%</strong></td></tr>
+          <tr><td><strong>D. Wijaya</strong></td><td>32M</td><td>2</td><td><strong style="color:var(--amber)">29%</strong></td><td>74</td><td><strong style="color:var(--red)">10%</strong></td></tr>
+          <tr><td><strong>P. Somsak</strong></td><td>30M</td><td>2</td><td><strong style="color:var(--green)">40%</strong></td><td>60</td><td><strong style="color:var(--green)">14%</strong></td></tr>
+          <tr><td><strong>J. Ng</strong></td><td>24M</td><td>2</td><td><strong style="color:var(--green)">40%</strong></td><td>55</td><td><strong style="color:var(--green)">15%</strong></td></tr>
+        </tbody></table></div>
+      </div>
+      <div class="cd s6">
+        <div class="ch"><h3>Risk & Attention Items</h3></div>
+        <div class="al ar"><div class="ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/></svg></div><div><div class="at">3 deals with stale status (>30 days)</div><div class="as">RDMS-2029, RDMS-2044, RDMS-2058</div></div></div>
+        <div class="al aa"><div class="ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><div><div class="at">Invoice backlog: 4 overdue >14 days</div><div class="as">Escalation sent to Product Heads</div></div></div>
+        <div class="al aa"><div class="ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M4 20L21 3"/></svg></div><div><div class="at">Cross-sell index below 35% target in ID</div><div class="as">Coverage team flagged for Q3 push</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== TAB: RFPs & PITCHES ======== -->
+  <section class="pane" id="rfp">
+    <div class="kpis" style="grid-template-columns:repeat(5,1fr)">
+      <div class="kp"><div class="kl">Active RFPs</div><div class="kv">12</div><div class="ks up">▲ 4 this month</div><div class="ki" style="background:var(--tb);color:var(--blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8"/></svg></div></div>
+      <div class="kp"><div class="kl">Active Pitches</div><div class="kv">8</div><div class="ks mu">In preparation</div><div class="ki" style="background:var(--tv);color:var(--violet)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h20v14H2zM8 21h8M12 17v4"/></svg></div></div>
+      <div class="kp"><div class="kl">Won (YTD)</div><div class="kv">14</div><div class="ks up">70% win rate</div><div class="ki" style="background:var(--tg);color:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15l-3 3 1-5-4-3h5L12 5l1 5h5l-4 3 1 5z"/></svg></div></div>
+      <div class="kp"><div class="kl">Lost</div><div class="kv">4</div><div class="ks dn">Key: pricing</div><div class="ki" style="background:var(--tr);color:var(--red)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></div></div>
+      <div class="kp"><div class="kl">Pipeline Value</div><div class="kv">620<span style="font-size:13px;font-weight:700">M</span></div><div class="ks mu">RM</div><div class="ki" style="background:var(--ta);color:var(--amber)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div></div>
+    </div>
+    <div class="g">
+      <div class="cd s7">
+        <div class="ch"><h3>RFP Tracker</h3></div>
+        <div class="tw"><table class="tb"><thead><tr><th>RFP</th><th>Client</th><th>Product</th><th>Value</th><th>Due</th><th>Owner</th><th>Status</th></tr></thead><tbody>
+          <tr><td class="did">RFP-2026-041</td><td>Petronas</td><td>DCM-Sukuk</td><td>RM 2.0B</td><td>18 Jul</td><td>A. Rahman</td><td><span class="bdg b-b">Drafting</span></td></tr>
+          <tr><td class="did">RFP-2026-039</td><td>Tenaga Nasional</td><td>DCM-Bond</td><td>RM 1.5B</td><td>22 Jul</td><td>S. Lim</td><td><span class="bdg b-c">Under review</span></td></tr>
+          <tr><td class="did">RFP-2026-038</td><td>Axiata Group</td><td>M&A</td><td>RM 800M</td><td>15 Jul</td><td>N. Tan</td><td><span class="bdg b-b">Drafting</span></td></tr>
+          <tr><td class="did">RFP-2026-036</td><td>Grab Holdings</td><td>ECM-IPO</td><td>RM 600M</td><td>28 Jul</td><td>J. Ng</td><td><span class="bdg b-d">Assigned</span></td></tr>
+          <tr><td class="did">RFP-2026-035</td><td>PLN Persero</td><td>DCM-Bond</td><td>RM 750M</td><td>10 Jul</td><td>D. Wijaya</td><td><span class="bdg b-v">Submitted</span></td></tr>
+        </tbody></table></div>
+      </div>
+      <div class="cd s5">
+        <div class="ch"><h3>Pitch Calendar</h3></div>
+        <div class="li"><div class="lip"><div class="m">JUL</div><div class="d">08</div></div><div class="lt"><div class="t">Petronas — Sukuk pitch</div><div class="s">A. Rahman · KL HQ</div></div></div>
+        <div class="li"><div class="lip"><div class="m">JUL</div><div class="d">11</div></div><div class="lt"><div class="t">Axiata — M&A advisory</div><div class="s">N. Tan · Virtual</div></div></div>
+        <div class="li"><div class="lip"><div class="m">JUL</div><div class="d">14</div></div><div class="lt"><div class="t">Tenaga — Bond underwriting</div><div class="s">S. Lim · Menara CIMB</div></div></div>
+        <div class="li"><div class="lip"><div class="m">JUL</div><div class="d">18</div></div><div class="lt"><div class="t">Grab — IPO listing</div><div class="s">J. Ng · SG office</div></div></div>
+        <div class="li"><div class="lip"><div class="m">JUL</div><div class="d">22</div></div><div class="lt"><div class="t">CP Group — Dual listing</div><div class="s">P. Somsak · Bangkok</div></div></div>
+      </div>
+      <div class="cd s6">
+        <div class="ch"><h3>RFP Win/Loss by Product</h3></div>
+        <div class="hb2" id="rfpWL"></div>
+      </div>
+      <div class="cd s6">
+        <div class="ch"><h3>Pitch Outcomes by Owner</h3></div>
+        <div class="tw"><table class="tb"><thead><tr><th>Owner</th><th>Pitches</th><th>Won</th><th>Lost</th><th>Win Rate</th></tr></thead><tbody>
+          <tr><td><strong>A. Rahman</strong></td><td>6</td><td>4</td><td>1</td><td><strong style="color:var(--green)">67%</strong></td></tr>
+          <tr><td><strong>S. Lim</strong></td><td>5</td><td>3</td><td>1</td><td><strong style="color:var(--green)">60%</strong></td></tr>
+          <tr><td><strong>N. Tan</strong></td><td>4</td><td>3</td><td>0</td><td><strong style="color:var(--green)">75%</strong></td></tr>
+          <tr><td><strong>R. Putra</strong></td><td>3</td><td>2</td><td>1</td><td><strong style="color:var(--green)">67%</strong></td></tr>
+          <tr><td><strong>J. Ng</strong></td><td>2</td><td>2</td><td>0</td><td><strong style="color:var(--green)">100%</strong></td></tr>
+        </tbody></table></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="toast" id="tst"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span id="tm">Done</span></div>
+
+<script>
+/* ---- DATA ---- */
+const D=[
+["RDMS-2041","Project Meranti","Sime Darby Plantation","M&A","MY","BRG Review","A. Rahman","ar",2,"a"],
+["RDMS-2038","Sukuk Wakalah RM500m","Cagamas Berhad","DCM-Sukuk","MY","Mandate","S. Lim","sl",5,"g"],
+["RDMS-2035","IPO Main Market","Farm Fresh Bhd","ECM-IPO","MY","BRF Submitted","N. Tan","nt",1,"g"],
+["RDMS-2029","Acquisition Financing","Bank Mandiri","Advisory","ID","Coverage Approved","R. Putra","rp",3,"g"],
+["RDMS-2044","Green Bond RM750m","PLN Persero","DCM-Bond","ID","BRG Review","D. Wijaya","dw",3,"r"],
+["RDMS-2050","Cross-border M&A","Keppel Corp","M&A","SG","Draft","J. Ng","jn",1,"g"],
+["RDMS-2047","Perpetual Sukuk","Khazanah Nasional","DCM-Sukuk","MY","Executed","S. Lim","sl",0,"g"],
+["RDMS-2052","Rights Issue","Bangkok Bank","ECM-IPO","TH","BRF Submitted","P. Somsak","ps",4,"a"],
+["RDMS-2055","Dual-listing Advisory","CP Group","Advisory","TH","Coverage Approved","P. Somsak","ps",2,"g"],
+["RDMS-2058","M&A Buy-side","Astra International","M&A","ID","BRG Review","R. Putra","rp",6,"r"]
+];
+const BM={"Draft":"b-d","Coverage Approved":"b-c","BRF Submitted":"b-b","BRG Review":"b-v","Mandate":"b-m","Executed":"b-e"};
+const SL={g:"<span class='dot dg'></span>On track",a:"<span class='dot da'></span>At risk",r:"<span class='dot dr'></span>Breached"};
+let curUser="all";
+
+function rD(rows){
+  document.querySelector("#dtbl tbody").innerHTML=rows.map(d=>`<tr style="cursor:pointer" onclick="toast('Opening ${d[0]}')">
+    <td class="did">${d[0]}</td><td style="font-weight:600">${d[1]}</td><td>${d[2]}</td><td>${d[3]}</td>
+    <td><span class="ctry">${d[4]}</span></td><td><span class="bdg ${BM[d[5]]}">${d[5]}</span></td>
+    <td>${d[6]}</td><td style="font-variant-numeric:tabular-nums">${d[8]}</td><td>${SL[d[9]]}</td></tr>`).join("");
+}
+function af(){
+  const c=fC.value,t=fT.value,s=fS.value;
+  rD(D.filter(d=>(!c||d[4]===c)&&(!t||d[3]===t)&&(!s||d[5]===s)&&(curUser==="all"||d[7]===curUser)));
+}
+function pre(el,v){
+  document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));el.classList.add('on');
+  fC.value="";fT.value="";fS.value="";
+  if(v==="BRG Review")fS.value="BRG Review";else if(v==="MY")fC.value="MY";
+  af();
+}
+rD(D);
+
+/* ---- KPIs for dashboard ---- */
+document.getElementById("dashKpis").innerHTML=`
+  <div class="kp"><div class="kl">Active Deals</div><div class="kv">47</div><div class="ks up">▲ 6 this month</div><div class="ki" style="background:var(--tb);color:var(--blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg></div></div>
+  <div class="kp"><div class="kl">Pending BRG</div><div class="kv">6</div><div class="ks dn">2 breaching SLA</div><div class="ki" style="background:var(--tv);color:var(--violet)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div></div>
+  <div class="kp"><div class="kl">Mandates Won</div><div class="kv">18</div><div class="ks up">▲ 12% YoY</div><div class="ki" style="background:var(--tg);color:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></div></div>
+  <div class="kp"><div class="kl">Pipeline Value</div><div class="kv">1.24<span style="font-size:13px;font-weight:700">B</span></div><div class="ks mu">RM</div><div class="ki" style="background:var(--ta);color:var(--amber)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div></div>
+  <div class="kp"><div class="kl">Fee Income</div><div class="kv">86.4<span style="font-size:13px;font-weight:700">M</span></div><div class="ks mu">RM · YTD</div><div class="ki" style="background:var(--tg);color:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></div></div>
+  <div class="kp"><div class="kl">SLA Breaches</div><div class="kv">4</div><div class="ks dn">Auto-escalated</div><div class="ki" style="background:var(--tr);color:var(--red)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9L2 18a2 2 0 0 0 1.7 3h16.6A2 2 0 0 0 22 18L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></div></div>
+`;
+
+/* ---- Donut ---- */
+const DD=[["Won",18,"#16a34a","312M"],["In Progress",21,"#2563eb","486M"],["Completed",34,"#7c3aed","441M"],["Expired",5,"#e89b0c","61M"]];
+const dt=DD.reduce((a,b)=>a+b[1],0);let off=25;
+let sv=`<circle cx="21" cy="21" r="15.9" fill="none" stroke="#f0f2f6" stroke-width="5.5"/>`;
+DD.forEach(d=>{const p=d[1]/dt*100;sv+=`<circle cx="21" cy="21" r="15.9" fill="none" stroke="${d[2]}" stroke-width="5.5" stroke-dasharray="${p} ${100-p}" stroke-dashoffset="${off}"/>`;off-=p;});
+sv+=`<text x="21" y="20" text-anchor="middle" font-size="6" font-weight="800" fill="#1e2a3a">${dt}</text><text x="21" y="25" text-anchor="middle" font-size="2.5" fill="#7b8a9e">mandates</text>`;
+document.getElementById("don").innerHTML=sv;
+document.getElementById("donL").innerHTML=DD.map(d=>`<span><i style="background:${d[2]}"></i>${d[0]} · <strong>${d[1]}</strong> · RM ${d[3]}</span>`).join("");
+
+/* ---- Bar chart ---- */
+const Q=[["Q1",18.2,6.1],["Q2",22.6,7.3],["Q3",24.1,7.8],["Q4",21.5,7.0]];
+const W=310,H=170,pad=26,gap=62,bw=15,base=H-22,sc=(base-12)/26;
+let bs="";[0,10,20].forEach(v=>{const y=base-v*sc;bs+=`<line x1="${pad}" y1="${y}" x2="${W-4}" y2="${y}" stroke="#eef1f5"/><text x="4" y="${y+3}" font-size="7.5" fill="#9aa4b2">${v}</text>`;});
+Q.forEach((r,i)=>{const x=pad+10+i*gap,hI=r[1]*sc,hC=r[2]*sc,m=Math.round((r[1]-r[2])/r[1]*100);
+  bs+=`<rect x="${x}" y="${base-hI}" width="${bw}" height="${hI}" rx="3" fill="#2563eb"/><rect x="${x+bw+3}" y="${base-hC}" width="${bw}" height="${hC}" rx="3" fill="#e89b0c"/>`;
+  bs+=`<text x="${x+bw+1}" y="${base-Math.max(hI,hC)-5}" font-size="8" font-weight="700" fill="#16a34a" text-anchor="middle">${m}%</text>`;
+  bs+=`<text x="${x+bw+1}" y="${base+12}" font-size="8.5" fill="#475467" text-anchor="middle" font-weight="600">${r[0]}</text>`;});
+document.getElementById("bc").innerHTML=bs;
+
+/* ---- Country pie ---- */
+const CP=[["MY",24,"#2563eb"],["ID",11,"#7c3aed"],["SG",7,"#0d9488"],["TH",5,"#e89b0c"]];
+const cpt=CP.reduce((a,b)=>a+b[1],0);let co=25;
+let cs=`<circle cx="21" cy="21" r="15.9" fill="none" stroke="#f0f2f6" stroke-width="5.5"/>`;
+CP.forEach(d=>{const p=d[1]/cpt*100;cs+=`<circle cx="21" cy="21" r="15.9" fill="none" stroke="${d[2]}" stroke-width="5.5" stroke-dasharray="${p} ${100-p}" stroke-dashoffset="${co}"/>`;co-=p;});
+cs+=`<text x="21" y="20" text-anchor="middle" font-size="6" font-weight="800" fill="#1e2a3a">${cpt}</text><text x="21" y="25" text-anchor="middle" font-size="2.5" fill="#7b8a9e">deals</text>`;
+document.getElementById("ctyPie").innerHTML=cs;
+document.getElementById("ctyL").innerHTML=CP.map(d=>`<span style="display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--ink2)"><i style="width:10px;height:10px;border-radius:3px;background:${d[2]};display:inline-block"></i>${d[0]} · ${d[1]}</span>`).join("");
+
+/* ---- Product bars ---- */
+const PB=[["M&A",420,"#2563eb"],["ECM-IPO",310,"#7c3aed"],["DCM-Sukuk",280,"#0d9488"],["DCM-Bond",160,"#e89b0c"],["Advisory",70,"#d41920"]];
+const pm=Math.max(...PB.map(p=>p[1]));
+document.getElementById("pBars").innerHTML=PB.map(p=>`<div class="hr"><div class="hn">${p[0]}</div><div class="ht"><div class="hf" style="width:${p[1]/pm*100}%;background:${p[2]}"></div></div><div class="hv">RM ${p[1]}M</div></div>`).join("");
+
+/* ---- Trend chart ---- */
+const TR=[["Jan",6,4],["Feb",8,5],["Mar",7,6],["Apr",9,5],["May",11,7],["Jun",8,6]];
+const tw=310,th=140,tp=30,tbase=th-20,tsc=(tbase-10)/12;
+let ts=`<line x1="${tp}" y1="10" x2="${tp}" y2="${tbase}" stroke="#eef1f5"/><line x1="${tp}" y1="${tbase}" x2="${tw-4}" y2="${tbase}" stroke="#eef1f5"/>`;
+[0,4,8,12].forEach(v=>{const y=tbase-v*tsc;ts+=`<line x1="${tp}" y1="${y}" x2="${tw-4}" y2="${y}" stroke="#eef1f5" stroke-dasharray="3"/><text x="6" y="${y+3}" font-size="7.5" fill="#9aa4b2">${v}</text>`;});
+let lc="",la="";
+TR.forEach((r,i)=>{const x=tp+10+i*48;
+  lc+=`${x},${tbase-r[1]*tsc} `;la+=`${x},${tbase-r[2]*tsc} `;
+  ts+=`<circle cx="${x}" cy="${tbase-r[1]*tsc}" r="3.5" fill="#2563eb"/><circle cx="${x}" cy="${tbase-r[2]*tsc}" r="3.5" fill="#16a34a"/>`;
+  ts+=`<text x="${x}" y="${tbase+12}" font-size="8" fill="#475467" text-anchor="middle" font-weight="600">${r[0]}</text>`;
+});
+ts=`<polyline points="${lc.trim()}" fill="none" stroke="#2563eb" stroke-width="2"/><polyline points="${la.trim()}" fill="none" stroke="#16a34a" stroke-width="2"/>`+ts;
+ts+=`<text x="${tw-60}" y="16" font-size="8" fill="#2563eb" font-weight="700">● Created</text><text x="${tw-60}" y="27" font-size="8" fill="#16a34a" font-weight="700">● Closed</text>`;
+document.getElementById("trend").innerHTML=ts;
+
+/* ---- Lead funnel ---- */
+const LF=[["New Lead",134,"#93c5fd"],["Screening",98,"#60a5fa"],["Qualified",62,"#3b82f6"],["Nurturing",38,"#7c3aed"],["Converted",28,"#16a34a"],["Disqualified",6,"#dc2626"]];
+const lfm=LF[0][1];
+document.getElementById("leadFun").innerHTML=LF.map(f=>`<div class="fs"><div class="fn">${f[0]}</div><div class="fb"><div class="fi" style="width:${Math.max(f[1]/lfm*100,8)}%;background:${f[2]}">${f[1]}</div></div></div>`).join("");
+
+/* ---- Lead aging ---- */
+const LA=[["New Lead",1.2,"#60a5fa"],["Screening",8.4,"#dc2626"],["Qualified",3.1,"#16a34a"],["Nurturing",12.6,"#e89b0c"]];
+const lam=Math.max(...LA.map(l=>l[1]));
+document.getElementById("leadAge").innerHTML=LA.map(l=>`<div class="hr"><div class="hn">${l[0]}</div><div class="ht"><div class="hf" style="width:${l[1]/lam*100}%;background:${l[2]}"></div></div><div class="hv" style="color:${l[2]}">${l[1]}d</div></div>`).join("");
+
+/* ---- Lead source ---- */
+const LS=[["Referral",42,"#2563eb"],["Direct approach",28,"#7c3aed"],["RFP inbound",24,"#0d9488"],["Conference",18,"#e89b0c"],["Existing client",14,"#16a34a"],["Other",8,"#94a3b8"]];
+const lsm=Math.max(...LS.map(l=>l[1]));
+document.getElementById("leadSrc").innerHTML=LS.map(l=>`<div class="hr"><div class="hn">${l[0]}</div><div class="ht"><div class="hf" style="width:${l[1]/lsm*100}%;background:${l[2]}"></div></div><div class="hv">${l[1]}</div></div>`).join("");
+
+/* ---- Deal funnel ---- */
+const DF=[["Deal Created",47,"#60a5fa"],["Coverage OK",31,"#3b82f6"],["BRF Submitted",22,"#7c3aed"],["BRG Review",9,"#e89b0c"],["Mandate",18,"#0d9488"],["Execution",14,"#16a34a"]];
+const dfm=DF[0][1];
+document.getElementById("dealFun").innerHTML=DF.map(f=>`<div class="fs"><div class="fn">${f[0]}</div><div class="fb"><div class="fi" style="width:${Math.max(f[1]/dfm*100,8)}%;background:${f[2]}">${f[1]}</div></div></div>`).join("");
+
+/* ---- Deal workflow (mini visual from the process map) ---- */
+const WF=[
+  {s:"Deal Creation",steps:["Start","New Prospect","Screen","Create Record","Assignment","Send for Review"]},
+  {s:"BRF Creation & Approval",steps:["Under Review","Generate BRF","BRF Submitted","BRF Under Review","Is Approved?","BRF Approved"]},
+  {s:"Mandate Prep & Approval",steps:["Assignment","Mandate Prep","Update Record","Mandate Under Review","Assignment"]},
+  {s:"Mandate Issued",steps:["Mandate Sent","Mandate Signed"]},
+  {s:"Handoff",steps:["Mandate Won","In Execution","End"]}
+];
+const colors=["#2563eb","#7c3aed","#e89b0c","#0d9488","#16a34a"];
+document.getElementById("wflow").innerHTML=`<div style="display:flex;gap:2px;min-width:${WF.length*200}px">${WF.map((w,i)=>`<div style="flex:1;min-width:160px">
+  <div style="background:${colors[i]};color:#fff;padding:5px 10px;border-radius:8px 8px 0 0;font-size:10px;font-weight:700;text-align:center">${w.s}</div>
+  <div style="background:#f8fafc;border:1px solid var(--line);border-top:0;border-radius:0 0 8px 8px;padding:8px">
+    ${w.steps.map((st,j)=>`<div style="display:flex;align-items:center;gap:6px;padding:4px 0;font-size:10.5px;font-weight:600;color:var(--ink2)"><span style="width:18px;height:18px;border-radius:50%;background:${colors[i]};color:#fff;display:grid;place-items:center;font-size:8px;font-weight:800;flex:0 0 18px">${j+1}</span>${st}</div>`).join("")}
+  </div>
+</div>`).join("")}</div>`;
+
+/* ---- Deal value bar chart ---- */
+const DV=[["Draft",86],["Cov Appr",124],["BRF Sub",198],["BRG Rev",156],["Mandate",312],["Exec",248]];
+const dvm=Math.max(...DV.map(d=>d[1]));
+const dvW=340,dvH=160,dvP=26,dvB=dvH-22,dvSc=(dvB-10)/dvm;
+let dvs="";
+[0,100,200,300].forEach(v=>{if(v<=dvm){const y=dvB-v*dvSc;dvs+=`<line x1="${dvP}" y1="${y}" x2="${dvW-4}" y2="${y}" stroke="#eef1f5"/><text x="2" y="${y+3}" font-size="7" fill="#9aa4b2">${v}</text>`;}});
+DV.forEach((d,i)=>{const x=dvP+6+i*52,h=d[1]*dvSc;
+  dvs+=`<rect x="${x}" y="${dvB-h}" width="28" height="${h}" rx="4" fill="#7c3aed" opacity="${0.4+i*0.12}"/>`;
+  dvs+=`<text x="${x+14}" y="${dvB-h-4}" font-size="8" font-weight="700" fill="#7c3aed" text-anchor="middle">${d[1]}</text>`;
+  dvs+=`<text x="${x+14}" y="${dvB+12}" font-size="7.5" fill="#475467" text-anchor="middle" font-weight="600">${d[0]}</text>`;
+});
+document.getElementById("dealBar").innerHTML=dvs;
+
+/* ---- BRF workbench ---- */
+const BRF=[
+["BRF-MY-0412","Project Meranti — Sime Darby","1","MY","pending"],
+["BRF-MY-0410","Perpetual Sukuk — Khazanah","2","MY","approved"],
+["BRF-MY-0409","IPO — Farm Fresh Bhd","3","MY","conditional"],
+["BRF-ID-0447","Acq Fin — Bank Mandiri","4","ID","pending"],
+["BRF-ID-0451","M&A — Astra Intl","5","ID","deferred"],
+["BRF-MY-0407","Sukuk Wakalah — Cagamas","6","MY","approved"]
+];
+const DM={pending:["Awaiting","b-b"],approved:["Approved","b-g"],conditional:["Conditional","b-c"],deferred:["Deferred","b-v"],rejected:["Rejected","b-r"]};
+document.getElementById("brfB").innerHTML=BRF.map((b,i)=>{
+  const d=DM[b[4]];const act=b[4]==="pending"?`<button class="btn pr" onclick="event.stopPropagation();rDec(${i})">Record</button>`:`<button class="btn" onclick="event.stopPropagation();toast('Opening ${b[0]}')">View</button>`;
+  return `<tr><td class="did">${b[0]}</td><td style="font-weight:600">${b[1]}</td><td>#${b[2]}</td><td><span class="ctry">${b[3]}</span></td><td><span class="bdg ${d[1]}">${d[0]}</span></td><td style="text-align:right">${act}</td></tr>`;
+}).join("");
+function rDec(i){const d=prompt("Decision for "+BRF[i][0]+":\nApproved / Conditional / Deferred / Rejected","Approved");if(d)toast(BRF[i][0]+" → "+d+" · notified");}
+
+/* ---- KPI tab bars ---- */
+const KPP=[["DCM-Sukuk",68,"#0d9488"],["M&A",52,"#2563eb"],["ECM-IPO",44,"#7c3aed"],["DCM-Bond",38,"#e89b0c"],["Advisory",26,"#d41920"]];
+const kpm=Math.max(...KPP.map(k=>k[1]));
+document.getElementById("kpiProd").innerHTML=KPP.map(k=>`<div class="hr"><div class="hn">${k[0]}</div><div class="ht"><div class="hf" style="width:${k[1]/kpm*100}%;background:${k[2]}"></div></div><div class="hv">RM ${k[1]}M</div></div>`).join("");
+const KC=[["MY",124,"#2563eb"],["ID",52,"#7c3aed"],["SG",32,"#0d9488"],["TH",20,"#e89b0c"]];
+const kcm=Math.max(...KC.map(k=>k[1]));
+document.getElementById("kpiCtry").innerHTML=KC.map(k=>`<div class="hr"><div class="hn">${k[0]}</div><div class="ht"><div class="hf" style="width:${k[1]/kcm*100}%;background:${k[2]}"></div></div><div class="hv">RM ${k[1]}M</div></div>`).join("");
+
+/* ---- RFP win/loss ---- */
+const RW=[["DCM-Sukuk",6,1,"#0d9488"],["M&A",4,1,"#2563eb"],["ECM-IPO",3,1,"#7c3aed"],["DCM-Bond",1,1,"#e89b0c"]];
+document.getElementById("rfpWL").innerHTML=RW.map(r=>{const t=r[1]+r[2];return`<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:var(--ink2);margin-bottom:3px"><span>${r[0]}</span><span style="color:var(--green)">${r[1]}W</span> / <span style="color:var(--red)">${r[2]}L</span></div><div style="display:flex;height:14px;border-radius:5px;overflow:hidden;background:#f0f2f6"><div style="width:${r[1]/t*100}%;background:${r[3]}"></div><div style="width:${r[2]/t*100}%;background:#fca5a5"></div></div></div>`;}).join("");
+
+/* ---- TABS ---- */
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.pane').forEach(x=>x.classList.remove('on'));
+  t.classList.add('on');document.getElementById(t.dataset.t).classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}));
+
+/* ---- USER DRILL ---- */
+document.querySelectorAll('.uc .u').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.uc .u').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  curUser=b.dataset.u;af();
+  toast(curUser==="all"?"Showing all users":"Filtered to "+b.textContent.trim());
+}));
+
+/* ---- TOAST ---- */
+let tt;function toast(m){document.getElementById("tm").textContent=m;const e=document.getElementById("tst");e.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>e.classList.remove("show"),2500);}
+</script>
