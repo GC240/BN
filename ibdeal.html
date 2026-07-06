@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Deal 360 — MINNLI-PLAS SDN. BHD. | One-Page Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{
+  --navy:#1E2430; --navy2:#252C3A;
+  --magenta:#C2185B; --magenta-dark:#880E4F; --magenta-light:#FBE4ED;
+  --orange:#F5871F; --blue:#2E75B6; --gold:#F0B429; --pink:#D6547F; --teal:#3EC6C6;
+  --ink:#1F2430; --grey:#6B7280; --lgrey:#9CA3AF;
+  --line:#E5E7EB; --panel:#F4F5F7; --white:#fff;
+  --green:#1E8E3E; --green-bg:#E7F6EC; --amber:#B26A00; --amber-bg:#FFF3E0; --red:#D64545; --red-bg:#FBEAEA; --blueb:#E7F0FA;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:'Segoe UI','Poppins',Arial,sans-serif;background:#EDEEF1;color:var(--ink);}
+
+/* Top bar */
+.topbar{background:var(--navy);height:56px;display:flex;align-items:center;padding:0 18px;gap:18px;}
+.hamburger{color:#fff;font-size:20px;opacity:.8;}
+.logo{display:flex;align-items:center;gap:6px;}
+.logo-mark{width:20px;height:20px;background:linear-gradient(135deg,var(--magenta),var(--pink));border-radius:4px;}
+.logo-text{color:#fff;font-weight:700;font-size:15px;letter-spacing:.5px;}
+.search-group{display:flex;margin-left:20px;flex:1;max-width:640px;}
+.search-group input{background:#2B3241;border:1px solid #3A4152;color:#D7DAE0;font-size:12px;padding:8px 12px;outline:none;}
+.search-group input::placeholder{color:#8A93A6;}
+.search-group input:first-child{border-radius:5px 0 0 5px;}
+.search-group input:last-child{border-radius:0 5px 5px 0;border-left:none;}
+.search-group input:not(:first-child):not(:last-child){border-left:none;}
+.search-btn{background:#2B3241;border:1px solid #3A4152;border-left:none;border-radius:0 5px 5px 0;padding:8px 12px;color:#D7DAE0;}
+.top-icons{display:flex;align-items:center;gap:18px;margin-left:auto;color:#C7CBD4;font-size:16px;}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--magenta);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;}
+
+.body-shell{display:flex;}
+.rail{width:46px;background:var(--navy2);display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:19px;min-height:100vh;}
+.rail .ic{width:18px;height:18px;border-radius:3px;background:#454D5F;opacity:.55;}
+.rail .ic.on{background:var(--magenta);opacity:1;}
+.main{flex:1;padding:18px 22px 60px 22px;max-width:1560px;}
+
+.panel{background:var(--white);border-radius:6px;border:1px solid var(--line);}
+.head-top{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap;gap:10px;}
+.head-top h2{margin:0;font-size:17px;font-weight:700;}
+.head-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.hbtn{display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;border-radius:5px;padding:7px 13px;font-size:12px;font-weight:600;color:var(--ink);}
+.hbtn.gradient{background:linear-gradient(90deg,#F0A73C,var(--magenta));color:#fff;border:none;}
+.hbtn.icon-only{padding:7px 9px;}
+.xclose{font-size:18px;color:var(--lgrey);padding:0 4px;}
+
+.head-fields{display:grid;grid-template-columns:1.1fr 1.6fr 1.6fr 1fr;padding:16px 20px;gap:10px;}
+.hf-lbl{font-size:10px;letter-spacing:.5px;color:var(--lgrey);text-transform:uppercase;}
+.hf-val{font-size:15px;font-weight:600;margin-top:3px;}
+.hf-val a{color:var(--blue);}
+.hf-val.status{color:var(--green);}
+
+/* section head */
+.sec-head{display:flex;align-items:center;gap:9px;margin:24px 0 12px 0;}
+.sec-head .bar{width:4px;height:15px;background:var(--magenta);border-radius:2px;}
+.sec-head h3{font-size:13.5px;margin:0;font-weight:700;color:var(--ink);}
+.sec-head:first-child{margin-top:16px;}
+
+.ai-box{background:var(--magenta-light);border:1px solid #F3CBDB;border-left:4px solid var(--magenta);border-radius:6px;padding:12px 15px;display:flex;gap:12px;}
+.ai-badge{background:var(--magenta);color:#fff;font-size:9.5px;font-weight:700;border-radius:5px;padding:3px 8px;height:fit-content;white-space:nowrap;}
+.ai-text{font-size:12px;color:var(--magenta-dark);line-height:1.5;}
+.ai-text b{color:var(--magenta-dark);}
+
+.grid{display:grid;gap:14px;}
+.g4{grid-template-columns:repeat(4,1fr);}
+.g3{grid-template-columns:repeat(3,1fr);}
+.g2{grid-template-columns:repeat(2,1fr);}
+@media(max-width:1200px){.g4{grid-template-columns:repeat(2,1fr);}.g3{grid-template-columns:repeat(2,1fr);}}
+
+.field-card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:9px 11px;}
+.field-lbl{font-size:9px;color:var(--lgrey);font-weight:700;text-transform:uppercase;letter-spacing:.3px;}
+.field-val{font-size:12px;font-weight:600;color:var(--ink);margin-top:3px;}
+
+.kpi-card{background:var(--white);border:1px solid var(--line);border-radius:6px;padding:14px 16px;}
+.kpi-top{display:flex;justify-content:space-between;align-items:flex-start;}
+.kpi-lbl{font-size:11.5px;color:var(--grey);font-weight:500;}
+.kpi-icon{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;flex-shrink:0;}
+.kpi-val{font-size:20px;font-weight:700;margin-top:7px;color:var(--ink);}
+.kpi-sub{font-size:10.5px;margin-top:5px;color:var(--lgrey);}
+.kpi-sub.pos{color:var(--green);}
+.kpi-sub.warn{color:var(--orange);}
+.progress-track{width:100%;height:6px;background:var(--panel);border-radius:4px;overflow:hidden;margin-top:7px;}
+.progress-fill{height:100%;background:var(--magenta);border-radius:4px;}
+
+.chart-card{background:var(--white);border:1px solid var(--line);border-radius:6px;padding:16px 18px;}
+.chart-card h4{margin:0;font-size:13.5px;font-weight:700;}
+.cc-sub{font-size:11px;color:var(--lgrey);margin-top:2px;margin-bottom:8px;}
+.chart-card canvas{max-height:230px;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.two-col.wide{grid-template-columns:1.4fr 1fr;}
+@media(max-width:1200px){.two-col,.two-col.wide{grid-template-columns:1fr;}}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+@media(max-width:1200px){.three-col{grid-template-columns:1fr;}}
+
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{text-align:left;font-weight:700;color:var(--ink);padding:8px;border-bottom:2px solid var(--line);background:var(--panel);font-size:11px;}
+td{padding:8px;border-bottom:1px solid var(--line);color:var(--ink);}
+tr:last-child td{border-bottom:none;}
+.badge{padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;}
+.b-green{background:var(--green-bg);color:var(--green);}
+.b-amber{background:var(--amber-bg);color:var(--amber);}
+.b-red{background:var(--red-bg);color:var(--red);}
+.b-blue{background:var(--blueb);color:var(--blue);}
+.b-grey{background:var(--panel);color:var(--grey);border:1px solid var(--line);}
+
+.league-num{font-weight:700;color:var(--grey);}
+.league-cell{display:flex;align-items:center;}
+.league-bar-track{background:var(--panel);border-radius:10px;height:9px;flex:1;overflow:hidden;margin-right:8px;}
+.league-bar-fill{background:var(--pink);height:100%;border-radius:10px;}
+.league-pct{font-size:11px;font-weight:700;width:30px;text-align:right;}
+
+.stage-list{display:flex;flex-direction:column;gap:11px;}
+.stage-row{display:grid;grid-template-columns:100px 1fr 50px;align-items:center;gap:8px;}
+.stage-meta{font-size:9.5px;color:var(--lgrey);}
+.stage-name{font-size:11.5px;font-weight:600;color:var(--ink);}
+.stage-bar-track{height:16px;}
+.stage-bar{height:16px;border-radius:3px;}
+.stage-amt{font-size:11px;color:var(--ink);font-weight:600;}
+
+.tl{position:relative;padding-left:22px;}
+.tl:before{content:'';position:absolute;left:6px;top:4px;bottom:4px;width:2px;background:var(--line);}
+.tl-item{position:relative;padding-bottom:14px;}
+.tl-dot{position:absolute;left:-22px;top:2px;width:11px;height:11px;border-radius:50%;background:#fff;border:2.5px solid var(--magenta);}
+.tl-dot.done{background:var(--magenta);}
+.tl-date{font-size:9.5px;color:var(--lgrey);font-weight:700;}
+.tl-title{font-size:11.5px;font-weight:700;margin:1px 0;}
+
+.doc-row{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border:1px solid var(--line);border-radius:6px;margin-bottom:6px;background:#fff;}
+.doc-left{display:flex;gap:10px;align-items:center;}
+.doc-ic{width:26px;height:26px;border-radius:5px;background:var(--panel);display:flex;align-items:center;justify-content:center;color:var(--magenta);font-weight:700;font-size:9px;}
+.doc-name{font-size:11.5px;font-weight:600;}
+
+.kpi-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--lgrey);font-weight:600;font-size:12px;gap:6px;height:100%;padding:10px 0;}
+
+.footer{display:flex;justify-content:center;gap:12px;margin-top:22px;}
+.fbtn{border:1px solid var(--line);background:#fff;border-radius:5px;padding:9px 24px;font-size:12px;font-weight:600;color:var(--ink);}
+.footer-meta{display:flex;justify-content:space-between;font-size:10.5px;color:var(--lgrey);margin-top:14px;padding:0 4px;flex-wrap:wrap;gap:6px;}
+</style>
+</head>
+<body>
+
+
+
+
+
+    <!-- KPI ROW -->
+    <div class="grid g4" style="margin-top:16px;">
+      <div class="kpi-card"><div class="kpi-top"><div class="kpi-lbl">Deal Health Score</div><div class="kpi-icon" style="background:var(--magenta);">◎</div></div><div class="kpi-val">82/100</div><div class="kpi-sub pos">▲ 6 pts (3 wks)</div></div>
+      <div class="kpi-card"><div class="kpi-top"><div class="kpi-lbl">DD Completion</div><div class="kpi-icon" style="background:var(--blue);">◔</div></div><div class="kpi-val">68%</div><div class="progress-track"><div class="progress-fill" style="width:68%;"></div></div></div>
+      <div class="kpi-card"><div class="kpi-top"><div class="kpi-lbl">Enterprise Value</div><div class="kpi-icon" style="background:var(--gold);">◐</div></div><div class="kpi-val">RM 186.0M</div><div class="kpi-sub">EV/EBITDA 6.4x</div></div>
+      <div class="kpi-card"><div class="kpi-top"><div class="kpi-lbl">Financing Gap</div><div class="kpi-icon" style="background:var(--orange);">◈</div></div><div class="kpi-val">RM 14M</div><div class="kpi-sub warn">Pending KWAP Co-Invest</div></div>
+    </div>
+    <div class="grid g4" style="margin-top:14px;">
+      <div class="kpi-card"><div class="kpi-top"><div class="kpi-lbl">Synergy Value (NPV)</div><div class="kpi-icon" style="background:var(--teal);">◑</div></div><div class="kpi-val">RM 24.6M</div><div class="kpi-sub">62% cost / 38% revenue</div></div>
+      <div class="kpi-card"><div class="kpi-top"><div class="kpi-lbl">Open Conditions Precedent</div><div class="kpi-icon" style="background:var(--pink);">◒</div></div><div class="kpi-val">5 of 11</div><div class="kpi-sub">2 regulatory, 3 commercial</div></div>
+      <div class="kpi-card"><div class="kpi-top"><div class="kpi-lbl">Days to Target Close</div><div class="kpi-icon" style="background:var(--blue);">◷</div></div><div class="kpi-val">147</div><div class="kpi-sub">of 165 total</div></div>
+      <div class="kpi-card"><div class="kpi-top"><div class="kpi-lbl">Advisory Budget Utilised</div><div class="kpi-icon" style="background:var(--magenta-dark);">◓</div></div><div class="kpi-val">RM 3.1/4.4M</div><div class="kpi-sub">70% utilised</div></div>
+    </div>
+
+    <!-- TARGET SNAPSHOT FIELDS -->
+    <div class="sec-head"><div class="bar"></div><h3>Target &amp; Deal Fields</h3></div>
+    <div class="grid g4">
+      <div class="field-card"><div class="field-lbl">Target / SSM No.</div><div class="field-val">MINNLI-PLAS SDN. BHD. · 201401234567</div></div>
+      <div class="field-card"><div class="field-lbl">Sector / MSIC Code</div><div class="field-val">2220 — Plastics Packaging Mfg.</div></div>
+      <div class="field-card"><div class="field-lbl">Deal Type / Vehicle</div><div class="field-val">100% Share Sale via Genta MY Acquisitions SPV</div></div>
+      <div class="field-card"><div class="field-lbl">Exclusivity Expiry</div><div class="field-val">15 Sep 2026</div></div>
+      <div class="field-card"><div class="field-lbl">FY25 Revenue / EBITDA</div><div class="field-val">RM 142.8M / RM 29.1M (20.4%)</div></div>
+      <div class="field-card"><div class="field-lbl">Consideration</div><div class="field-val">RM 142.4M cash + RM 20M earn-out</div></div>
+      <div class="field-card"><div class="field-lbl">Deal Lead</div><div class="field-val">Farah Aziz, Director M&amp;A</div></div>
+      <div class="field-card"><div class="field-lbl">Target Close</div><div class="field-val">30 Nov 2026</div></div>
+    </div>
+
+    <!-- CHART ROW 1: DD + Milestones -->
+    <div class="sec-head"><div class="bar"></div><h3>Due Diligence &amp; Deal Progress</h3></div>
+    <div class="two-col">
+      <div class="chart-card"><h4>DD Workstream Completion</h4><div class="cc-sub">% complete by workstream</div><canvas id="ddChart"></canvas></div>
+      <div class="chart-card"><h4>Deal Milestones by Stage</h4><div class="cc-sub">Count of items, RM M value</div><div class="stage-list" id="stageList"></div></div>
+    </div>
+
+    <!-- CHART ROW 2: Health trend + Risk -->
+    <div class="two-col" style="margin-top:14px;">
+      <div class="chart-card"><h4>Deal Health Score Trend</h4><div class="cc-sub">Weekly, health vs open risk score</div><canvas id="healthChart"></canvas></div>
+      <div class="chart-card"><h4>Risk Register — Weighted by Category</h4><canvas id="riskChart"></canvas></div>
+    </div>
+
+    <!-- VALUATION + FINANCING -->
+    <div class="sec-head"><div class="bar"></div><h3>Valuation &amp; Financing</h3></div>
+    <div class="two-col wide">
+      <div class="chart-card"><h4>Valuation Football Field</h4><div class="cc-sub">RM Million, equity value</div><canvas id="footballField"></canvas></div>
+      <div class="chart-card"><h4>Sources of Financing (RM M)</h4><canvas id="financeChart"></canvas></div>
+    </div>
+
+    <!-- REGULATORY + SYNERGY -->
+    <div class="sec-head"><div class="bar"></div><h3>Regulatory Approval &amp; Synergies</h3></div>
+    <div class="two-col">
+      <div class="chart-card">
+        <h4>Regulatory Approval League (Malaysia)</h4>
+        <table>
+          <tr><th style="width:22px;"></th><th>Authority</th><th style="width:160px;">Progress</th></tr>
+          <tr><td class="league-num">1</td><td>MIDA — Pioneer Status</td><td><div class="league-cell"><div class="league-bar-track"><div class="league-bar-fill" style="width:100%;"></div></div><div class="league-pct">100</div></div></td></tr>
+          <tr><td class="league-num">2</td><td>MyCC — Merger Notification</td><td><div class="league-cell"><div class="league-bar-track"><div class="league-bar-fill" style="width:55%;"></div></div><div class="league-pct">55</div></div></td></tr>
+          <tr><td class="league-num">3</td><td>Bursa — MMLR Para 9.29</td><td><div class="league-cell"><div class="league-bar-track"><div class="league-bar-fill" style="width:40%;"></div></div><div class="league-pct">40</div></div></td></tr>
+          <tr><td class="league-num">4</td><td>BNM — Cross-Border Notice</td><td><div class="league-cell"><div class="league-bar-track"><div class="league-bar-fill" style="width:35%;"></div></div><div class="league-pct">35</div></div></td></tr>
+          <tr><td class="league-num">5</td><td>DOE — Environmental Compliance</td><td><div class="league-cell"><div class="league-bar-track"><div class="league-bar-fill" style="width:20%;"></div></div><div class="league-pct">20</div></div></td></tr>
+        </table>
+      </div>
+      <div class="chart-card"><h4>Synergy Value Split</h4><div class="cc-sub">Cost vs revenue (RM M)</div><canvas id="synergyChart"></canvas></div>
+    </div>
+
+    <!-- TIMELINE + DOCS + APPROVALS -->
+    <div class="sec-head"><div class="bar"></div><h3>Timeline, Documents &amp; Approvals</h3></div>
+    <div class="three-col">
+      <div class="chart-card"><h4>Key Milestones</h4>
+        <div class="tl" style="margin-top:10px;">
+          <div class="tl-item"><div class="tl-dot done"></div><div class="tl-date">02 JUL — DONE</div><div class="tl-title">MyCC Filed</div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">18 JUL</div><div class="tl-title">Soil Test Results Due</div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">22 JUL</div><div class="tl-title">Consolidated DD Report</div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">15 SEP</div><div class="tl-title">SPA Signing</div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">30 NOV</div><div class="tl-title">Financial Close</div></div>
+        </div>
+      </div>
+      <div class="chart-card"><h4>Document Status</h4>
+        <div style="margin-top:10px;">
+          <div class="doc-row"><div class="doc-left"><div class="doc-ic">SPA</div><div class="doc-name">SPA (Draft v4)</div></div><span class="badge b-amber">In Review</span></div>
+          <div class="doc-row"><div class="doc-left"><div class="doc-ic">DL</div><div class="doc-name">Disclosure Letter</div></div><span class="badge b-red">Pending</span></div>
+          <div class="doc-row"><div class="doc-left"><div class="doc-ic">DD</div><div class="doc-name">Consolidated DD Report</div></div><span class="badge b-blue">In Progress</span></div>
+          <div class="doc-row"><div class="doc-left"><div class="doc-ic">FA</div><div class="doc-name">Facility Agreements</div></div><span class="badge b-green">Executed</span></div>
+          <div class="doc-row"><div class="doc-left"><div class="doc-ic">MyCC</div><div class="doc-name">MyCC Filing</div></div><span class="badge b-green">Submitted</span></div>
+        </div>
+      </div>
+      <div class="chart-card"><h4>Approval Matrix</h4>
+        <table style="margin-top:6px;">
+          <tr><th>Gate</th><th>Status</th></tr>
+          <tr><td>NBIO &amp; Exclusivity</td><td><span class="badge b-green">Approved</span></td></tr>
+          <tr><td>Investment Committee</td><td><span class="badge b-blue">Scheduled 24 Jul</span></td></tr>
+          <tr><td>KWAP Co-Investment</td><td><span class="badge b-amber">Pending</span></td></tr>
+          <tr><td>Board — Final SPA</td><td><span class="badge b-grey">Not yet due</span></td></tr>
+          <tr><td>Bursa Announcement</td><td><span class="badge b-grey">Not yet due</span></td></tr>
+        </table>
+      </div>
+    </div>
+
+    
+    <div class="footer-meta">
+      <div>Created By Farah Aziz on 10/06/2026. &nbsp; Last Modified By Ryan Teoh on 06/07/2026 10:35 PM.</div>
+      <div>© Copyright 2026, All rights reserved.</div>
+      <div>Generated in 4.812 s &nbsp; powered by BUSINESSNEXT</div>
+    </div>
+  </div>
+</div>
+
+<script>
+Chart.defaults.font.family="'Segoe UI','Poppins',Arial,sans-serif";
+Chart.defaults.color='#6B7280';
+const orange='#F5871F', blue='#2E75B6', gold='#F0B429', pink='#D6547F', teal='#3EC6C6', magenta='#C2185B', magentaDark='#880E4F', line='#E5E7EB', ink='#1F2430';
+
+new Chart(document.getElementById('ddChart'),{
+  type:'bar',
+  data:{labels:['Financial','Legal','Tax','Commercial','HR','IT','Environmental','Insurance'],
+  datasets:[{data:[80,70,90,60,75,55,40,85],backgroundColor:[orange,blue,gold,pink,teal,magenta,'#D64545',blue],borderRadius:3,barThickness:14}]},
+  options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,max:100,grid:{color:line}},y:{grid:{display:false}}}}
+});
+
+new Chart(document.getElementById('healthChart'),{
+  type:'line',
+  data:{labels:['Wk1','Wk2','Wk3','Wk4','Wk5','Wk6'],
+  datasets:[
+    {label:'Health',data:[71,74,76,78,80,82],borderColor:teal,backgroundColor:teal,tension:.35,pointRadius:3},
+    {label:'Risk',data:[42,40,38,35,33,30],borderColor:pink,backgroundColor:pink,tension:.35,pointRadius:3}
+  ]},
+  options:{plugins:{legend:{position:'bottom'}},scales:{y:{min:0,max:100,grid:{color:line}},x:{grid:{display:false}}}}
+});
+
+new Chart(document.getElementById('riskChart'),{
+  type:'doughnut',
+  data:{labels:['Environmental','Financing','Legal/Title','Commercial','IT Integration'],
+  datasets:[{data:[30,28,17,15,10],backgroundColor:[magenta,magentaDark,pink,'#F3B8CC',line]}]},
+  options:{plugins:{legend:{position:'right',labels:{boxWidth:9,font:{size:10.5}}}}}
+});
+
+new Chart(document.getElementById('footballField'),{
+  type:'bar',
+  data:{labels:['Precedent Txns','Trading Comps','DCF (WACC/g)','LBO Feasibility','Agreed Offer'],
+  datasets:[
+    {label:'Low',data:[150,148,174,160,186],backgroundColor:'rgba(0,0,0,0)'},
+    {label:'Range',data:[38,32,24,32,0],backgroundColor:'#F3CBDB',borderColor:magenta,borderWidth:1}
+  ]},
+  options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{stacked:true,grid:{color:line}},y:{stacked:true,grid:{display:false}}}}
+});
+
+new Chart(document.getElementById('financeChart'),{
+  type:'pie',
+  data:{labels:['Buyer Equity','Maybank Loan','CIMB Loan','KWAP Co-Invest','Vendor Earn-out','Gap (Open)'],
+  datasets:[{data:[72,60,20,20,20,14],backgroundColor:[magenta,blue,teal,gold,ink,line]}]},
+  options:{plugins:{legend:{position:'right',labels:{boxWidth:9,font:{size:10.5}}}}}
+});
+
+new Chart(document.getElementById('synergyChart'),{
+  type:'bar',
+  data:{labels:['Procurement','Logistics','SG&A','Cross-sell','Export'],
+  datasets:[
+    {label:'Cost',data:[6.8,4.6,3.8,0,0],backgroundColor:teal,stack:'s',borderRadius:3},
+    {label:'Revenue',data:[0,0,0,6.2,3.2],backgroundColor:pink,stack:'s',borderRadius:3}
+  ]},
+  options:{plugins:{legend:{position:'bottom'}},scales:{x:{grid:{display:false}},y:{beginAtZero:true,grid:{color:line}}}}
+});
+
+const stages=[
+  {n:'8 Opps',name:'Origination',val:1240,color:teal},
+  {n:'5 Pitches',name:'Pitched',val:890,color:pink},
+  {n:'3 Mandates',name:'Mandated',val:620,color:gold},
+  {n:'2 Deals',name:'In Execution',val:410,color:blue},
+  {n:'1 Deal',name:'Closing (This Deal)',val:186,color:orange},
+];
+const max=Math.max(...stages.map(s=>s.val));
+document.getElementById('stageList').innerHTML=stages.map(s=>`
+  <div class="stage-row">
+    <div><div class="stage-meta">${s.n}</div><div class="stage-name">${s.name}</div></div>
+    <div class="stage-bar-track"><div class="stage-bar" style="width:${(s.val/max*100).toFixed(0)}%;background:${s.color};"></div></div>
+    <div class="stage-amt">${s.val}</div>
+  </div>
+`).join('');
+</script>
+</body>
+</html>
