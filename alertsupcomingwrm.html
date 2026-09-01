@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio Alerts</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* ==========================================================
+   NOTE ON LINKS
+   "View Customer" keeps the original working URL (mdi=1).
+   Every second action button below points to the SAME base
+   URL with a `&action=...` flag appended as a placeholder —
+   swap these for the real BusinessNext module routes for
+   opportunity creation, review scheduling, and Re-KYC intake.
+   ========================================================== */
+
+:root {
+    --ink: #17223b;
+    --ink-soft: #4a5468;
+    --muted: #7b8496;
+    --hairline: #e6e2d8;
+    --paper: #fcfbf8;
+    --card: #ffffff;
+
+    --gold: #93701e;
+    --gold-fill: #f8f1de;
+    --gold-line: #e6d6a8;
+
+    --wine: #8f2f3f;
+    --wine-fill: #fbeaec;
+    --wine-line: #ecc7cd;
+
+    --violet: #574a83;
+    --violet-fill: #efecf7;
+    --violet-line: #d6cfe9;
+
+    --steel: #2c6183;
+    --steel-fill: #e9f2f7;
+    --steel-line: #c8e0eb;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background: var(--paper);
+    font-family: 'Inter', Arial, sans-serif;
+    color: var(--ink);
+}
+
+body { overflow-x: hidden; }
+
+a:focus-visible,
+button:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+}
+
+.panel {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    background: var(--card);
+    border: 1px solid var(--hairline);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+/* =========================
+   CLIENT HEADER
+========================= */
+
+.client-header {
+    padding: 20px 20px 16px;
+    background: linear-gradient(180deg, #fcfbf8 0%, #ffffff 100%);
+    border-bottom: 1px solid var(--hairline);
+}
+
+.eyebrow {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+}
+
+.client-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+.client-name {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 21px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.25;
+}
+
+.alert-count-pill {
+    flex-shrink: 0;
+    margin-top: 3px;
+    background: var(--ink);
+    color: #ffffff;
+    border-radius: 20px;
+    padding: 5px 11px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* stat strip */
+
+.stat-strip {
+    display: flex;
+    margin-top: 16px;
+    border-top: 1px solid var(--hairline);
+    padding-top: 14px;
+    gap: 18px;
+}
+
+.stat {
+    flex: 1;
+    min-width: 0;
+}
+
+.stat-value {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ink);
+    white-space: nowrap;
+}
+
+.stat-label {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 2px;
+}
+
+/* insight banner */
+
+.insight {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-top: 16px;
+    padding: 12px 13px;
+    background: var(--gold-fill);
+    border: 1px solid var(--gold-line);
+    border-radius: 10px;
+}
+
+.insight-icon {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    margin-top: 1px;
+    color: var(--gold);
+}
+
+.insight-text {
+    font-size: 12px;
+    line-height: 1.5;
+    color: #3f3320;
+}
+
+.insight-text strong { color: var(--ink); }
+
+/* =========================
+   ALERT LIST
+========================= */
+
+.alert-list { padding: 14px; }
+
+.alert-card {
+    border: 1px solid var(--hairline);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 10px;
+    background: var(--card);
+}
+
+.alert-card:last-child { margin-bottom: 0; }
+
+.alert-top {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.alert-icon {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.alert-icon svg { width: 16px; height: 16px; }
+
+.icon-opportunity { background: var(--gold-fill); color: var(--gold); }
+.icon-risk        { background: var(--wine-fill); color: var(--wine); }
+.icon-compliance  { background: var(--violet-fill); color: var(--violet); }
+.icon-review      { background: var(--steel-fill); color: var(--steel); }
+
+.alert-body { min-width: 0; flex: 1; }
+
+.alert-name-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.alert-name {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.35;
+}
+
+.status {
+    flex-shrink: 0;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+    margin-top: 1px;
+}
+
+.status-opportunity { background: var(--gold-fill); color: var(--gold); }
+.status-risk        { background: var(--wine-fill); color: var(--wine); }
+.status-compliance  { background: var(--violet-fill); color: var(--violet); }
+.status-review      { background: var(--steel-fill); color: var(--steel); }
+
+.alert-description {
+    margin-top: 7px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+}
+
+.alert-description strong { color: var(--ink); }
+
+.alert-action {
+    margin-top: 6px;
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.alert-action strong { color: var(--ink); }
+
+/* buttons */
+
+.alert-buttons {
+    margin-top: 11px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-decoration: none;
+    line-height: 1;
+    border: 1px solid transparent;
+}
+
+.btn-secondary {
+    color: var(--ink-soft);
+    border-color: var(--hairline);
+    background: #ffffff;
+}
+
+.btn-secondary:hover { border-color: var(--ink-soft); color: var(--ink); }
+
+.btn-primary { color: #ffffff; }
+
+.btn-primary.tone-opportunity { background: var(--gold); }
+.btn-primary.tone-risk        { background: var(--wine); }
+.btn-primary.tone-compliance  { background: var(--violet); }
+.btn-primary.tone-review      { background: var(--steel); }
+
+.btn-primary:hover { filter: brightness(1.08); }
+
+/* =========================
+   FOOTER
+========================= */
+
+.panel-footer {
+    border-top: 1px solid var(--hairline);
+    padding: 10px 16px;
+    font-size: 10px;
+    color: var(--muted);
+    text-align: right;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 400px) {
+    .client-header { padding: 16px 16px 14px; }
+    .alert-list { padding: 10px; }
+    .alert-card { padding: 12px; }
+    .client-name { font-size: 19px; }
+    .stat-strip { gap: 12px; flex-wrap: wrap; }
+    .stat { min-width: 42%; }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="panel">
+
+    <!-- =========================
+         CLIENT HEADER + INSIGHT
+    ========================== -->
+
+    <div class="client-header">
+
+        <div class="eyebrow">Actions requiring RM attention</div>
+
+        <div class="client-row">
+            <div class="client-name">Datin Seri Rosnah binti Abdullah</div>
+            <div class="alert-count-pill">4 actions</div>
+        </div>
+
+        <div class="stat-strip">
+            <div class="stat">
+                <div class="stat-value">RM6.8M</div>
+                <div class="stat-label">Relationship value</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">RM3.4M</div>
+                <div class="stat-label">Liquidity</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">RM2.04M</div>
+                <div class="stat-label">Equity exposure</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">Moderate</div>
+                <div class="stat-label">Risk profile</div>
+            </div>
+        </div>
+
+        <div class="insight">
+            <svg class="insight-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.5.4.8 1 .8 1.7v.5h5.6v-.5c0-.7.3-1.3.8-1.7A6 6 0 0 0 12 3Z"/>
+            </svg>
+            <div class="insight-text">
+                <strong>Lead with the Sharia conversation.</strong> RM3.4M in liquid holdings and an existing Sharia preference make this the highest-value action — open there before the portfolio and compliance items below.
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         ALERT LIST
+    ========================== -->
+
+    <div class="alert-list">
+
+        <!-- ALERT 1 — SHARIA OPPORTUNITY -->
+
+        <div class="alert-card">
+
+            <div class="alert-top">
+
+                <div class="alert-icon icon-opportunity">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3v3M12 18v3M4.2 12H2M22 12h-2.2M6 6l1.6 1.6M16.4 16.4 18 18M18 6l-1.6 1.6M7.6 16.4 6 18"/>
+                        <circle cx="12" cy="12" r="3.4"/>
+                    </svg>
+                </div>
+
+                <div class="alert-body">
+                    <div class="alert-name-row">
+                        <div class="alert-name">Sharia Product Opportunity</div>
+                        <div class="status status-opportunity">Opportunity</div>
+                    </div>
+
+                    <div class="alert-description">
+                        Existing Sharia preference against <strong>RM3.4M</strong> in liquid holdings creates an opening for a suitable wealth conversation.
+                    </div>
+
+                    <div class="alert-action">
+                        Suggested action: <strong>Discuss Sharia-compliant investment solutions</strong>
+                    </div>
+
+                    <div class="alert-buttons">
+                        <a href="https://presales.businessbywire.com/appgb8/businessnext/detail/Account?x=emc3krdyka8c4phczaxmx8kj36tdlb7j66mudnzj6fdvvyk9dd2j376utfca6z6w&mdi=1" class="btn btn-secondary">View Customer</a>
+                        <a href="https://presales.businessbywire.com/appgb8/businessnext/RunFlow/Lead?x=wmlptkyqwxpv4bxdnz3cm5b2aqzb5nwqd3ffuxxg4d7daxjaxans8kxgayua4c9q5kcwexmlkkv398dqj2lf3e5aldpmdfljqej2wlhe84atqx63yajq&mdi=1" class="btn btn-primary tone-opportunity">Create Opportunity</a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ALERT 2 — RISK PROFILE REVIEW -->
+
+        <div class="alert-card">
+
+            <div class="alert-top">
+
+                <div class="alert-icon icon-risk">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 9v4M12 16.5h.01"/>
+                        <path d="M10.6 3.9 2.8 17.5a1.6 1.6 0 0 0 1.4 2.4h15.6a1.6 1.6 0 0 0 1.4-2.4L13.4 3.9a1.6 1.6 0 0 0-2.8 0Z"/>
+                    </svg>
+                </div>
+
+                <div class="alert-body">
+                    <div class="alert-name-row">
+                        <div class="alert-name">Risk Profile Review Due</div>
+                        <div class="status status-risk">Due soon</div>
+                    </div>
+
+                    <div class="alert-description">
+                        Current <strong>Moderate Balanced</strong> profile is due for periodic review. Confirm objectives and risk appetite are still appropriate.
+                    </div>
+
+                    <div class="alert-action">
+                        Suggested action: <strong>Schedule risk profiling review</strong>
+                    </div>
+
+                    <div class="alert-buttons">
+                        <a href="https://presales.businessbywire.com/appgb8/businessnext/detail/Account?x=emc3krdyka8c4phczaxmx8kj36tdlb7j66mudnzj6fdvvyk9dd2j376utfca6z6w&mdi=1" class="btn btn-secondary">View Customer</a>
+                        <a href="https://presales.businessbywire.com/appgb8/businessnext/detail/Account?x=emc3krdyka8c4phczaxmx8kj36tdlb7j66mudnzj6fdvvyk9dd2j376utfca6z6w&mdi=1&action=schedule-risk-review" class="btn btn-primary tone-risk">Schedule Review</a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ALERT 3 — RE-KYC -->
+
+        <div class="alert-card">
+
+            <div class="alert-top">
+
+                <div class="alert-icon icon-compliance">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3 4.5 5.5v5.4c0 4.6 3.2 8.4 7.5 9.6 4.3-1.2 7.5-5 7.5-9.6V5.5L12 3Z"/>
+                        <path d="m9 12 2 2 4-4.2"/>
+                    </svg>
+                </div>
+
+                <div class="alert-body">
+                    <div class="alert-name-row">
+                        <div class="alert-name">Re-KYC Review Due</div>
+                        <div class="status status-compliance">Compliance</div>
+                    </div>
+
+                    <div class="alert-description">
+                        KYC information requires periodic refresh. Review profile, source of wealth, and identification details before the next cycle.
+                    </div>
+
+                    <div class="alert-action">
+                        Suggested action: <strong>Initiate Re-KYC review</strong>
+                    </div>
+
+                    <div class="alert-buttons">
+                        <a href="https://presales.businessbywire.com/appgb8/businessnext/detail/Account?x=emc3krdyka8c4phczaxmx8kj36tdlb7j66mudnzj6fdvvyk9dd2j376utfca6z6w&mdi=1" class="btn btn-secondary">View Customer</a>
+                        <a href="https://presales.businessbywire.com/appgb8/businessnext/detail/Account?x=emc3krdyka8c4phczaxmx8kj36tdlb7j66mudnzj6fdvvyk9dd2j376utfca6z6w&mdi=1&action=start-rekyc" class="btn btn-primary tone-compliance">Start Re-KYC</a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ALERT 4 — PORTFOLIO REVIEW -->
+
+        <div class="alert-card">
+
+            <div class="alert-top">
+
+                <div class="alert-icon icon-review">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="8.5"/>
+                        <path d="M12 3.5V12l6 3.4"/>
+                    </svg>
+                </div>
+
+                <div class="alert-body">
+                    <div class="alert-name-row">
+                        <div class="alert-name">Portfolio Review Recommended</div>
+                        <div class="status status-review">Review</div>
+                    </div>
+
+                    <div class="alert-description">
+                        Equity exposure of <strong>RM2.04M</strong> is a significant allocation. Review diversification against the Moderate Balanced profile.
+                    </div>
+
+                    <div class="alert-action">
+                        Suggested action: <strong>Arrange annual wealth portfolio review</strong>
+                    </div>
+
+                    <div class="alert-buttons">
+                        <a href="https://presales.businessbywire.com/appgb8/businessnext/detail/Account?x=emc3krdyka8c4phczaxmx8kj36tdlb7j66mudnzj6fdvvyk9dd2j376utfca6z6w&mdi=1" class="btn btn-secondary">View Customer</a>
+                        <a href="https://presales.businessbywire.com/appgb8/businessnext/detail/Account?x=emc3krdyka8c4phczaxmx8kj36tdlb7j66mudnzj6fdvvyk9dd2j376utfca6z6w&mdi=1&action=schedule-portfolio-review" class="btn btn-primary tone-review">Schedule Review</a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="panel-footer">Updated from customer portfolio activity</div>
+
+</div>
+
+</body>
+</html>
