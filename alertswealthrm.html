@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio Alerts</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* ==========================================================
+   LINK NOTE
+   "View Customer" uses the working account URL (mdi=1).
+   "Create Opportunity" uses the confirmed RunFlow/Lead URL.
+   The other primary actions (Schedule Review, Start Re-KYC)
+   still carry an &action=... placeholder flag on the account
+   URL — swap these for the real BusinessNext routes when
+   you have them.
+   ========================================================== */
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background: #f4f5f7;
+    font-family: 'Inter', Arial, sans-serif;
+}
+
+body { overflow-x: hidden; }
+
+a:focus-visible { outline: 2px solid #1a1a1a; outline-offset: 2px; }
+
+.panel {
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 20px 20px 8px;
+    box-shadow: 0 1px 3px rgba(20, 20, 30, 0.06);
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 16px;
+}
+
+.panel-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #16181d;
+}
+
+.header-icons {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.header-icons svg {
+    width: 17px;
+    height: 17px;
+    color: #40444c;
+}
+
+.header-icons a { display: flex; }
+
+/* =========================
+   TIMELINE
+========================= */
+
+.timeline { list-style: none; margin: 0; padding: 0; }
+
+.timeline-row {
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+}
+
+.timeline-track {
+    flex-shrink: 0;
+    width: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.timeline-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #4cb583;
+    background: #ffffff;
+    margin-top: 22px;
+    flex-shrink: 0;
+}
+
+.timeline-line {
+    flex: 1;
+    width: 0;
+    border-left: 1.5px dashed #d6d9de;
+    margin-top: 4px;
+}
+
+.timeline-row:last-child .timeline-line { border-left-color: transparent; }
+
+/* =========================
+   ALERT CARD
+========================= */
+
+.alert-card {
+    flex: 1;
+    min-width: 0;
+    background: #ffffff;
+    border: 1px solid #edeef1;
+    border-radius: 14px;
+    padding: 16px 16px 14px;
+    margin-bottom: 18px;
+    box-shadow: 0 1px 2px rgba(20, 20, 30, 0.04);
+}
+
+.field-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 14px;
+    row-gap: 14px;
+}
+
+.field-label {
+    font-size: 11px;
+    color: #9297a1;
+    margin-bottom: 3px;
+}
+
+.field-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: #17181c;
+    line-height: 1.35;
+}
+
+.field-value.tone-opportunity { color: #b3860e; }
+.field-value.tone-risk        { color: #c23d55; }
+.field-value.tone-compliance  { color: #6a56b0; }
+.field-value.tone-review      { color: #2f78ad; }
+
+.action-box {
+    display: block;
+    border-radius: 8px;
+    padding: 7px 9px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.45;
+}
+
+.action-next {
+    background: #e9f9ef;
+    color: #2c9d5f;
+}
+
+.action-primary {
+    background: #fff4da;
+    color: #b9860f;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.alert-buttons {
+    margin-top: 13px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.btn-pink {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 13px;
+    border-radius: 999px;
+    border: 1px solid #e8558c;
+    color: #e8558c;
+    background: #ffffff;
+    font-size: 11.5px;
+    font-weight: 600;
+    text-decoration: none;
+    line-height: 1;
+}
+
+.btn-pink:hover { background: #fdf0f4; }
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 400px) {
+    .panel { padding: 16px 14px 6px; border-radius: 14px; }
+    .alert-card { padding: 14px 13px 12px; }
+    .field-grid { gap: 12px; }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="panel">
+
+    <div class="panel-header">
+        <div class="panel-title">Portfolio Alerts</div>
+        <div class="header-icons">
+            <a href="#" aria-label="Refresh">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 11A8 8 0 0 0 6 6.3L4 8M4 13a8 8 0 0 0 14 4.7l2-1.7"/>
+                    <path d="M4 4v4h4M20 20v-4h-4"/>
+                </svg>
+            </a>
+            <a href="#" aria-label="Sort">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 4v16M7 20l-3-3M7 20l3-3M17 20V4M17 4l-3 3M17 4l3 3"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+
+    <ul class="timeline">
+
+        <!-- ALERT 1 — SHARIA OPPORTUNITY -->
+        <li class="timeline-row">
+            <div class="timeline-track">
+                <div class="timeline-dot"></div>
+                <div class="timeline-line"></div>
+            </div>
+
+            <div class="alert-card">
+                <div class="field-grid">
+                    <div>
+                        <div class="field-label">Client Name</div>
+                        <div class="field-value">Datin Seri Rosnah binti Abdullah</div>
+                    </div>
+                    <div>
+                        <div class="field-label">Alert Type</div>
+                        <div class="field-value tone-opportunity">Sharia Product Opportunity</div>
+                    </div>
+                    <div>
+                        <div class="field-label">Liquidity</div>
+                        <div class="field-value">RM3,400,000</div>
+                    </div>
+                    <div>
+                        <div class="field-label">Relationship Value</div>
+                        <div class="field-value">RM6,800,000</div>
+                    </div>
+                    <div>
+                        <div class="field-label">Next Best Action</div>
+                        <div class="action-box action-next">Discuss Sharia-compliant investment solutions.</div>
+                    </div>
+                    <div>
+                        <div class="field-label">Primary Action</div>
+                        <div class="action-box action-primary">Sharia Proposal</div>
+                    </div>
+                </div>
+
+                <div class="alert-buttons">
+                    <a href="https://presales.businessbywire.com/appgb8/businessnext/detail/Account?x=emc3krdyka8c4phczaxmx8kj36tdlb7j66mudnzj6fdvvyk9dd2j376utfca6z6w&mdi=1" class="btn-pink">View Customer</a>
+                    <a href="https://presales.businessbywire.com/appgb8/businessnext/RunFlow/Lead?x=wmlptkyqwxpv4bxdnz3cm5b2aqzb5nwqd3ffuxxg4d7daxjaxans8kxgayua4c9q5kcwexmlkkv398dqj2lf3e5aldpmdfljqej2wlhe84atqx63yajq&mdi=1" class="btn-pink">Create Opportunity</a>
+                </div>
+            </div>
+        </li>
+
+        <!-- ALERT 2 — RISK PROFILE REVIEW -->
+        <li class="timeline-row">
+            <div class="timeline-track">
+                <div class="timeline-dot"></div>
+                <div class="timeline-line"></div>
+            </div>
+
+            <div class="alert-card">
+                <div class="field-grid">
+                    <div>
+                        <div class="field-label">Client Name</div>
+                        <div class="field-value">Datin Rosnah binti Karim</div>
+                    </div>
+                    <div>
+                        <div class="field-label">Alert Type</div>
+                        <div class="field-value tone-risk">Risk Profile Review Due</div>
+                    </div>
+                    <div>
+                        <div class="field-label">Current Profile</div>
+                        <div class="field-value">Moderate Balanced</div>
+                    </div>
+                    <div>
+                        <div class="field-label">Review Cycle</div>
+                        <div class="field-value">Periodic</div>
+                    </div>
+                    <div>
+                        <div class="field-label">Next Best Action</div>
+                        <div class="action-box action-next">Confirm objectives and risk appetite remain appropriate.</div>
+                    </div>
+                    <div>
+                        <div class="field-label">Primary Action</div>
+                        <div class="action-box action-primary">Review Profile</div>
+                    </div>
+                </div>
+
+                <div class="alert-buttons">
+                    <a href="https://presales.businessbywire.com/appgb8/businessnext/detail/Account?x=emc3krdyka8c4phczaxmx8kj36tdlb7j66mudnzj6fdvvyk9dd2j376utfca6z6w&mdi=1" class="btn-pink">View Customer</a>
+                    <a href="https://presales.businessbywire.com/appgb8/businessnext/detail/Account?x=emc3krdyka8c4phczaxmx8kj36tdlb7j66mudnzj6fdvvyk9dd2j376utfca6z6w&mdi=1&action=schedule-risk-review" class="btn-pink">Schedule Review</a>
+                </div>
+            </div>
+        </li>
+
+        <!-- ALERT 3 — RE-KYC -->
+        <li class="timeline-row">
+            <div class="timeline-track">
+                <div class="timeline-dot"></div>
+                <div class="timeline-line"></div>
+            </div>
+
+            <div class="alert-card">
+                <div class="field-grid">
+                    <div>
+                        <div class="field-label">Client Name</div>
+                        <div class="field-value">Puan Sri Rosnah binti Hassan</div>
+                    </div>
+                    <div>
+                        <div class="field-label">Alert Type</div>
+                        <div class="field-value tone-compliance">Re-KYC Review Due</div>
+                    </div>
+                    <div>
+                        <div class="field-label">KYC Status</div>
+                        <div class="field-value">Refresh Required</div>
+                    </div>
+                    <div>
+                        <div class="field-label">Review Type</div>
+                        <div class="field-value">Periodic</div>
+                    </div>
+                    <div>
+                        <div class="field-label">Next Best Action</div>
+                        <div class="action-box action-next">Review profile, source of wealth, and ID details.</div>
+                    </div>
+                    <div>
+                        <div class="field-label">Primary Action</div>
+                        <div class="action-box action-primary">Start Re-KYC</div>
+                    </div>
+                </div>
+
+                <div class="alert-buttons">
+                    <a href="https://presales.businessbywire.com/appgb8/businessnext/detail/Account?x=emc3krdyka8c4phczaxmx8kj36tdlb7j66mudnzj6fdvvyk9dd2j376utfca6z6w&mdi=1" class="btn-pink">View Customer</a>
+                    <a href="https://presales.businessbywire.com/appgb8/businessnext/detail/Account?x=emc3krdyka8c4phczaxmx8kj36tdlb7j66mudnzj6fdvvyk9dd2j376utfca6z6w&mdi=1&action=start-rekyc" class="btn-pink">Start Re-KYC</a>
+                </div>
+            </div>
+        </li>
+
+        <!-- ALERT 4 — PORTFOLIO REVIEW -->
+        <li class="timeline-row">
+            <div class="timeline-track">
+                <div class="timeline-dot"></div>
+                <div class="timeline-line"></div>
+            </div>
+
+            <div class="alert-card">
+                <div class="field-grid">
+                    <div>
+                        <div class="field-label">Client Name</div>
+                        <div class="field-value">Toh Puan Rosnah binti Yaakob</div>
+                    </div>
+                    <div>
+                        <div class="field-label">Alert Type</div>
+                        <div class="field-value tone-review">Portfolio Review Recommended</div>
+                    </div>
+                    <div>
+                        <div class="field-label">Equity Exposure</div>
+                        <div class="field-value">RM2,040,000</div>
+                    </div>
+                    <div>
+                        <div class="field-label">Risk Profile</div>
+                        <div class="field-value">Moderate Balanced</div>
+                    </div>
+                    <div>
+                        <div class="field-label">Next Best Action</div>
+                        <div class="action-box action-next">Review diversification against the current profile.</div>
+                    </div>
+                    <div>
+                        <div class="field-label">Primary Action</div>
+                        <div class="action-box action-primary">Portfolio Review</div>
+                    </div>
+                </div>
+
+                <div class="alert-buttons">
+                    <a href="https://presales.businessbywire.com/appgb8/businessnext/detail/Account?x=emc3krdyka8c4phczaxmx8kj36tdlb7j66mudnzj6fdvvyk9dd2j376utfca6z6w&mdi=1" class="btn-pink">View Customer</a>
+                    <a href="https://presales.businessbywire.com/appgb8/businessnext/detail/Account?x=emc3krdyka8c4phczaxmx8kj36tdlb7j66mudnzj6fdvvyk9dd2j376utfca6z6w&mdi=1&action=schedule-portfolio-review" class="btn-pink">Schedule Review</a>
+                </div>
+            </div>
+        </li>
+
+    </ul>
+
+</div>
+
+</body>
+</html>
