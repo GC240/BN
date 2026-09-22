@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portfolio and TTD Monitoring - Interactive Prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#15171C;--muted:#6B6F76;--line:#E4E5EA;--bg:#F4F5F7;--card:#FFFFFF;--header:#0A0A0D;--pink:#E91E7C;--pinkd:#B8135F;--pinkt:#FCE4F0;--green:#17A160;--greent:#E3F7EC;--blue:#2A6FE0;--blued:#1C4FA8;--bluet:#E6EFFD;--teal:#17B7C4;--tealt:#E1F7F9;--gold:#F2B705;--goldt:#FDF3D6}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Poppins','Segoe UI',sans-serif;font-size:13px}
+a{color:var(--blue)}a:hover{color:#084A88}
+button,select,input{font-family:inherit;font-size:13px;color:var(--ink)}
+button{cursor:pointer}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.skip{position:absolute;left:-999px;top:0;background:#fff;padding:8px 12px;z-index:100}.skip:focus{left:8px;top:8px}
+:focus-visible{outline:3px solid #7AA7E0;outline-offset:1px}
+main{padding:20px 28px 40px;display:flex;flex-direction:column;gap:16px;max-width:1440px;width:100%;margin:0 auto}
+.btn{min-height:44px;padding:0 16px;border:1px solid var(--line);border-radius:8px;background:#fff;font-weight:500;font-size:12.5px}
+.btn:hover{background:var(--bg)}
+.btn.sm{min-height:36px;padding:0 12px;font-size:12px}
+.menu{position:absolute;right:0;top:50px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 28px rgba(15,17,23,.14);min-width:240px;z-index:20;padding:6px}
+.menu button{display:block;width:100%;text-align:left;min-height:40px;border:0;background:transparent;padding:0 12px;border-radius:6px;font-size:12.5px}
+.menu button:hover{background:var(--bg)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(15,17,23,.05)}
+.card.pad{padding:18px}
+.card h2{margin:0;font-size:13.5px;font-weight:600;color:var(--ink)}
+.card:not(.pad)>h2{padding:16px 18px 10px}
+.card.pad>h2{margin-bottom:14px}
+.hd-row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:14px 18px}
+.filters{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px;box-shadow:0 1px 3px rgba(15,17,23,.05)}
+.field{display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:500;color:var(--muted)}
+.field select,.field input{height:44px;min-width:170px;border:1px solid var(--line);border-radius:8px;padding:0 10px;background:#fff}
+.grow{flex-grow:1}
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px}
+.kpi{position:relative;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 16px 14px;box-shadow:0 1px 3px rgba(15,17,23,.05)}
+.kpi .ic{position:absolute;top:14px;right:14px;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.kpi .ic i{display:block;width:9px;height:9px;border-radius:50%}
+.kpi:nth-child(6n+1) .ic{background:var(--bluet)}.kpi:nth-child(6n+1) .ic i{background:var(--blue)}
+.kpi:nth-child(6n+2) .ic{background:var(--tealt)}.kpi:nth-child(6n+2) .ic i{background:var(--teal)}
+.kpi:nth-child(6n+3) .ic{background:var(--pinkt)}.kpi:nth-child(6n+3) .ic i{background:var(--pink)}
+.kpi:nth-child(6n+4) .ic{background:var(--goldt)}.kpi:nth-child(6n+4) .ic i{background:var(--gold)}
+.kpi:nth-child(6n+5) .ic{background:var(--greent)}.kpi:nth-child(6n+5) .ic i{background:var(--green)}
+.kpi:nth-child(6n+6) .ic{background:var(--pinkt)}.kpi:nth-child(6n+6) .ic i{background:var(--pink)}
+.kpi .l{font-size:11px;color:var(--muted);font-weight:500;padding-right:32px}.kpi .v{font-size:23px;font-weight:700;margin-top:6px;color:var(--ink)}.kpi .s{font-size:11px;color:var(--muted);margin-top:3px}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{height:44px;padding:0 10px;font-size:11px;font-weight:600;color:var(--muted);background:var(--bg);border-top:1px solid var(--line);border-bottom:1px solid var(--line);text-align:right;vertical-align:middle}
+td{height:48px;padding:0 10px;font-size:12.5px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th.l,td.l{text-align:left}
+tr.flag td{background:var(--pinkt)}
+tr.sel td{box-shadow:inset 0 -2px 0 var(--blue)}
+tr.grp td{background:var(--bluet);font-weight:600;height:52px}
+tr.tot td{background:var(--bg);font-weight:600}
+td.ind{padding-left:44px}
+.sortbtn{border:0;background:transparent;font-weight:600;font-size:11px;color:var(--muted);padding:0;min-height:32px;text-align:inherit}
+.sortbtn:hover{color:var(--ink)}
+.tg{display:inline-flex;align-items:center;gap:8px;border:0;background:transparent;padding:0;min-height:32px;font-weight:600;text-align:left}
+.tg .ch{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:4px;border:1px solid #9BBCE0;background:#fff;font-size:10px;color:var(--blue)}
+.pill{display:inline-flex;align-items:center;height:26px;padding:0 10px;border-radius:13px;font-size:11.5px;font-weight:500;white-space:nowrap}
+.p-pink{background:var(--pinkt);color:var(--pinkd)}.p-green{background:var(--greent);color:var(--green)}.p-blue{background:var(--bluet);color:var(--blue)}.p-gray{background:var(--bg);color:var(--muted)}
+.use{display:inline-flex;align-items:center;gap:8px}.use i{display:block;width:44px;height:6px;background:#E6E6EA;border-radius:3px}.use i b{display:block;height:6px;background:var(--blue);border-radius:3px}
+.lk{border:0;background:transparent;color:var(--blue);font-weight:500;font-size:12px;text-decoration:underline;padding:6px 4px;min-height:32px}.lk:hover{color:#084A88}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.bars .br{display:flex;align-items:center;gap:12px;height:30px}
+.bars .br span:first-child{width:180px;font-size:12px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bars .tr{flex-grow:1;height:14px;background:#ECECF0;border-radius:3px}.bars .tr b{display:block;height:14px;border-radius:3px}
+.bars .vl{width:56px;text-align:right;font-size:12px;font-weight:500}
+.bars .gh{font-size:11px;font-weight:600;color:var(--muted);margin:10px 0 2px}.bars .gh:first-child{margin-top:0}
+.tiles{display:flex;gap:12px;flex-wrap:wrap}.tile{flex:1;min-width:110px;background:var(--card);border:1px solid var(--line);border-top:3px solid var(--line);border-radius:10px;padding:12px 14px;box-shadow:0 1px 3px rgba(15,17,23,.05)}.tile .l{font-size:11px;font-weight:500;color:var(--muted)}.tile .v{font-size:22px;font-weight:700;margin-top:4px}
+.note{font-size:11.5px;color:var(--muted)}
+.empty{padding:32px;text-align:center;color:var(--muted)}
+.mixrow{margin-bottom:16px}.mixrow:last-child{margin-bottom:0}
+.mixbar{display:flex;height:16px;border-radius:4px;overflow:hidden;background:#ECECF0;margin:6px 0}.mixbar i{display:block;height:16px}
+.legend{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:11.5px}.legend span{display:inline-flex;align-items:center;gap:6px}.legend em{display:inline-block;width:10px;height:10px;border-radius:2px}
+.cmp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}
+.cmp div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;box-shadow:0 1px 3px rgba(15,17,23,.05)}.cmp .l{font-size:11px;color:var(--muted)}.cmp .v{font-size:13px;font-weight:600;margin-top:2px}
+#modal-root .ov{position:fixed;inset:0;background:rgba(20,20,20,.55);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
+#modal-root .dlg{background:#fff;border-radius:10px;width:min(1000px,100%);max-height:calc(100vh - 40px);display:flex;flex-direction:column;overflow:hidden}
+#modal-root .dh{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--line)}
+#modal-root .dh h2{margin:0;font-size:15px}
+#modal-root .db{overflow:auto;flex-grow:1}
+.chips{display:flex;gap:8px;flex-wrap:wrap;padding:12px 20px}
+#toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:8px;font-size:12.5px;z-index:80;opacity:0;pointer-events:none;transition:opacity .2s;max-width:90vw}
+#toast.show{opacity:1}
+@media (max-width:1100px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.two{grid-template-columns:1fr}.cmp{grid-template-columns:1fr}}
+@media (max-width:760px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding:16px}}
+@media print{.filters,.noprint,#toast,#modal-root{display:none!important}main{padding:0}body{background:#fff}.card{break-inside:avoid}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<main id="main" tabindex="-1"></main>
+<div id="modal-root"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+'use strict';
+
+// [project, source, type(0 TTD,1 non), limit, balance, accts, delinqBal, delinqAccts, approvals, unavailed, rejects]; money in 0.01 PHP million
+const FACTS = [[0,0,0,1095,689,6,12,1,7,1,1],[0,0,1,1333,1149,159,5,1,0,0,0],[0,1,0,825,1141,5,51,1,7,2,3],[0,1,1,943,983,104,0,0,0,0,0],[0,2,0,885,420,4,0,0,5,1,0],[0,2,1,1185,623,74,0,0,0,0,0],[0,3,0,5475,4590,30,322,1,33,3,4],[0,3,1,8259,6925,793,0,0,0,0,0],[1,0,0,1438,960,5,0,0,6,1,1],[1,0,1,1899,1021,114,0,0,0,0,0],[1,1,0,1127,474,3,88,2,5,2,3],[1,1,1,1119,567,75,0,0,0,0,0],[1,2,0,653,316,2,0,0,3,1,1],[1,2,1,1058,398,52,0,0,0,0,0],[1,3,0,5432,3520,20,472,1,24,4,6],[1,3,1,7274,4924,566,0,0,0,0,0],[2,0,0,302,137,1,0,0,3,2,1],[2,0,1,728,508,52,0,0,0,0,0],[2,1,0,374,260,1,0,0,2,1,1],[2,1,1,357,344,34,6,1,0,0,0],[2,2,0,368,233,1,0,0,2,1,1],[2,2,1,481,252,24,0,0,0,0,0],[2,3,0,3296,1780,10,155,1,13,3,3],[2,3,1,4094,2036,257,0,0,0,0,0],[3,0,0,915,945,5,11,1,6,1,0],[3,0,1,1540,1022,113,2,1,0,0,0],[3,1,0,553,520,3,143,2,5,2,3],[3,1,1,695,665,75,0,0,0,0,0],[3,2,0,776,421,3,70,1,4,1,1],[3,2,1,778,516,53,0,0,0,0,0],[3,3,0,4556,3214,23,441,1,29,6,7],[3,3,1,6187,4697,565,1,1,0,0,0],[4,0,0,1008,504,4,12,1,5,1,1],[4,0,1,1024,1042,94,0,0,0,0,0],[4,1,0,778,529,3,98,2,4,1,2],[4,1,1,782,484,61,0,0,0,0,0],[4,2,0,668,407,2,0,0,3,1,0],[4,2,1,815,362,43,0,0,0,0,0],[4,3,0,3436,2680,18,335,1,22,4,5],[4,3,1,5489,3792,465,0,0,0,0,0],[5,0,0,1007,499,4,160,1,5,1,1],[5,0,1,1312,558,75,0,0,0,0,0],[5,1,0,749,297,2,0,0,4,2,1],[5,1,1,809,378,50,0,0,0,0,0],[5,2,0,531,180,1,0,0,2,1,0],[5,2,1,599,275,35,0,0,0,0,0],[5,3,0,3703,2074,17,0,0,20,3,3],[5,3,1,6290,3379,376,0,0,0,0,0],[6,0,0,485,276,2,0,0,3,1,1],[6,0,1,914,320,49,0,0,0,0,0],[6,1,0,444,269,2,70,1,3,1,1],[6,1,1,445,279,33,0,0,0,0,0],[6,2,0,699,223,2,0,0,2,0,0],[6,2,1,504,174,23,0,0,0,0,0],[6,3,0,2332,1212,10,0,0,13,3,2],[6,3,1,4177,2247,247,0,0,0,0,0]];
+const DEVS = [{id:'A',name:'AYALA LAND, INC'},{id:'B',name:'Bayside Homes Corp.'},{id:'M',name:'Metro Vista Properties'}];
+const PROJ = [
+ {id:'A1',dev:'A',name:'TWO SERENDRA (THE ASTON TOWER)',code:'ART1'},{id:'A2',dev:'A',name:'Alpha Heights Phase 2',code:'AHP2'},{id:'A3',dev:'A',name:'Alpha Garden Villas',code:'AGV'},
+ {id:'B1',dev:'B',name:'Bayside Marina Towers',code:'BMT'},{id:'B2',dev:'B',name:'Bayside Palm Residences',code:'BPR'},
+ {id:'M1',dev:'M',name:'Metro Vista Central',code:'MVC'},{id:'M2',dev:'M',name:'Metro Vista Park',code:'MVP'}];
+const devName = id => DEVS.find(d => d.id === id).name;
+const FLAG_DPD = 5, FLAG_REJ = 25;
+const PAL = ['#17B7C4','#E91E7C','#F2B705','#2A6FE0'];
+const ASOF = [{v:'live',l:'Today (live)'},{v:'aug',l:'Month-end 31 Aug 2026'}];
+const TYPES = [{v:'ALL',l:'All accounts'},{v:'TTD',l:'TTD accounts'},{v:'NON',l:'Non-TTD accounts'}];
+const STATS = [{v:'ALL',l:'All statuses'},{v:'CUR',l:'Current'},{v:'DQ',l:'Delinquent 30+ DPD'}];
+
+const CACHE = {live: FACTS.map(r => ({p:r[0],s:r[1],t:r[2],lim:r[3],bal:r[4],acc:r[5],dqb:r[6],dqa:r[7],ap:r[8],un:r[9],rj:r[10]}))};
+CACHE.aug = FACTS.map(r => {
+  const f = {p:r[0],s:r[1],t:r[2],lim:r[3],bal:Math.round(r[4]*0.985),acc:r[5],dqb:Math.round(r[6]*0.93),dqa:r[7],ap:r[8],un:r[9],rj:r[10]};
+  if (r[2] === 0) { f.acc = Math.round(r[5]*0.94); f.un = Math.round(r[9]*0.9); f.ap = f.acc + f.un; f.rj = Math.round(r[10]*0.9); f.dqa = Math.min(f.acc, r[7]); }
+  return f;
+});
+
+
+const $ = (s, r) => (r || document).querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fM = u => '₱' + (u/100).toLocaleString('en-US',{minimumFractionDigits:1,maximumFractionDigits:1}) + 'M';
+const fP = v => v.toFixed(1) + '%';
+const fN = n => n.toLocaleString('en-US');
+const nowStamp = () => new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+const opts = (list, val) => list.map(o => `<option value="${esc(o.v)}"${o.v === val ? ' selected' : ''}>${esc(o.l)}</option>`).join('');
+let toastT;
+function toast(msg){ const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2600); }
+function download(name, rows){
+  const csv = '\ufeff' + rows.map(r => r.map(c => { const s = String(c == null ? '' : c); return /[",\n]/.test(s) ? '"' + s.replace(/"/g,'""') + '"' : s; }).join(',')).join('\r\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8'}));
+  a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  toast('Downloaded ' + name);
+}
+function rng(seed){ let a = seed >>> 0; return function(){ a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+
+function selectFacts(o){
+  return CACHE[o.asof || 'live'].filter(f => {
+    const p = PROJ[f.p];
+    return (!o.devs || o.devs.includes(p.dev)) && (!o.projs || o.projs.includes(p.id)) &&
+           (!o.type || o.type === 'ALL' || (o.type === 'TTD' ? f.t === 0 : f.t === 1));
+  });
+}
+function derive(s){ s.usage = s.lim ? s.balAll / s.lim * 100 : 0; s.dpd = s.balAll ? s.dqb / s.balAll * 100 : 0; s.rejRate = (s.ap + s.rj) ? s.rj / (s.ap + s.rj) * 100 : 0; return s; }
+function sumFacts(list, status){
+  const s = {lim:0,balAll:0,bal:0,dqb:0,dqa:0,accAll:0,acc:0,accT:0,ap:0,un:0,rj:0};
+  for (const f of list){
+    s.lim += f.lim; s.balAll += f.bal; s.dqb += f.dqb; s.dqa += f.dqa; s.accAll += f.acc; s.ap += f.ap; s.un += f.un; s.rj += f.rj;
+    const bal = status === 'CUR' ? f.bal - f.dqb : status === 'DQ' ? f.dqb : f.bal;
+    const acc = status === 'CUR' ? f.acc - f.dqa : status === 'DQ' ? f.dqa : f.acc;
+    s.bal += bal; s.acc += acc; if (f.t === 0) s.accT += acc;
+  }
+  return derive(s);
+}
+function addSums(a, b){ const o = {}; for (const k of ['lim','balAll','bal','dqb','dqa','accAll','acc','accT','ap','un','rj']) o[k] = (a ? a[k] : 0) + b[k]; return derive(o); }
+const isFlag = s => s.dpd >= FLAG_DPD || s.rejRate >= FLAG_REJ;
+
+
+const dflt = () => ({type:'ALL',status:'ALL',asof:'live',sort:null});
+const S = {
+  screen:'dev', stamp:'09:15', menu:false,
+  dev:{...dflt(),dev:'ALL'},
+  proj:{...dflt(),dev:'ALL',proj:'ALL',sel:null,collapsed:{}}
+};
+
+
+function fieldHTML(kind, key, label, list, val){
+  return `<label class="field">${label}<select id="${kind}-${key}" data-act="filter" data-kind="${kind}" data-key="${key}">${opts(list, val)}</select></label>`;
+}
+const DEVOPTS = () => [{v:'ALL',l:'All developers'}].concat(DEVS.map(d => ({v:d.id,l:d.name})));
+function filterBar(kind){
+  const st = S[kind]; let f = fieldHTML(kind,'dev','Developer',DEVOPTS(),st.dev);
+  if (kind === 'proj') f += fieldHTML(kind,'proj','Project',[{v:'ALL',l:'All projects'}].concat(PROJ.filter(p => st.dev === 'ALL' || p.dev === st.dev).map(p => ({v:p.id,l:p.name}))),st.proj);
+  f += fieldHTML(kind,'type','Account type',TYPES,st.type) + fieldHTML(kind,'status','Status',STATS,st.status) + fieldHTML(kind,'asof','As of',ASOF,st.asof);
+  return `<div class="filters" role="group" aria-label="Report filters">${f}<div class="grow"></div><button class="btn" data-act="reset" data-kind="${kind}">Reset filters</button></div>`;
+}
+function kpisHTML(kind, s, sub1){
+  const st = S[kind], non = st.type === 'NON';
+  const suf = st.status === 'CUR' ? ' (current)' : st.status === 'DQ' ? ' (delinquent)' : '';
+  const K = (l,v,x) => `<div class="kpi"><div class="ic"><i></i></div><div class="l">${l}</div><div class="v">${v}</div><div class="s">${x}</div></div>`;
+  return `<div class="kpis">${K('Outstanding Balance' + suf, fM(s.bal), sub1)}${K('Limit Usage', fP(s.usage), 'of ' + fM(s.lim) + ' approved')}${K('30+ DPD', fP(s.dpd), 'of outstanding balance')}${K('TTD Accounts', non ? '–' : fN(s.accT), 'in selected scope')}${K('Approvals', non ? '–' : fN(s.ap), non ? 'TTD facilities only' : fN(s.un) + ' unavailed')}${K('Rejects', non ? '–' : fN(s.rj), non ? 'TTD facilities only' : fP(s.rejRate) + ' reject rate')}</div>`;
+}
+function barsHTML(items, color, maxv){ // items: [{name, v}] or {group}
+  return `<div class="bars">${items.map(it => it.group ? `<div class="gh">${esc(it.group)}</div>` :
+    `<div class="br"><span title="${esc(it.name)}">${esc(it.name)}</span><span class="tr"><b style="width:${Math.min(100, it.v / maxv * 100).toFixed(1)}%;background:${color}"></b></span><span class="vl">${it.v.toFixed(1)}%</span></div>`).join('')}</div>`;
+}
+const legendNote = `<div class="note noprint">Highlighted rows: 30+ DPD at or above ${FLAG_DPD}.0% of balance, or reject rate (rejects / approvals + rejects) at or above ${FLAG_REJ}%. Click a column heading to sort. Approvals, unavailed and rejects are tracked on TTD facilities only.</div>`;
+
+
+function metricCols(st){
+  const non = st.type === 'NON', ttd = v => non ? '–' : v;
+  return [
+    {key:'lim',label:'Approved Limit',raw:r => r.s.lim/100,csv:r => r.s.lim/100,html:r => fM(r.s.lim)},
+    {key:'bal',label:'Outstanding Balance' + (st.status === 'CUR' ? ' (current)' : st.status === 'DQ' ? ' (delinquent)' : ''),raw:r => r.s.bal,csv:r => r.s.bal/100,html:r => fM(r.s.bal)},
+    {key:'usage',label:'Limit Usage',raw:r => r.s.usage,csv:r => +r.s.usage.toFixed(1),html:r => `<span class="use"><span>${fP(r.s.usage)}</span><i><b style="width:${Math.min(100,r.s.usage)}%"></b></i></span>`},
+    {key:'dpd',label:'30+ DPD',raw:r => r.s.dpd,csv:r => +r.s.dpd.toFixed(1),html:r => r.s.dpd >= FLAG_DPD ? `<span class="pill p-pink">${fP(r.s.dpd)}</span>` : fP(r.s.dpd)},
+    {key:'accT',label:'TTD Accts',raw:r => r.s.accT,csv:r => non ? '' : r.s.accT,html:r => ttd(fN(r.s.accT))},
+    {key:'ap',label:'Approvals',raw:r => r.s.ap,csv:r => non ? '' : r.s.ap,html:r => ttd(fN(r.s.ap))},
+    {key:'un',label:'Unavailed',raw:r => r.s.un,csv:r => non ? '' : r.s.un,html:r => ttd(fN(r.s.un))},
+    {key:'rj',label:'Rejects',raw:r => r.s.rj,csv:r => non ? '' : r.s.rj,html:r => non ? '–' : (r.s.rejRate >= FLAG_REJ ? `<span class="pill p-pink">${fN(r.s.rj)}</span>` : fN(r.s.rj))}
+  ];
+}
+function thHTML(kind, cols){
+  const st = S[kind];
+  return cols.map(c => {
+    const on = st.sort && st.sort.key === c.key, arr = on ? (st.sort.dir > 0 ? ' ▲' : ' ▼') : '';
+    return `<th class="${c.cls || ''}" scope="col" aria-sort="${on ? (st.sort.dir > 0 ? 'ascending' : 'descending') : 'none'}"><button class="sortbtn" data-act="sort" data-kind="${kind}" data-key="${c.key}">${esc(c.label)}${arr}</button></th>`;
+  }).join('') + '<th scope="col"><span class="sr">Actions</span></th>';
+}
+function sortBy(arr, cols, sort, get){
+  if (!sort) return arr;
+  const c = cols.find(x => x.key === sort.key); if (!c) return arr;
+  return arr.slice().sort((a,b) => { const x = c.raw(get(a)), y = c.raw(get(b)); return (typeof x === 'string' ? x.localeCompare(y) : x - y) * sort.dir; });
+}
+
+
+function devModel(){
+  const st = S.dev, base = {type:st.type, asof:st.asof};
+  const rows = DEVS.filter(d => st.dev === 'ALL' || d.id === st.dev).map(d => {
+    const facts = selectFacts({...base, devs:[d.id]});
+    return {id:d.id, name:d.name, n:PROJ.filter(p => p.dev === d.id).length, s:sumFacts(facts, st.status)};
+  });
+  const total = rows.reduce((a, r) => addSums(a, r.s), null) || derive({lim:0,balAll:0,bal:0,dqb:0,dqa:0,accAll:0,acc:0,accT:0,ap:0,un:0,rj:0});
+  const cols = [{key:'name',label:'Developer',cls:'l',raw:r => r.name,csv:r => r.name,html:r => `<span style="font-weight:500">${esc(r.name)}</span>`},
+    {key:'n',label:'Projects',raw:r => r.n,csv:r => r.n,html:r => fN(r.n)}].concat(metricCols(st));
+  return {rows, total, cols};
+}
+function devScreen(){
+  const m = devModel(), st = S.dev, rows = sortBy(m.rows, m.cols, st.sort, r => r);
+  const body = rows.map(r => `<tr class="${isFlag(r.s) ? 'flag' : ''}">${m.cols.map(c => `<td class="${c.cls || ''}">${c.html(r)}</td>`).join('')}<td class="l"><button class="lk" data-act="drill" data-id="${r.id}">View projects</button><button class="lk" data-act="accts" data-kind="dev" data-id="${r.id}">Accounts</button></td></tr>`).join('');
+  const nProj = m.rows.reduce((a, r) => a + r.n, 0);
+  const tot = m.rows.length > 1 ? `<tr class="tot">${m.cols.map((c,i) => `<td class="${c.cls || ''}">${i === 0 ? 'Total' : c.key === 'n' ? fN(nProj) : c.html({s:m.total})}</td>`).join('')}<td></td></tr>` : '';
+  const table = rows.length ? `<div class="tw"><table><caption class="sr">Developer report</caption><thead><tr>${thHTML('dev', m.cols)}</tr></thead><tbody>${body}${tot}</tbody></table></div>` : '<div class="empty">No data for the selected filters.</div>';
+  const usage = rows.map(r => ({name:r.name, v:r.s.usage})), dq = rows.map(r => ({name:r.name, v:r.s.dpd}));
+  return filterBar('dev') + kpisHTML('dev', m.total, `${m.rows.length} developer${m.rows.length === 1 ? '' : 's'}, ${nProj} projects`) + `<div class="card">${table}</div>` + legendNote +
+    `<div class="two"><div class="card pad"><h2>Limit usage by developer</h2>${barsHTML(usage,'var(--blue)',100)}</div><div class="card pad"><h2>30+ DPD by developer</h2>${barsHTML(dq,'var(--pink)',Math.max(8, ...dq.map(x => x.v)))}</div></div>`;
+}
+
+
+function projModel(){
+  const st = S.proj, base = {type:st.type, asof:st.asof};
+  const groups = DEVS.filter(d => st.dev === 'ALL' || d.id === st.dev).map(d => {
+    const all = PROJ.filter(p => p.dev === d.id);
+    const shown = all.filter(p => st.proj === 'ALL' || p.id === st.proj);
+    if (!shown.length) return null;
+    const devS = sumFacts(selectFacts({...base, devs:[d.id]}), st.status);
+    const rows = shown.map(p => {
+      const s = sumFacts(selectFacts({...base, projs:[p.id]}), st.status);
+      return {id:p.id, name:p.name, s, shB:devS.bal ? s.bal / devS.bal * 100 : 0, shD:devS.dqb ? s.dqb / devS.dqb * 100 : 0};
+    });
+    const sub = rows.reduce((a, r) => addSums(a, r.s), null);
+    return {id:d.id, name:d.name, nAll:all.length, rows, g:{id:d.id, name:d.name, s:sub, shB:devS.bal ? sub.bal / devS.bal * 100 : 0, shD:devS.dqb ? sub.dqb / devS.dqb * 100 : 0}};
+  }).filter(Boolean);
+  const nProj = groups.reduce((a, g) => a + g.rows.length, 0);
+  const total = groups.reduce((a, g) => addSums(a, g.g.s), null) || derive({lim:0,balAll:0,bal:0,dqb:0,dqa:0,accAll:0,acc:0,accT:0,ap:0,un:0,rj:0});
+  const cols = [{key:'name',label:'Developer / Project',cls:'l',raw:r => r.name,csv:r => r.name}].concat(metricCols(st), [
+    {key:'shB',label:'% of Developer Balance',raw:r => r.shB,csv:r => +r.shB.toFixed(1),html:r => fP(r.shB)},
+    {key:'shD',label:'% of Developer Delinquency',raw:r => r.shD,csv:r => +r.shD.toFixed(1),html:r => fP(r.shD)}]);
+  return {groups, nProj, total, cols};
+}
+function projScreen(){
+  const m = projModel(), st = S.proj, mc = m.cols.slice(1);
+  const allRows = m.groups.flatMap(g => g.rows);
+  const selRow = allRows.find(r => r.id === st.sel) || allRows.slice().sort((a,b) => b.s.dpd - a.s.dpd)[0];
+  const groups = sortBy(m.groups, m.cols, st.sort, g => g.g);
+  let body = '';
+  for (const g of groups){
+    const open = !st.collapsed[g.id];
+    body += `<tr class="grp"><td class="l"><button class="tg" data-act="toggle" data-id="${g.id}" aria-expanded="${open}" aria-label="${open ? 'Collapse' : 'Expand'} ${esc(g.name)}"><span class="ch">${open ? '▼' : '▶'}</span>${esc(g.name)}<span class="note" style="font-weight:400">${g.rows.length} of ${g.nAll} project${g.nAll === 1 ? '' : 's'}</span></button></td>${mc.map(c => `<td>${c.html(g.g)}</td>`).join('')}<td class="l"><button class="lk" data-act="accts" data-kind="dev" data-id="${g.id}">Accounts</button></td></tr>`;
+    if (open) for (const r of sortBy(g.rows, m.cols, st.sort, x => x)){
+      body += `<tr class="${isFlag(r.s) ? 'flag' : ''} ${st.sel === r.id ? 'sel' : ''}"><td class="l ind"><span style="font-weight:500">${esc(r.name)}</span></td>${mc.map(c => `<td>${c.html(r)}</td>`).join('')}<td class="l"><button class="lk" data-act="sel" data-id="${r.id}">Details</button><button class="lk" data-act="accts" data-kind="proj" data-id="${r.id}">Accounts</button></td></tr>`;
+    }
+  }
+  const tot = m.nProj > 1 ? `<tr class="tot"><td class="l">Total, ${m.nProj} projects</td>${mc.map(c => `<td>${c.key === 'shB' || c.key === 'shD' ? '' : c.html({s:m.total})}</td>`).join('')}<td></td></tr>` : '';
+  const table = m.groups.length ? `<div class="hd-row noprint"><h2>Projects by developer</h2><div style="display:flex;gap:8px"><button class="btn sm" data-act="expandall">Expand all</button><button class="btn sm" data-act="collapseall">Collapse all</button></div></div><div class="tw"><table><caption class="sr">Project report grouped by developer</caption><thead><tr>${thHTML('proj', m.cols)}</tr></thead><tbody>${body}${tot}</tbody></table></div>` : '<div class="empty">No data for the selected filters.</div>';
+
+  // project mix within developer
+  const mix = m.groups.map(g => {
+    const totBal = g.rows.reduce((a, r) => a + r.s.balAll, 0) || 1;
+    const segs = g.rows.map((r,i) => `<i style="width:${r.s.balAll / totBal * 100}%;background:${PAL[i % PAL.length]}"></i>`).join('');
+    const leg = g.rows.map((r,i) => `<span><em style="background:${PAL[i % PAL.length]}"></em>${esc(r.name)} ${(r.s.balAll / totBal * 100).toFixed(0)}%</span>`).join('');
+    return `<div class="mixrow"><div style="font-weight:500">${esc(g.name)} <span class="note">(${g.rows.length} project${g.rows.length === 1 ? '' : 's'}, ${fM(g.g.s.balAll)})</span></div><div class="mixbar" role="img" aria-label="Project share of outstanding balance">${segs}</div><div class="legend">${leg}</div></div>`;
+  }).join('') || '<div class="empty">No data</div>';
+  const dq = []; m.groups.forEach(g => { dq.push({group:g.name}); g.rows.forEach(r => dq.push({name:r.name, v:r.s.dpd})); });
+  const maxDq = Math.max(8, ...allRows.map(r => r.s.dpd));
+
+  // selected project detail
+  let det = '';
+  if (selRow){
+    const g = m.groups.find(x => x.rows.includes(selRow)), devS = sumFacts(selectFacts({type:st.type, asof:st.asof, devs:[g.id]}), st.status), non = st.type === 'NON';
+    const T = (l,v,c) => `<div class="tile" style="border-top-color:${c}"><div class="l">${l}</div><div class="v" style="color:${c}">${v}</div></div>`;
+    const C = (l,a,b) => `<div><div class="l">${l}</div><div class="v" style="font-size:13px">${a} <span class="note" style="font-weight:400">vs ${b} developer</span></div></div>`;
+    det = `<div class="card pad"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px"><h2 style="margin:0">Selected project: ${esc(selRow.name)} <span class="note" style="font-weight:400">(${esc(g.name)})</span></h2><button class="btn" data-act="accts" data-kind="proj" data-id="${selRow.id}">View accounts</button></div>
+      <div class="tiles">${T('Approved', non ? '–' : fN(selRow.s.ap), 'var(--blue)')}${T('Unavailed', non ? '–' : fN(selRow.s.un), 'var(--muted)')}${T('Rejected', non ? '–' : fN(selRow.s.rj), 'var(--pinkd)')}${T('TTD accounts', non ? '–' : fN(selRow.s.accT), 'var(--green)')}</div>
+      <div class="cmp">${C('30+ DPD', fP(selRow.s.dpd), fP(devS.dpd))}${C('Limit usage', fP(selRow.s.usage), fP(devS.usage))}<div><div class="l">Share of developer balance</div><div class="v" style="font-size:13px">${fP(selRow.shB)} <span class="note" style="font-weight:400">of ${fM(devS.bal)}</span></div></div></div></div>`;
+  }
+  const label = m.groups.length === 1 ? m.groups[0].name : m.groups.length + ' developers';
+  return filterBar('proj') + kpisHTML('proj', m.total, `${m.nProj} projects, ${label}`) + `<div class="card">${table}</div>` + legendNote +
+    `<div class="two"><div class="card pad"><h2>Project mix within each developer (share of balance)</h2>${mix}</div><div class="card pad"><h2>30+ DPD by project</h2>${barsHTML(dq,'var(--pink)',maxDq)}</div></div>` + det;
+}
+
+
+let ALLACC = null;
+function splitInt(total, n, r){
+  const w = Array.from({length:n}, () => .4 + r()), sw = w.reduce((a,b) => a+b, 0), rest = total - n;
+  const raw = w.map(x => x / sw * rest), out = raw.map(Math.floor);
+  let left = rest - out.reduce((a,b) => a+b, 0);
+  raw.map((x,i) => [x - Math.floor(x), i]).sort((a,b) => b[0]-a[0]).slice(0, left).forEach(k => out[k[1]]++);
+  return out.map(x => x + 1);
+}
+function buildAccounts(){
+  const list = [], counter = {};
+  for (const f of CACHE.live){
+    if (f.t !== 0 || f.acc <= 0) continue;
+    const r = rng(f.p * 97 + f.s * 13 + 5), pj = PROJ[f.p];
+    const cur = splitInt(f.bal - f.dqb, f.acc - f.dqa, r), dq = f.dqa ? splitInt(f.dqb, f.dqa, r) : [];
+    const mk = (bal, delinq) => {
+      counter[pj.id] = (counter[pj.id] || 0) + 1;
+      const x = r();
+      return {no:`TTD-${pj.code}-${String(counter[pj.id]).padStart(3,'0')}`,dev:pj.dev,proj:pj.name,unit:`${1 + Math.floor(r()*30)}F-${String(1 + Math.floor(r()*40)).padStart(2,'0')}`,bal:bal,delinq:delinq,bucket:!delinq ? '' : x < .5 ? '30-59' : x < .8 ? '60-89' : '90+',pid:pj.id};
+    };
+    cur.forEach(b => list.push(mk(b,false))); dq.forEach(b => list.push(mk(b,true)));
+  }
+  return list;
+}
+let M = null;
+function openAccounts(ctx){
+  if (!ALLACC) ALLACC = buildAccounts();
+  M = {ctx, list:ALLACC.filter(a => (!ctx.devs || ctx.devs.includes(a.dev)) && (!ctx.projs || ctx.projs.includes(a.pid))), status:'ALL', q:'', sort:{key:'no',dir:1}};
+  $('#modal-root').innerHTML = `<div class="ov" data-act="closeov"><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="mtitle">
+    <div class="dh"><h2 id="mtitle">${esc(ctx.title)}</h2><div style="display:flex;gap:8px"><button class="btn" data-act="mcsv">Export CSV</button><button class="btn" id="mclose" data-act="mclose">Close</button></div></div>
+    <div class="filters" style="border:0;border-bottom:1px solid var(--line);border-radius:0">
+      <label class="field">Search account, unit or project<input type="search" id="mq" data-act="mq" placeholder="e.g. TTD-AHP2"></label>
+      <label class="field">Status<select id="mst" data-act="mst"><option value="ALL">All</option><option value="CUR">Current</option><option value="DQ">Delinquent</option></select></label>
+    </div><div class="db" id="mbody"></div></div></div>`;
+  renderModalBody(); $('#mclose').focus();
+}
+function modalRows(){
+  const q = M.q.trim().toLowerCase();
+  const rows = M.list.filter(a => (M.status === 'ALL' || (M.status === 'DQ') === a.delinq) && (!q || (a.no + ' ' + a.unit + ' ' + a.proj).toLowerCase().includes(q)));
+  const k = M.sort.key, d = M.sort.dir;
+  return rows.sort((a,b) => (typeof a[k] === 'string' ? a[k].localeCompare(b[k]) : (a[k] > b[k] ? 1 : a[k] < b[k] ? -1 : 0)) * d);
+}
+const MCOLS = [['no','Account No.','l'],['proj','Project','l'],['unit','Unit','l'],['bal','Outstanding','r'],['delinq','Status','l'],['bucket','DPD bucket','l']];
+function renderModalBody(){
+  const rows = modalRows(), tot = rows.reduce((a,r) => a + r.bal, 0), dq = rows.filter(r => r.delinq).length;
+  const th = MCOLS.map(([k,l,c]) => `<th class="${c === 'l' ? 'l' : ''}" scope="col"><button class="sortbtn" data-act="msort" data-key="${k}">${l}${M.sort.key === k ? (M.sort.dir > 0 ? ' ▲' : ' ▼') : ''}</button></th>`).join('');
+  const body = rows.map(a => `<tr class="${a.delinq ? 'flag' : ''}"><td class="l">${a.no}</td><td class="l">${esc(a.proj)}</td><td class="l">${a.unit}</td><td>₱${fN(a.bal * 10000)}</td><td class="l">${a.delinq ? '<span class="pill p-pink">Delinquent</span>' : '<span class="pill p-green">Current</span>'}</td><td class="l">${a.bucket || '–'}</td></tr>`).join('');
+  $('#mbody').innerHTML = `<div class="chips"><span class="pill p-blue">${fN(rows.length)} accounts</span><span class="pill p-gray">Outstanding ${fM(Math.round(tot))}</span><span class="pill ${dq ? 'p-pink' : 'p-gray'}">${dq} delinquent</span><span class="note" style="align-self:center">TTD accounts, live data. Account references are illustrative.</span></div>` +
+    (rows.length ? `<div class="tw"><table><caption class="sr">TTD accounts</caption><thead><tr>${th}</tr></thead><tbody>${body}</tbody></table></div>` : '<div class="empty">No accounts match.</div>');
+}
+function closeModal(){ $('#modal-root').innerHTML = ''; M = null; }
+function ctxFor(kind, id){
+  if (kind === 'dev') return {title:'TTD accounts: ' + devName(id), devs:[id]};
+  const p = PROJ.find(x => x.id === id); return {title:'TTD accounts: ' + p.name + ' (' + devName(p.dev) + ')', projs:[id]};
+}
+
+
+const TITLES = {dev:['Portfolio by Developer','By Developer'],proj:['Portfolio by Project','By Project']};
+const TABS = [['dev','Developer'],['proj','Project']];
+function renderChrome(){
+  const [t, crumb] = TITLES[S.screen];
+  $('#topbar').innerHTML = `<div><h1>${esc(t)}</h1></div><div class="tools"><span class="asof">As of 21 Sep 2026, ${S.stamp}</span><button class="btn" data-act="refresh">Refresh</button><button class="btn" data-act="menu" aria-haspopup="true" aria-expanded="${S.menu}">Export</button>${S.menu ? `<div class="menu" role="menu"><button role="menuitem" data-act="csv">Download CSV (opens in Excel)</button><button role="menuitem" data-act="print">Print / Save as PDF</button></div>` : ''}</div>`;
+  $('#tabs').innerHTML = TABS.map(([k,l]) => `<a href="#${k}" class="${S.screen === k ? 'on' : ''}"${S.screen === k ? ' aria-current="page"' : ''}>${l}</a>`).join('');
+}
+function render(){
+  const ae = document.activeElement, id = ae && ae.id && $('#main').contains(ae) ? ae.id : null;
+  $('#main').innerHTML = S.screen === 'proj' ? projScreen() : devScreen();
+  if (id){ const el = document.getElementById(id); if (el) el.focus(); }
+}
+function go(k){ if (location.hash === '#' + k) { S.screen = k; render(); } else location.hash = k; }
+function route(){ const h = (location.hash || '#dev').slice(1); S.screen = TITLES[h] ? h : 'dev'; S.menu = false; render(); window.scrollTo(0,0); }
+
+function exportCurrent(){
+  if (S.screen === 'dev'){
+    const m = devModel(), rows = [m.cols.map(c => c.label)];
+    sortBy(m.rows, m.cols, S.dev.sort, r => r).forEach(r => rows.push(m.cols.map(c => c.csv(r))));
+    if (m.rows.length > 1) rows.push(m.cols.map((c,i) => i === 0 ? 'Total' : c.key === 'n' ? m.rows.reduce((a,r) => a + r.n, 0) : c.csv({s:m.total})));
+    download('portfolio_by_developer.csv', rows);
+  } else {
+    const m = projModel(), mc = m.cols.slice(1), rows = [['Developer','Project'].concat(mc.map(c => c.label))];
+    sortBy(m.groups, m.cols, S.proj.sort, g => g.g).forEach(g => {
+      sortBy(g.rows, m.cols, S.proj.sort, x => x).forEach(r => rows.push([g.name, r.name].concat(mc.map(c => c.csv(r)))));
+      rows.push([g.name, 'Subtotal'].concat(mc.map(c => c.csv(g.g))));
+    });
+    if (m.nProj > 1) rows.push(['Total', ''].concat(mc.map(c => c.key === 'shB' || c.key === 'shD' ? '' : c.csv({s:m.total}))));
+    download('portfolio_by_project.csv', rows);
+  }
+}
+
+
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-act]');
+  if (!t){ if (S.menu){ S.menu = false; renderChrome(); } return; }
+  const a = t.dataset.act, d = t.dataset;
+  if (a === 'closeov'){ if (e.target === t) closeModal(); return; }
+  if (['filter','mq','mst'].includes(a)) return;
+  if (a !== 'menu' && S.menu){ S.menu = false; renderChrome(); }
+  switch (a){
+    case 'menu': S.menu = !S.menu; renderChrome(); break;
+    case 'refresh': S.stamp = nowStamp(); render(); toast('Data refreshed.'); break;
+    case 'csv': exportCurrent(); break;
+    case 'print': window.print(); break;
+    case 'reset': Object.assign(S[d.kind], d.kind === 'proj' ? {...dflt(),dev:'ALL',proj:'ALL',sel:null,collapsed:{}} : {...dflt(),dev:'ALL'}); render(); break;
+    case 'sort': { const st = S[d.kind]; st.sort = st.sort && st.sort.key === d.key ? (st.sort.dir === 1 ? {key:d.key,dir:-1} : null) : {key:d.key,dir:d.key === 'name' ? 1 : -1}; render(); break; }
+    case 'drill': Object.assign(S.proj, {dev:d.id,proj:'ALL',sel:null,collapsed:{}}); go('proj'); break;
+    case 'toggle': S.proj.collapsed[d.id] = !S.proj.collapsed[d.id]; render(); break;
+    case 'expandall': S.proj.collapsed = {}; render(); break;
+    case 'collapseall': DEVS.forEach(x => S.proj.collapsed[x.id] = true); render(); break;
+    case 'sel': S.proj.sel = d.id; render(); break;
+    case 'accts': openAccounts(ctxFor(d.kind, d.id)); break;
+    case 'mclose': closeModal(); break;
+    case 'mcsv': { const rows = [MCOLS.map(c => c[1])]; modalRows().forEach(r => rows.push([r.no, r.proj, r.unit, r.bal * 10000, r.delinq ? 'Delinquent' : 'Current', r.bucket])); download('ttd_accounts.csv', rows); break; }
+    case 'msort': M.sort = M.sort.key === d.key ? {key:d.key,dir:-M.sort.dir} : {key:d.key,dir:1}; renderModalBody(); break;
+  }
+});
+document.addEventListener('change', e => {
+  const t = e.target.closest('[data-act]'); if (!t) return;
+  const a = t.dataset.act, d = t.dataset;
+  if (a === 'filter'){
+    const st = S[d.kind]; st[d.key] = t.value;
+    if (d.kind === 'proj' && d.key === 'dev'){ st.proj = 'ALL'; st.sel = null; }
+    if (d.kind === 'proj' && d.key === 'proj') st.sel = t.value === 'ALL' ? null : t.value;
+    render();
+  } else if (a === 'mst'){ M.status = t.value; renderModalBody(); }
+});
+document.addEventListener('input', e => { if (e.target.dataset && e.target.dataset.act === 'mq'){ M.q = e.target.value; renderModalBody(); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape'){ if (M) closeModal(); else if (S.menu){ S.menu = false; renderChrome(); } } });
+window.addEventListener('hashchange', route);
+route();
+</script>
+</body>
+</html>
