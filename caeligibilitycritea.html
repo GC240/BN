@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Corporate 360 — EQL Global Pvt Ltd</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink:#E91E8C; --pink-bg:#FDEAF4;
+    --yg:#C8D400; --yg-bg:#F6F9D9;
+    --surface-1:#FFFFFF; --surface-2:#F8F8F8;
+    --border:#E6E6E6; --border-strong:#D4D4D4;
+    --text-primary:#000000; --text-secondary:#595959; --text-muted:#8C8C8C;
+    --danger:#C0392B; --danger-bg:#FBE9E7;
+    --warn:#8a6d00; --warn-bg:#FFF8E1;
+    --radius:10px;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --surface-1:#1C1B19; --surface-2:#232220; --border:#38362F; --border-strong:#4A473E;
+      --text-primary:#F1F0EC; --text-secondary:#B3B1A8; --text-muted:#85837A;
+      --pink-bg:#4A1230; --yg-bg:#2E3300; --danger-bg:#4A1E19; --danger:#F0A297;
+      --warn-bg:#3a2f00; --warn:#f0d878;
+    }
+  }
+  :root[data-theme="dark"]{
+    --surface-1:#1C1B19; --surface-2:#232220; --border:#38362F; --border-strong:#4A473E;
+    --text-primary:#F1F0EC; --text-secondary:#B3B1A8; --text-muted:#85837A;
+    --pink-bg:#4A1230; --yg-bg:#2E3300; --danger-bg:#4A1E19; --danger:#F0A297;
+    --warn-bg:#3a2f00; --warn:#f0d878;
+  }
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--surface-2);color:var(--text-primary);font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;padding:0 0 40px;}
+  .wrap{max-width:900px;margin:0 auto;padding:20px 16px 40px;}
+
+  .brandbar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--surface-1);border-bottom:1px solid var(--border);}
+  .brandbar .inner{max-width:900px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between;}
+  .logo{display:flex;flex-direction:column;line-height:1;}
+  .logo .flock{display:flex;gap:3px;margin-bottom:4px;}
+  .logo .flock span{width:9px;height:9px;background:var(--pink);clip-path:polygon(0 0,100% 50%,0 100%);}
+  .logo .word{font-weight:700;font-size:15px;letter-spacing:.01em;color:var(--text-primary);}
+  .logo .word .next{color:var(--pink);}
+
+  .accent-line{height:3px;width:64px;background:var(--pink);border-radius:2px;margin:22px 0 20px;}
+
+  .pill{font-size:11px;font-weight:600;padding:4px 11px;border-radius:999px;display:inline-block;}
+  .pill.ok{background:var(--yg-bg);color:#5c6600;}
+  .pill.warn{background:var(--warn-bg);color:var(--warn);}
+  .pill.bad{background:var(--danger-bg);color:var(--danger);}
+  .pill.neutral{background:var(--surface-2);color:var(--text-secondary);border:1px solid var(--border-strong);}
+  :root:not([data-theme="light"]) .pill.ok{color:var(--yg);}
+  :root[data-theme="dark"] .pill.ok{color:var(--yg);}
+
+  section.card{background:var(--surface-1);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:18px;}
+  section.card h2{font-size:13px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted);margin:0 0 14px;}
+
+  .grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;}
+  .metric{background:var(--surface-2);border-radius:8px;padding:12px 14px;}
+  .metric .label{font-size:12px;color:var(--text-secondary);margin:0 0 4px;}
+  .metric .value{font-size:19px;font-weight:700;margin:0;}
+  .metric .value.pink{color:var(--pink);}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap;}
+  th{color:var(--text-muted);font-weight:500;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;}
+  tr:last-child td{border-bottom:none;}
+  td.num,th.num{text-align:right;}
+  .table-scroll{overflow-x:auto;}
+  tfoot td{border-top:1px solid var(--border-strong);font-weight:600;}
+
+  p.note{font-size:11px;color:var(--text-muted);text-align:center;margin-top:10px;}
+</style>
+</head>
+<body>
+
+  <div class="wrap">
+
+    <div class="accent-line"></div>
+
+    <section class="card">
+      <h2>Eligibility criteria</h2>
+      <div class="grid-4">
+        <div class="metric">
+          <p class="label">SEC / DTI registration</p>
+          <p class="value" style="font-size:15px;">Met</p>
+          <span class="pill ok" style="margin-top:6px;">Compliant</span>
+        </div>
+        <div class="metric">
+          <p class="label">Years in operation</p>
+          <p class="value" style="font-size:15px;">7 yrs</p>
+          <span class="pill ok" style="margin-top:6px;">Met (&ge; 5 yrs)</span>
+        </div>
+        <div class="metric">
+          <p class="label">Profitability, last 2 yrs</p>
+          <p class="value" style="font-size:15px;">Profitable</p>
+          <span class="pill ok" style="margin-top:6px;">Met</span>
+        </div>
+        <div class="metric">
+          <p class="label">Regular employees</p>
+          <p class="value" style="font-size:15px;">140</p>
+          <span class="pill ok" style="margin-top:6px;">Met (&ge; 100)</span>
+        </div>
+        <div class="metric">
+          <p class="label">Salary deduction / ADA</p>
+          <p class="value" style="font-size:15px;">Agreement</p>
+          <span class="pill warn" style="margin-top:6px;">Pending signature</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Financial review &amp; concentration limit</h2>
+      <div class="grid-4">
+        <div class="metric"><p class="label">Revenue (FY)</p><p class="value">&#8369;2.1B</p></div>
+        <div class="metric"><p class="label">Net income trend</p><p class="value">+4.8%</p></div>
+        <div class="metric"><p class="label">Requested limit</p><p class="value">&#8369;1,000.0M</p></div>
+        <div class="metric"><p class="label">Proposed limit</p><p class="value pink">&#8369;1,000.0M</p></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Company group holding details</h2>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Entity</th><th>Relationship</th><th class="num">Approved limit</th><th class="num">Utilized</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>EQL Global Pvt Ltd</td><td>Applicant</td><td class="num">&#8369;0</td><td class="num">&#8369;0</td></tr>
+            <tr><td>EQL International Holdings</td><td>Parent</td><td class="num">&#8369;400,000,000</td><td class="num">&#8369;210,000,000</td></tr>
+            <tr><td>EQL Logistics Asia</td><td>Affiliate</td><td class="num">&#8369;150,000,000</td><td class="num">&#8369;92,000,000</td></tr>
+          </tbody>
+          <tfoot>
+            <tr><td colspan="2">Group total</td><td class="num">&#8369;550,000,000</td><td class="num">&#8369;302,000,000</td></tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+  </div>
+
+  <p class="note">Illustrative data reproduced from the credit review queue for EQL Global Pvt Ltd.</p>
+
+</body>
+</html>
