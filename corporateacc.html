@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Corporate Lending — Sales Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #E91E8C;
+    --pink-bg: #FDEAF4;
+    --black: #000000;
+    --dark-gray: #1A1A1A;
+    --text-gray: #595959;
+    --yg: #F2B705;
+    --yg-bg: #FDF3D6;
+    --teal: #17B7C4;
+    --teal-bg: #E1F7F9;
+    --blue: #2A6FE0;
+    --blue-bg: #E6EFFD;
+    --header: #0A0A0D;
+    --white: #FFFFFF;
+    --light-bg: #F8F8F8;
+    --surface-1: #FFFFFF;
+    --surface-2: #F8F8F8;
+    --border: #E6E6E6;
+    --border-strong: #D4D4D4;
+    --text-primary: #000000;
+    --text-secondary: #595959;
+    --text-muted: #8C8C8C;
+    --danger: #C0392B;
+    --danger-bg: #FBE9E7;
+    --radius: 12px;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --surface-1: #1C1B19;
+      --surface-2: #232220;
+      --border: #38362F;
+      --border-strong: #4A473E;
+      --text-primary: #F1F0EC;
+      --text-secondary: #B3B1A8;
+      --text-muted: #85837A;
+      --pink-bg: #4A1230;
+      --yg-bg: #332900;
+      --danger-bg: #4A1E19;
+      --danger: #F0A297;
+    }
+  }
+  :root[data-theme="dark"] {
+    --surface-1: #1C1B19;
+    --surface-2: #232220;
+    --border: #38362F;
+    --border-strong: #4A473E;
+    --text-primary: #F1F0EC;
+    --text-secondary: #B3B1A8;
+    --text-muted: #85837A;
+    --pink-bg: #4A1230;
+    --yg-bg: #332900;
+    --danger-bg: #4A1E19;
+    --danger: #F0A297;
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--surface-1);
+    color: var(--text-primary);
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+    padding: 0 0 60px;
+  }
+  .wrap { max-width: 1140px; margin: 0 auto; padding: 20px 16px 40px; }
+
+  /* Tabs */
+  .tabbar { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+  .tabbtn {
+    font-family: inherit; font-size: 13.5px; font-weight: 600; color: var(--text-secondary);
+    background: none; border: none; padding: 10px 16px; cursor: pointer;
+    border-bottom: 2px solid transparent; margin-bottom: -1px;
+  }
+  .tabbtn:hover { color: var(--text-primary); }
+  .tabbtn.active { color: var(--pink); border-bottom-color: var(--pink); }
+  .tabpanel { display: none; }
+  .tabpanel.active { display: block; }
+
+  .filters { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(15,17,23,.05); }
+  .filters select, .filters input { font-family: inherit; font-size: 13px; padding: 7px 10px; border-radius: 7px; border: 1px solid var(--border-strong); background: var(--surface-2); color: var(--text-primary); }
+  .filters .search { flex: 1; min-width: 160px; }
+  .filters label { font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 3px; }
+
+  section.block { margin-bottom: 26px; }
+  section.block > h2 { font-size: 13px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--text-primary); margin: 0 0 14px; }
+  .section-sub { font-size: 12px; color: var(--text-muted); margin: -8px 0 14px; }
+
+  .funnel-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+  .funnel-card { background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; box-shadow: 0 1px 3px rgba(15,17,23,.05); }
+  .funnel-card .fc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .funnel-card .fc-head h3 { font-size: 16px; font-weight: 600; margin: 0; }
+  .funnel-card .fc-head .total { font-size: 12.5px; color: var(--text-muted); }
+  .funnel-stage { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .funnel-stage .fs-label { width: 80px; font-size: 13px; color: var(--text-secondary); flex-shrink: 0; }
+  .funnel-stage .fs-bar-track { flex: 1; height: 26px; background: #F2F2F4; border-radius: 6px; overflow: hidden; }
+  .funnel-stage .fs-bar { height: 100%; border-radius: 6px; }
+  .funnel-stage .fs-val { width: 30px; text-align: right; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+  .bar-hold { background: var(--teal); }
+  .bar-queue { background: var(--pink); }
+  .bar-approved { background: var(--yg); }
+  .bar-rejected { background: var(--blue); }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 11.5px; color: var(--text-secondary); margin-top: 4px; }
+  .legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .legend i { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+
+  .metric-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+  .metric { position: relative; background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px 14px; box-shadow: 0 1px 3px rgba(15,17,23,.05); }
+  .metric .label { font-size: 12px; color: var(--text-secondary); margin: 0 0 4px; padding-right: 30px; }
+  .metric .value { font-size: 22px; font-weight: 700; margin: 0; }
+  .metric .value.pink { color: var(--pink); }
+  .metric .sub { font-size: 11px; color: var(--text-muted); margin: 3px 0 0; }
+  .metric .ic { position: absolute; top: 12px; right: 12px; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .metric .ic i { width: 8px; height: 8px; border-radius: 50%; display: block; }
+  .metric.m-blue .ic { background: var(--blue-bg); } .metric.m-blue .ic i { background: var(--blue); }
+  .metric.m-teal .ic { background: var(--teal-bg); } .metric.m-teal .ic i { background: var(--teal); }
+  .metric.m-muted .ic { background: var(--surface-2); } .metric.m-muted .ic i { background: var(--text-muted); }
+  .metric.m-pink .ic { background: var(--pink-bg); } .metric.m-pink .ic i { background: var(--pink); }
+  .metric.m-gold .ic { background: var(--yg-bg); } .metric.m-gold .ic i { background: var(--yg); }
+  .metric.m-danger .ic { background: var(--danger-bg); } .metric.m-danger .ic i { background: var(--danger); }
+
+  .table-card { background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: 0 1px 3px rgba(15,17,23,.05); }
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  th { color: var(--text-muted); font-weight: 500; font-size: 10.5px; text-transform: uppercase; letter-spacing: .04em; background: var(--surface-2); }
+  tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--surface-2); }
+  td.num, th.num { text-align: right; }
+
+  .stage-pill { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px; display: inline-block; }
+  .stage-pill.hold { background: var(--surface-2); color: var(--text-secondary); border: 1px solid var(--border-strong); }
+  .stage-pill.queue { background: var(--pink-bg); color: var(--pink); }
+  .stage-pill.approved { background: var(--yg-bg); color: #8A6100; }
+  .stage-pill.rejected { background: var(--danger-bg); color: var(--danger); }
+  :root:not([data-theme="light"]) .stage-pill.approved { color: var(--yg); }
+  :root[data-theme="dark"] .stage-pill.approved { color: var(--yg); }
+
+  .journey-tag { font-size: 10.5px; font-weight: 600; padding: 2px 8px; border-radius: 5px; }
+  .journey-tag.new { background: var(--pink-bg); color: var(--pink); }
+  .journey-tag.renewal { background: var(--surface-2); color: var(--text-secondary); border: 1px solid var(--border-strong); }
+
+  .status-pill { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px; display: inline-block; }
+  .status-pill.current { background: var(--yg-bg); color: #8A6100; }
+  .status-pill.watch { background: #FFF8E1; color: #8a6d00; }
+  .status-pill.delinquent { background: var(--danger-bg); color: var(--danger); }
+  :root:not([data-theme="light"]) .status-pill.current { color: var(--yg); }
+  :root[data-theme="dark"] .status-pill.current { color: var(--yg); }
+  :root:not([data-theme="light"]) .status-pill.watch { background: #3a2f00; color: #f0d878; }
+  :root[data-theme="dark"] .status-pill.watch { background: #3a2f00; color: #f0d878; }
+
+  .company-link {
+    background: none; border: none; padding: 0; font-family: inherit; font-size: 13px; font-weight: 600;
+    color: var(--pink); cursor: pointer; text-align: left; text-decoration: underline; text-decoration-color: transparent;
+  }
+  .company-link:hover { text-decoration-color: var(--pink); }
+
+  .caveat { display: flex; gap: 8px; align-items: flex-start; background: #FFF8E1; color: #8a6d00; border: 1px solid #F0E0A0; border-radius: 8px; padding: 10px 12px; font-size: 12px; margin-bottom: 18px; }
+  :root:not([data-theme="light"]) .caveat { background: #3a2f00; color: #f0d878; border-color: #5a4a00; }
+  :root[data-theme="dark"] .caveat { background: #3a2f00; color: #f0d878; border-color: #5a4a00; }
+
+  p.note { font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 10px; }
+
+  /* Modal */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+    align-items: center; justify-content: center; z-index: 50; padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: var(--surface-1); border-radius: 12px; width: 100%; max-width: 760px;
+    max-height: 85vh; overflow-y: auto; padding: 22px 22px 20px; position: relative;
+    box-shadow: 0 12px 28px rgba(15,17,23,.18);
+  }
+  .modal-close {
+    position: absolute; top: 14px; right: 14px; background: var(--surface-2); border: 1px solid var(--border);
+    width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 14px; color: var(--text-secondary);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .modal-close:hover { background: var(--border); }
+  .modal-head { margin-bottom: 6px; padding-right: 30px; }
+  .modal-head h3 { font-size: 17px; font-weight: 700; margin: 0 0 3px; }
+  .modal-head p { font-size: 12px; color: var(--text-muted); margin: 0; }
+  .modal-metric-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin: 16px 0; }
+  .modal-metric { background: var(--surface-2); border-radius: 8px; padding: 10px 12px; }
+  .modal-metric .label { font-size: 11px; color: var(--text-secondary); margin: 0 0 3px; }
+  .modal-metric .value { font-size: 17px; font-weight: 700; margin: 0; }
+
+  @media (max-width: 560px) {
+    th, td { padding: 8px 10px; }
+    .funnel-stage .fs-label { width: 58px; }
+    .modal-box { padding: 18px 16px 16px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="wrap">
+
+    <div class="tabbar" style="margin-top:20px;">
+      <button class="tabbtn active" id="tab-btn-pipeline" onclick="showTab('pipeline')">Corporate accreditation pipeline</button>
+      <button class="tabbtn" id="tab-btn-companies" onclick="showTab('companies')">Accredited companies</button>
+    </div>
+
+    <!-- TAB 1: PIPELINE -->
+    <div class="tabpanel active" id="tab-pipeline">
+
+      <div class="filters">
+        <div class="search">
+          <label for="q">Search company</label>
+          <input id="q" type="text" placeholder="Search by company name or RM..." oninput="filterTable()">
+        </div>
+        <div>
+          <label for="stageFilter">Stage</label>
+          <select id="stageFilter" onchange="filterTable()">
+            <option value="all">All stages</option>
+            <option value="hold">On hold</option>
+            <option value="queue">In queue</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
+        <div>
+          <label for="journeyFilter">Journey</label>
+          <select id="journeyFilter" onchange="filterTable()">
+            <option value="all">New + Renewal</option>
+            <option value="new">New</option>
+            <option value="renewal">Renewal</option>
+          </select>
+        </div>
+        <div>
+          <label for="regionFilter">Region</label>
+          <select id="regionFilter" onchange="filterTable()">
+            <option value="all">All regions</option>
+            <option value="ncr">NCR</option>
+            <option value="luzon">Luzon</option>
+            <option value="visayas">Visayas</option>
+            <option value="mindanao">Mindanao</option>
+          </select>
+        </div>
+      </div>
+
+      <section class="block">
+        <h2>Pipeline funnel</h2>
+        <div class="funnel-row">
+          <div class="funnel-card">
+            <div class="fc-head"><h3>New accreditations</h3><span class="total" id="newTotal">0 total</span></div>
+            <div class="funnel-stage"><span class="fs-label">On hold</span><div class="fs-bar-track"><div class="fs-bar bar-hold" id="newHoldBar" style="width:0%"></div></div><span class="fs-val" id="newHoldVal">0</span></div>
+            <div class="funnel-stage"><span class="fs-label">In queue</span><div class="fs-bar-track"><div class="fs-bar bar-queue" id="newQueueBar" style="width:0%"></div></div><span class="fs-val" id="newQueueVal">0</span></div>
+            <div class="funnel-stage"><span class="fs-label">Approved</span><div class="fs-bar-track"><div class="fs-bar bar-approved" id="newApprovedBar" style="width:0%"></div></div><span class="fs-val" id="newApprovedVal">0</span></div>
+            <div class="funnel-stage"><span class="fs-label">Rejected</span><div class="fs-bar-track"><div class="fs-bar bar-rejected" id="newRejectedBar" style="width:0%"></div></div><span class="fs-val" id="newRejectedVal">0</span></div>
+          </div>
+          <div class="funnel-card">
+            <div class="fc-head"><h3>Renewals</h3><span class="total" id="renewalTotal">0 total</span></div>
+            <div class="funnel-stage"><span class="fs-label">On hold</span><div class="fs-bar-track"><div class="fs-bar bar-hold" id="renewalHoldBar" style="width:0%"></div></div><span class="fs-val" id="renewalHoldVal">0</span></div>
+            <div class="funnel-stage"><span class="fs-label">In queue</span><div class="fs-bar-track"><div class="fs-bar bar-queue" id="renewalQueueBar" style="width:0%"></div></div><span class="fs-val" id="renewalQueueVal">0</span></div>
+            <div class="funnel-stage"><span class="fs-label">Approved</span><div class="fs-bar-track"><div class="fs-bar bar-approved" id="renewalApprovedBar" style="width:0%"></div></div><span class="fs-val" id="renewalApprovedVal">0</span></div>
+            <div class="funnel-stage"><span class="fs-label">Rejected</span><div class="fs-bar-track"><div class="fs-bar bar-rejected" id="renewalRejectedBar" style="width:0%"></div></div><span class="fs-val" id="renewalRejectedVal">0</span></div>
+          </div>
+        </div>
+        <div class="legend">
+          <span><i style="background:var(--teal)"></i>On hold</span>
+          <span><i style="background:var(--pink)"></i>In queue</span>
+          <span><i style="background:var(--yg)"></i>Approved</span>
+          <span><i style="background:var(--blue)"></i>Rejected</span>
+        </div>
+      </section>
+
+      <section class="block">
+        <h2>Combined totals</h2>
+        <div class="metric-strip">
+          <div class="metric m-muted"><div class="ic"><i></i></div><p class="label">Total count</p><p class="value" id="totalCount">0</p></div>
+          <div class="metric m-teal"><div class="ic"><i></i></div><p class="label">On hold</p><p class="value" id="totalHold">0</p></div>
+          <div class="metric m-pink"><div class="ic"><i></i></div><p class="label">In queue</p><p class="value" id="totalQueue">0</p></div>
+          <div class="metric m-gold"><div class="ic"><i></i></div><p class="label">Approved</p><p class="value pink" id="totalApproved">0</p></div>
+          <div class="metric m-blue"><div class="ic"><i></i></div><p class="label">Rejected</p><p class="value" id="totalRejected">0</p></div>
+        </div>
+      </section>
+
+      <section class="block">
+        <h2>Companies in pipeline</h2>
+        <div class="table-card">
+          <div class="table-scroll">
+            <table id="pipelineTable">
+              <thead>
+                <tr>
+                  <th>Company</th><th>Journey</th><th>Region</th><th>RM</th>
+                  <th>Stage</th><th class="num">Requested limit</th><th class="num">Days in stage</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- TAB 2: ACCREDITED COMPANIES -->
+    <div class="tabpanel" id="tab-companies">
+
+      <section class="block">
+        <h2>Accredited companies</h2>
+        <p class="section-sub">Click a company name to view its enrolled employees and personal loan status.</p>
+        <div class="table-card">
+          <div class="table-scroll">
+            <table id="companiesTable">
+              <thead>
+                <tr>
+                  <th>Company</th><th class="num">Balance</th><th class="num">Delinquency</th>
+                  <th class="num">Limit usage</th><th class="num">TTD accounts</th>
+                  <th class="num">Approvals</th><th class="num">Unavailed</th><th class="num">Rejects</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+  </div>
+
+  <p class="note">Illustrative data for layout purposes — connect the live PL Sales / Corporate 360 / Credit feeds to populate with actual figures.</p>
+
+  <!-- Employee modal -->
+  <div class="modal-overlay" id="employeeModal" onclick="if(event.target===this) closeModal()">
+    <div class="modal-box">
+      <button class="modal-close" aria-label="Close" onclick="closeModal()">✕</button>
+      <div class="modal-head">
+        <h3 id="modalCompanyName">Company</h3>
+        <p id="modalCompanySub">Employee personal loans — monitoring view</p>
+      </div>
+      <div class="modal-metric-strip" id="modalMetrics"></div>
+      <div class="table-card">
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Employee ID</th><th>Name</th><th>Department</th>
+                <th class="num">Loan amount</th><th class="num">Outstanding</th><th class="num">Monthly EMI</th>
+                <th>Disbursed</th><th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="modalEmployeeRows"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+const pipelineRows = [
+  { company: "ABC Manufacturing Corp.", journey: "renewal", region: "ncr", rm: "J. Santos", stage: "queue", limit: 25000000, days: 4 },
+  { company: "Delta Foods Inc.", journey: "new", region: "luzon", rm: "M. Cruz", stage: "hold", limit: 12000000, days: 9 },
+  { company: "Everest Construction", journey: "new", region: "visayas", rm: "R. Aquino", stage: "approved", limit: 18500000, days: 1 },
+  { company: "Golden Harvest Agri", journey: "renewal", region: "mindanao", rm: "L. Ramos", stage: "approved", limit: 9000000, days: 2 },
+  { company: "Horizon Textiles", journey: "new", region: "ncr", rm: "J. Santos", stage: "rejected", limit: 6500000, days: 12 },
+  { company: "Insular Freight Co.", journey: "new", region: "luzon", rm: "K. Villar", stage: "queue", limit: 15000000, days: 6 },
+  { company: "Jade Electronics", journey: "renewal", region: "ncr", rm: "M. Cruz", stage: "approved", limit: 22000000, days: 1 },
+  { company: "Kismet BPO Services", journey: "new", region: "visayas", rm: "R. Aquino", stage: "hold", limit: 8000000, days: 5 },
+  { company: "EQL Global Pvt Ltd", journey: "new", region: "ncr", rm: "A. Fernandez", stage: "queue", limit: 20500000, days: 1 },
+];
+
+const companies = [
+  {
+    name: "ABC Manufacturing Corp.", balance: 17000000, delinquency: 420000, limitUsagePct: 68,
+    ttd: 3, approvals: 14, unavailed: 5, rejects: 2, eligible: 312, enrolled: 62,
+    employees: [
+      { id: "EMP-00231", name: "Maria Santos", dept: "Production", amount: 150000, outstanding: 98400, emi: 6250, disbursed: "Jan 15, 2026", status: "current" },
+      { id: "EMP-00248", name: "Jose Reyes", dept: "Logistics", amount: 200000, outstanding: 182000, emi: 8333, disbursed: "Jun 02, 2026", status: "current" },
+      { id: "EMP-00305", name: "Ana Dela Cruz", dept: "Finance", amount: 100000, outstanding: 21700, emi: 4167, disbursed: "Aug 20, 2024", status: "current" },
+      { id: "EMP-00317", name: "Ramon Bautista", dept: "Maintenance", amount: 80000, outstanding: 52900, emi: 3333, disbursed: "Mar 11, 2026", status: "watch", statusLabel: "1 missed payment" },
+      { id: "EMP-00342", name: "Liza Fernandez", dept: "HR", amount: 120000, outstanding: 114600, emi: 5000, disbursed: "Aug 30, 2026", status: "current" },
+      { id: "EMP-00360", name: "Carlo Mendoza", dept: "Production", amount: 175000, outstanding: 140300, emi: 7292, disbursed: "Feb 05, 2026", status: "delinquent", statusLabel: "Delinquent — 32 days" },
+      { id: "EMP-00381", name: "Grace Villanueva", dept: "QA", amount: 90000, outstanding: 9000, emi: 3750, disbursed: "Oct 01, 2024", status: "current" },
+      { id: "EMP-00399", name: "Miguel Torres", dept: "IT", amount: 140000, outstanding: 131600, emi: 5833, disbursed: "Jul 18, 2026", status: "current" },
+    ]
+  },
+  {
+    name: "EQL Global Pvt Ltd", balance: 2860000, delinquency: 149800, limitUsagePct: 14,
+    ttd: 1, approvals: 6, unavailed: 4, rejects: 1, eligible: 140, enrolled: 24,
+    employees: [
+      { id: "EQL1001", name: "John Doe", dept: "—", amount: 13500, outstanding: 13500, emi: 400, disbursed: "Sep 28, 2026", status: "current" },
+      { id: "EQL-01042", name: "Marites Dizon", dept: "Operations", amount: 180000, outstanding: 171200, emi: 7500, disbursed: "Aug 12, 2026", status: "current" },
+      { id: "EQL-01058", name: "Ferdinand Ocampo", dept: "Finance", amount: 150000, outstanding: 112000, emi: 6250, disbursed: "Apr 03, 2026", status: "current" },
+      { id: "EQL-01071", name: "Angeline Padilla", dept: "IT", amount: 220000, outstanding: 205300, emi: 9167, disbursed: "Jul 28, 2026", status: "current" },
+      { id: "EQL-01089", name: "Joel Mercado", dept: "Sales", amount: 130000, outstanding: 96400, emi: 5417, disbursed: "Feb 19, 2026", status: "watch", statusLabel: "1 missed payment" },
+      { id: "EQL-01104", name: "Cristina Navarro", dept: "HR", amount: 100000, outstanding: 18300, emi: 4167, disbursed: "Sep 05, 2024", status: "current" },
+      { id: "EQL-01117", name: "Bayani Domingo", dept: "Operations", amount: 175000, outstanding: 168900, emi: 7292, disbursed: "Aug 30, 2026", status: "current" },
+      { id: "EQL-01133", name: "Rowena Aguilar", dept: "Marketing", amount: 160000, outstanding: 149800, emi: 6667, disbursed: "Jun 14, 2026", status: "delinquent", statusLabel: "Delinquent — 21 days" },
+      { id: "EQL-01149", name: "Edgar Valdez", dept: "QA", amount: 90000, outstanding: 72000, emi: 3750, disbursed: "Mar 22, 2026", status: "current" },
+    ]
+  },
+  {
+    name: "Everest Construction", balance: 8300000, delinquency: 0, limitUsagePct: 45,
+    ttd: 0, approvals: 9, unavailed: 3, rejects: 0, eligible: 96, enrolled: 18,
+    employees: [
+      { id: "EVC-00212", name: "Noel Aquino", dept: "Site Ops", amount: 140000, outstanding: 118000, emi: 5833, disbursed: "May 09, 2026", status: "current" },
+      { id: "EVC-00229", name: "Bea Salonga", dept: "Admin", amount: 90000, outstanding: 40200, emi: 3750, disbursed: "Nov 14, 2025", status: "current" },
+      { id: "EVC-00241", name: "Tonio Ramirez", dept: "Engineering", amount: 160000, outstanding: 152300, emi: 6667, disbursed: "Aug 02, 2026", status: "current" },
+      { id: "EVC-00255", name: "Wendy Uy", dept: "Procurement", amount: 110000, outstanding: 88000, emi: 4583, disbursed: "Feb 27, 2026", status: "watch", statusLabel: "1 missed payment" },
+    ]
+  },
+  {
+    name: "Golden Harvest Agri", balance: 4100000, delinquency: 61000, limitUsagePct: 46,
+    ttd: 1, approvals: 5, unavailed: 2, rejects: 1, eligible: 130, enrolled: 15,
+    employees: [
+      { id: "GHA-00118", name: "Rico Pascual", dept: "Farm Ops", amount: 70000, outstanding: 61000, emi: 2917, disbursed: "Jul 30, 2026", status: "delinquent", statusLabel: "Delinquent — 14 days" },
+      { id: "GHA-00126", name: "Ella Marasigan", dept: "Logistics", amount: 95000, outstanding: 51200, emi: 3958, disbursed: "Jan 22, 2026", status: "current" },
+      { id: "GHA-00133", name: "Danilo Cruz", dept: "Admin", amount: 60000, outstanding: 12000, emi: 2500, disbursed: "Mar 05, 2025", status: "current" },
+    ]
+  },
+  {
+    name: "Jade Electronics", balance: 15600000, delinquency: 0, limitUsagePct: 71,
+    ttd: 0, approvals: 12, unavailed: 6, rejects: 0, eligible: 210, enrolled: 41,
+    employees: [
+      { id: "JDE-00512", name: "Kevin Ong", dept: "Assembly", amount: 130000, outstanding: 111000, emi: 5417, disbursed: "Jun 19, 2026", status: "current" },
+      { id: "JDE-00529", name: "Cathy Lim", dept: "QA", amount: 100000, outstanding: 40500, emi: 4167, disbursed: "Dec 03, 2025", status: "current" },
+      { id: "JDE-00540", name: "Paolo Sy", dept: "Warehousing", amount: 150000, outstanding: 143200, emi: 6250, disbursed: "Aug 08, 2026", status: "current" },
+      { id: "JDE-00558", name: "Rina Tan", dept: "Finance", amount: 120000, outstanding: 95400, emi: 5000, disbursed: "Apr 16, 2026", status: "current" },
+    ]
+  },
+];
+
+function peso(n) { return "₱" + Math.round(n).toLocaleString("en-PH"); }
+
+// --- Tabs ---
+function showTab(name) {
+  document.getElementById("tab-pipeline").classList.toggle("active", name === "pipeline");
+  document.getElementById("tab-companies").classList.toggle("active", name === "companies");
+  document.getElementById("tab-btn-pipeline").classList.toggle("active", name === "pipeline");
+  document.getElementById("tab-btn-companies").classList.toggle("active", name === "companies");
+}
+
+// --- Tab 1: pipeline table ---
+function renderPipelineTable(data) {
+  const tbody = document.querySelector("#pipelineTable tbody");
+  tbody.innerHTML = "";
+  data.forEach(r => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${r.company}</td>
+      <td><span class="journey-tag ${r.journey}">${r.journey === 'new' ? 'New' : 'Renewal'}</span></td>
+      <td>${r.region.toUpperCase()}</td>
+      <td>${r.rm}</td>
+      <td><span class="stage-pill ${r.stage}">${({hold:'On hold', queue:'In queue', approved:'Approved', rejected:'Rejected'})[r.stage]}</span></td>
+      <td class="num">${peso(r.limit)}</td>
+      <td class="num">${r.days}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function filterTable() {
+  const q = document.getElementById("q").value.trim().toLowerCase();
+  const stage = document.getElementById("stageFilter").value;
+  const journey = document.getElementById("journeyFilter").value;
+  const region = document.getElementById("regionFilter").value;
+
+  const filtered = pipelineRows.filter(r => {
+    const matchesQ = !q || r.company.toLowerCase().includes(q) || r.rm.toLowerCase().includes(q);
+    const matchesStage = stage === "all" || r.stage === stage;
+    const matchesJourney = journey === "all" || r.journey === journey;
+    const matchesRegion = region === "all" || r.region === region;
+    return matchesQ && matchesStage && matchesJourney && matchesRegion;
+  });
+  renderPipelineTable(filtered);
+}
+
+// --- Funnel + combined totals, computed from pipelineRows so they always match the listing ---
+function computeFunnelAndTotals() {
+  const stages = ["hold", "queue", "approved", "rejected"];
+  const byJourney = { new: {}, renewal: {} };
+  ["new", "renewal"].forEach(j => stages.forEach(s => byJourney[j][s] = 0));
+
+  pipelineRows.forEach(r => { byJourney[r.journey][r.stage]++; });
+
+  function fillFunnel(prefix, counts) {
+    const total = stages.reduce((s, k) => s + counts[k], 0);
+    document.getElementById(prefix + "Total").textContent = total + " total";
+    stages.forEach(s => {
+      const cap = s.charAt(0).toUpperCase() + s.slice(1);
+      const val = counts[s];
+      const pct = total ? Math.round((val / total) * 100) : 0;
+      document.getElementById(prefix + cap + "Val").textContent = val;
+      document.getElementById(prefix + cap + "Bar").style.width = pct + "%";
+    });
+  }
+  fillFunnel("new", byJourney.new);
+  fillFunnel("renewal", byJourney.renewal);
+
+  const totals = { hold: 0, queue: 0, approved: 0, rejected: 0 };
+  pipelineRows.forEach(r => { totals[r.stage]++; });
+  document.getElementById("totalCount").textContent = pipelineRows.length;
+  document.getElementById("totalHold").textContent = totals.hold;
+  document.getElementById("totalQueue").textContent = totals.queue;
+  document.getElementById("totalApproved").textContent = totals.approved;
+  document.getElementById("totalRejected").textContent = totals.rejected;
+}
+
+// --- Tab 2: accredited companies table ---
+function renderCompaniesTable() {
+  const tbody = document.querySelector("#companiesTable tbody");
+  tbody.innerHTML = "";
+  companies.forEach((c, idx) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><button class="company-link" onclick="openModal(${idx})">${c.name}</button></td>
+      <td class="num">${peso(c.balance)}</td>
+      <td class="num">${peso(c.delinquency)}</td>
+      <td class="num">${c.limitUsagePct}%</td>
+      <td class="num">${c.ttd}</td>
+      <td class="num">${c.approvals}</td>
+      <td class="num">${c.unavailed}</td>
+      <td class="num">${c.rejects}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// --- Employee modal ---
+const statusLabelDefault = { current: "Current", watch: "Watch", delinquent: "Delinquent" };
+
+function openModal(idx) {
+  const c = companies[idx];
+  document.getElementById("modalCompanyName").textContent = c.name;
+  document.getElementById("modalCompanySub").textContent = `Employee personal loans — ${c.enrolled} of ${c.eligible} eligible employees enrolled`;
+
+  const totalOutstanding = c.employees.reduce((s, e) => s + e.outstanding, 0);
+  const delinquentCount = c.employees.filter(e => e.status === "delinquent").length;
+  document.getElementById("modalMetrics").innerHTML = `
+    <div class="modal-metric"><p class="label">Eligible</p><p class="value">${c.eligible}</p></div>
+    <div class="modal-metric"><p class="label">Enrolled</p><p class="value">${c.enrolled}</p></div>
+    <div class="modal-metric"><p class="label">Outstanding (sample)</p><p class="value">${peso(totalOutstanding)}</p></div>
+    <div class="modal-metric"><p class="label">Delinquent (sample)</p><p class="value">${delinquentCount}</p></div>
+  `;
+
+  const rowsHtml = c.employees.map(e => `
+    <tr>
+      <td>${e.id}</td><td>${e.name}</td><td>${e.dept}</td>
+      <td class="num">${peso(e.amount)}</td><td class="num">${peso(e.outstanding)}</td><td class="num">${peso(e.emi)}</td>
+      <td>${e.disbursed}</td>
+      <td><span class="status-pill ${e.status}">${e.statusLabel || statusLabelDefault[e.status]}</span></td>
+    </tr>
+  `).join("");
+  document.getElementById("modalEmployeeRows").innerHTML = rowsHtml;
+
+  document.getElementById("employeeModal").classList.add("open");
+}
+
+function closeModal() {
+  document.getElementById("employeeModal").classList.remove("open");
+}
+
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+
+// init
+renderPipelineTable(pipelineRows);
+renderCompaniesTable();
+computeFunnelAndTotals();
+</script>
+
+</body>
+</html>
