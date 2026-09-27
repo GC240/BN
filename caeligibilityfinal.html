@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Corporate 360 — EQL Global Pvt Ltd</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink:#E91E8C; --pink-bg:#FDEAF4;
+    --yg:#C8D400; --yg-bg:#F6F9D9;
+    --surface-1:#FFFFFF; --surface-2:#F8F8F8;
+    --border:#E6E6E6; --border-strong:#D4D4D4;
+    --text-primary:#000000; --text-secondary:#595959; --text-muted:#8C8C8C;
+    --danger:#C0392B; --danger-bg:#FBE9E7;
+    --warn:#8a6d00; --warn-bg:#FFF8E1;
+    --radius:10px;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --surface-1:#1C1B19; --surface-2:#232220; --border:#38362F; --border-strong:#4A473E;
+      --text-primary:#F1F0EC; --text-secondary:#B3B1A8; --text-muted:#85837A;
+      --pink-bg:#4A1230; --yg-bg:#2E3300; --danger-bg:#4A1E19; --danger:#F0A297;
+      --warn-bg:#3a2f00; --warn:#f0d878;
+    }
+  }
+  :root[data-theme="dark"]{
+    --surface-1:#1C1B19; --surface-2:#232220; --border:#38362F; --border-strong:#4A473E;
+    --text-primary:#F1F0EC; --text-secondary:#B3B1A8; --text-muted:#85837A;
+    --pink-bg:#4A1230; --yg-bg:#2E3300; --danger-bg:#4A1E19; --danger:#F0A297;
+    --warn-bg:#3a2f00; --warn:#f0d878;
+  }
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--surface-1);color:var(--text-primary);font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;padding:0 0 40px;font-size:13px;}
+
+  /* ─── LAYOUT: full width, tighter padding ─── */
+  .wrap{max-width:1400px;margin:0 auto;padding:18px 24px 40px;}
+  .accent-line{height:3px;width:64px;background:var(--pink);border-radius:2px;margin:0 0 18px;}
+
+  .pill{font-size:10.5px;font-weight:600;padding:4px 11px;border-radius:999px;display:inline-block;}
+  .pill.ok{background:var(--yg-bg);color:#5c6600;}
+  .pill.warn{background:var(--warn-bg);color:var(--warn);}
+  .pill.bad{background:var(--danger-bg);color:var(--danger);}
+  .pill.neutral{background:var(--surface-2);color:var(--text-secondary);border:1px solid var(--border-strong);}
+  :root:not([data-theme="light"]) .pill.ok{color:var(--yg);}
+  :root[data-theme="dark"] .pill.ok{color:var(--yg);}
+
+  /* ─── ROW OF TWO CARDS SIDE BY SIDE (fills width) ─── */
+  .row2{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;align-items:start;margin-bottom:16px;}
+
+  section.card{background:var(--surface-1);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;margin-bottom:16px;}
+  .row2 section.card{margin-bottom:0;height:100%;}
+  section.card h2{font-size:12.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted);margin:0 0 16px;display:flex;align-items:center;justify-content:space-between;}
+  section.card h2 .cnt{font-size:10.5px;font-weight:600;color:var(--text-muted);background:var(--surface-2);padding:2px 9px;border-radius:10px;text-transform:none;letter-spacing:0;}
+
+  .grid-5{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .metric{background:var(--surface-1);border-radius:9px;padding:16px 16px;border:1px solid var(--border);transition:.15s ease;}
+  .metric:hover{border-color:var(--border-strong);box-shadow:0 1px 4px rgba(0,0,0,.05);}
+  .metric .label{font-size:12px;color:var(--text-secondary);margin:0 0 8px;font-weight:500;}
+  .metric .value{font-size:20px;font-weight:700;margin:0;line-height:1.15;}
+  .metric .value.pink{color:var(--pink);}
+  .metric .pill{margin-top:10px;}
+
+  /* ─── TABLE ─── */
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--border);white-space:nowrap;}
+  th{color:var(--text-muted);font-weight:500;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;background:var(--surface-1);}
+  th:first-child{border-top-left-radius:8px;}
+  th:last-child{border-top-right-radius:8px;}
+  tr:last-child td{border-bottom:none;}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;}
+  .table-scroll{overflow-x:auto;border:1px solid var(--border);border-radius:9px;}
+  .table-scroll table{border:none;}
+  tbody tr:hover{background:var(--pink-bg);}
+  tfoot td{border-top:1.5px solid var(--border-strong);font-weight:700;background:var(--surface-1);}
+
+  /* ─── SIDE PANEL (relationship snapshot to fill right column) ─── */
+  .snap-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);}
+  .snap-row:last-child{border-bottom:none;}
+  .snap-row .l{font-size:12px;color:var(--text-secondary);}
+  .snap-row .v{font-size:13px;font-weight:600;color:var(--text-primary);}
+  .snap-donut{display:flex;align-items:center;gap:16px;padding-bottom:14px;margin-bottom:6px;border-bottom:1px dashed var(--border);}
+  .snap-donut svg{flex:none;}
+  .snap-legend{display:flex;flex-direction:column;gap:7px;flex:1;}
+  .snap-legend span{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--text-secondary);}
+  .snap-legend i{width:9px;height:9px;border-radius:3px;flex:none;}
+  .snap-legend b{color:var(--text-primary);margin-left:auto;font-weight:600;}
+
+  p.note{font-size:11px;color:var(--text-muted);text-align:center;margin-top:10px;}
+
+  /* ─── RESPONSIVE ─── */
+  @media(max-width:1100px){
+    .row2{grid-template-columns:1fr;}
+    .grid-5{grid-template-columns:repeat(3,1fr);}
+  }
+  @media(max-width:640px){
+    .wrap{padding:14px 12px 30px;}
+    .grid-5,.grid-3{grid-template-columns:1fr 1fr;}
+    section.card{padding:16px;}
+    .tabnav{padding:8px 12px;}
+  }
+  @media(max-width:400px){
+    .grid-5,.grid-3{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+  <div class="wrap">
+
+    <div class="accent-line"></div>
+
+    <!-- ─── ELIGIBILITY (full width, 5 across, fills space) ─── -->
+    <section class="card">
+      <h2>Eligibility criteria <span class="cnt">5 of 5 met</span></h2>
+      <div class="grid-5">
+        <div class="metric">
+          <p class="label">SEC / DTI registration</p>
+          <p class="value">Met</p>
+          <span class="pill ok">Compliant</span>
+        </div>
+        <div class="metric">
+          <p class="label">Years in operation</p>
+          <p class="value">7 yrs</p>
+          <span class="pill ok">Met (&ge; 5 yrs)</span>
+        </div>
+        <div class="metric">
+          <p class="label">Profitability, last 2 yrs</p>
+          <p class="value">Profitable</p>
+          <span class="pill ok">Met</span>
+        </div>
+        <div class="metric">
+          <p class="label">Regular employees</p>
+          <p class="value">140</p>
+          <span class="pill ok">Met (&ge; 100)</span>
+        </div>
+        <div class="metric">
+          <p class="label">Salary deduction / ADA</p>
+          <p class="value">Agreement</p>
+          <span class="pill warn">Pending signature</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── FINANCIAL REVIEW + RELATIONSHIP SNAPSHOT (fills the row, no empty space) ─── -->
+    <div class="row2">
+      <section class="card">
+        <h2>Financial review &amp; concentration limit</h2>
+        <div class="grid-3">
+          <div class="metric"><p class="label">Revenue (FY)</p><p class="value">&#8369;2.1B</p></div>
+          <div class="metric"><p class="label">Net income trend</p><p class="value" style="color:#2E7D32;">+4.8%</p></div>
+          <div class="metric"><p class="label">Requested limit</p><p class="value pink">&#8369;1,000.0M</p></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Group exposure snapshot</h2>
+        <div class="snap-donut">
+          <svg viewBox="0 0 120 120" width="110" height="110" id="donut"></svg>
+          <div class="snap-legend">
+            <span><i style="background:#17B8C4;"></i>Intl Holdings <b>69.5%</b></span>
+            <span><i style="background:#E91E8C;"></i>Logistics Asia <b>30.5%</b></span>
+            <span><i style="background:#E6E6E6;"></i>Headroom <b>&#8369;248M</b></span>
+          </div>
+        </div>
+        <div class="snap-row"><span class="l">Group approved limit</span><span class="v">&#8369;550.0M</span></div>
+        <div class="snap-row"><span class="l">Group utilised</span><span class="v">&#8369;302.0M</span></div>
+        <div class="snap-row"><span class="l">Group utilisation</span><span class="v" style="color:var(--pink);">54.9%</span></div>
+      </section>
+    </div>
+
+    <!-- ─── GROUP HOLDINGS TABLE (full width) ─── -->
+    <section class="card">
+      <h2>Company group holding details <span class="cnt">3 entities</span></h2>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Entity</th><th>Relationship</th><th class="num">Approved limit</th><th class="num">Utilized</th><th class="num">Utilisation</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>EQL Global Pvt Ltd</td><td><span class="pill neutral">Applicant</span></td><td class="num">&#8369;0</td><td class="num">&#8369;0</td><td class="num">—</td></tr>
+            <tr><td>EQL International Holdings</td><td><span class="pill neutral">Parent</span></td><td class="num">&#8369;400,000,000</td><td class="num">&#8369;210,000,000</td><td class="num">52.5%</td></tr>
+            <tr><td>EQL Logistics Asia</td><td><span class="pill neutral">Affiliate</span></td><td class="num">&#8369;150,000,000</td><td class="num">&#8369;92,000,000</td><td class="num">61.3%</td></tr>
+          </tbody>
+          <tfoot>
+            <tr><td colspan="2">Group total</td><td class="num">&#8369;550,000,000</td><td class="num">&#8369;302,000,000</td><td class="num">54.9%</td></tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+  </div>
+
+  <p class="note">Illustrative data reproduced from the credit review queue for EQL Global Pvt Ltd.</p>
+
+<script>
+(function(){
+  var el=document.getElementById("donut");
+  var cx=60,cy=60,r=44,sw=20,C=2*Math.PI*r,off=0;
+  var data=[{v:69.5,c:"#17B8C4"},{v:30.5,c:"#E91E8C"}];
+  var s="";
+  data.forEach(function(d){
+    var len=d.v/100*C;
+    s+='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+d.c+'" stroke-width="'+sw+'" stroke-dasharray="'+len.toFixed(2)+' '+(C-len).toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'" transform="rotate(-90 '+cx+' '+cy+')"/>';
+    off+=len;
+  });
+  s+='<text x="'+cx+'" y="'+(cy-2)+'" text-anchor="middle" font-size="16" font-weight="700" fill="#000" font-family="Poppins">&#8369;302M</text>';
+  s+='<text x="'+cx+'" y="'+(cy+13)+'" text-anchor="middle" font-size="8" fill="#8C8C8C" font-family="Poppins">Utilised</text>';
+  el.innerHTML=s;
+})();
+</script>
+
+</body>
+</html>
