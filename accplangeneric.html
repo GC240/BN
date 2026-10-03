@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Account Plan Target — Petronas Chemical Group</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:auto}
+body{font-family:'Poppins',sans-serif;background:#fff;font-size:14px;color:#1a2332;-webkit-font-smoothing:antialiased;line-height:1.4}
+.wrap{width:100%}
+
+/* ── COMPACT META STRIP (replaces big title card) ── */
+.meta-strip{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-bottom:12px;margin-bottom:12px;border-bottom:1px solid #eef0f3}
+.meta-left{display:flex;align-items:center;gap:10px;min-width:0}
+.meta-left .client-name{font-size:14.5px;font-weight:600;color:#0A1628;white-space:nowrap}
+.meta-left .meta-sep{color:#d1d5db}
+.meta-left .meta-sub{font-size:12.5px;color:#6b7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.meta-tags{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}
+.tag{font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:5px;white-space:nowrap}
+.tag-gold{background:#FFF3CD;color:#856404}
+.tag-blue{background:#E6F1FB;color:#0C447C}
+.tag-green{background:#EAF3DE;color:#27500A}
+
+/* ── KPI STRIP — slim inline, no boxed cards ── */
+.kpi-strip{display:flex;align-items:stretch;gap:0;margin-bottom:12px;border:1px solid #eef0f3;border-radius:8px;overflow:hidden}
+.kpi-cell{flex:1;padding:9px 14px;border-right:1px solid #eef0f3;min-width:0}
+.kpi-cell:last-child{border-right:none}
+.kpi-cell .lbl{font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:.4px;font-weight:600;margin-bottom:3px;white-space:nowrap}
+.kpi-cell .val{font-size:16px;font-weight:600;color:#0A1628;line-height:1.15;white-space:nowrap}
+.kpi-cell .sub{font-size:10.5px;margin-top:2px;font-weight:500;white-space:nowrap}
+.up{color:#16a34a}.dn{color:#dc2626}.am{color:#d97706}.mut{color:#9ca3af}
+
+/* ── INFO BANNER ── */
+.banner{background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px;padding:8px 13px;margin-bottom:12px;font-size:12px;color:#856404;display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.banner svg{flex-shrink:0;margin-top:1px}
+
+/* ── CONTROLS ── */
+.controls-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.ctl-label{font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:.4px;flex-shrink:0}
+.filter-btn{padding:5px 12px;border-radius:20px;border:1px solid #e5e7eb;background:#fff;font-size:12px;font-weight:500;color:#4b5563;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .12s;white-space:nowrap}
+.filter-btn:hover{border-color:#FFAD00;background:#fffbeb}
+.filter-btn.on{background:#0A1628;color:#FFAD00;border-color:#0A1628;font-weight:600}
+.search-input{padding:6px 11px;border-radius:6px;border:1px solid #e5e7eb;font-size:12.5px;font-family:'Poppins',sans-serif;outline:none;width:190px;color:#1a2332}
+.search-input:focus{border-color:#FFAD00;box-shadow:0 0 0 2px rgba(255,173,0,.15)}
+.toggle-wrap{display:flex;align-items:center;gap:7px;margin-left:auto}
+.toggle-switch{position:relative;width:36px;height:20px;background:#d1d5db;border-radius:20px;cursor:pointer;transition:background .15s;flex-shrink:0}
+.toggle-switch.on{background:#FFAD00}
+.toggle-switch .knob{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .15s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.toggle-switch.on .knob{left:18px}
+.toggle-label{font-size:11.5px;color:#4b5563;font-weight:500;white-space:nowrap}
+
+/* ── TABLE — blends flat, no nested card chrome ── */
+.table-outer{border:1px solid #eef0f3;border-radius:8px;overflow:hidden;margin-bottom:12px}
+.table-scroll{overflow-x:auto;width:100%;max-height:620px;overflow-y:auto}
+table.calc-tbl{width:100%;border-collapse:collapse;min-width:1280px;font-size:13.5px;table-layout:fixed}
+table.calc-tbl colgroup col.col-type{width:110px}
+table.calc-tbl colgroup col.col-prod{width:240px}
+table.calc-tbl colgroup col.col-region{width:90px}
+table.calc-tbl colgroup col.col-entity{width:115px}
+table.calc-tbl colgroup col.col-actual{width:135px}
+table.calc-tbl colgroup col.col-niiA{width:110px}
+table.calc-tbl colgroup col.col-target{width:135px}
+table.calc-tbl colgroup col.col-niiT{width:110px}
+table.calc-tbl colgroup col.col-remarks{width:280px}
+
+table.calc-tbl thead th{padding:9px 8px;text-align:left;font-size:14px;font-weight:600;white-space:normal;line-height:1.25;border-bottom:1.5px solid rgba(0,0,0,.06);position:sticky;top:0;z-index:5;vertical-align:middle}
+th.h-type{background:#f8f9fa;color:#374151}
+th.h-prod{background:#f8f9fa;color:#374151}
+th.h-region{background:#f8f9fa;color:#374151}
+th.h-entity{background:#f8f9fa;color:#374151}
+th.h-actual{background:#FFF3CD;color:#856404;text-align:center}
+th.h-niiA{background:#D1FAE5;color:#065F46;text-align:center}
+th.h-target{background:#FFF3CD;color:#856404;text-align:center}
+th.h-niiT{background:#DBEAFE;color:#1E40AF;text-align:center}
+th.h-remarks{background:#DBEAFE;color:#1E40AF}
+
+table.calc-tbl tbody td{padding:7px 10px;border-bottom:1px solid #f3f4f6;vertical-align:middle;font-size:13.5px;color:#1a2332;overflow:hidden;text-overflow:ellipsis}
+table.calc-tbl tbody tr:hover td{background:#fafbfc}
+td.c-type{font-weight:600;color:#0A1628;vertical-align:top;padding-top:9px;background:#fff}
+td.c-type .type-count{font-size:10px;font-weight:400;color:#9ca3af;display:block;margin-top:2px}
+td.c-prod{font-weight:500;white-space:normal}
+td.c-region{color:#6b7280;font-size:12px}
+td.c-entity{color:#6b7280;font-size:12px}
+td.c-actual{background:#FFFCF0;text-align:center;font-weight:600;color:#1a2332}
+td.c-niiA{background:#F0FDF7;text-align:center;font-weight:600;color:#065F46}
+td.c-target{background:#FFFCF0;text-align:center}
+td.c-niiT{background:#F5F9FF;text-align:center}
+td.c-remarks{background:#F5F9FF;white-space:normal}
+
+.dash-row td{color:#b0b7c3}
+.dash-row td.c-prod{color:#6b7280}
+.held-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#16a34a;margin-right:6px;flex-shrink:0}
+.unheld-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#d1d5db;margin-right:6px;flex-shrink:0}
+
+input.cell-input{width:100%;padding:5px 6px;border-radius:5px;border:1px solid #e5e7eb;font-size:13px;font-family:'Poppins',sans-serif;text-align:center;background:#fff;outline:none;color:#1a2332}
+input.cell-input:focus{border-color:#FFAD00;box-shadow:0 0 0 2px rgba(255,173,0,.15);background:#fffefa}
+input.cell-input.ai-suggested{color:#92400e;font-style:italic;background:#fffdf5}
+textarea.cell-input{width:100%;padding:5px 6px;border-radius:5px;border:1px solid #e5e7eb;font-size:12px;font-family:'Poppins',sans-serif;resize:vertical;min-height:32px;outline:none;color:#1a2332;line-height:1.35}
+textarea.cell-input:focus{border-color:#FFAD00;box-shadow:0 0 0 2px rgba(255,173,0,.15)}
+textarea.cell-input.ai-suggested{color:#92400e;font-style:italic;background:#fffdf5}
+
+tr.total-row td{background:#FFF3CD!important;font-weight:700;color:#0A1628;border-top:2px solid #FFAD00;padding:10px 8px;font-size:13px}
+tr.total-row .total-arrow{font-size:12.5px;color:#374151;display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:wrap}
+tr.total-row .total-label{white-space:normal}
+
+.legend-row{display:flex;gap:14px;flex-wrap:wrap;padding:8px 12px;font-size:11px;color:#9ca3af;align-items:center;border-top:1px solid #f3f4f6}
+.legend-item{display:flex;align-items:center;gap:5px}
+
+@media (max-width:768px){
+  .meta-strip{flex-direction:column;align-items:flex-start}
+  .kpi-strip{flex-wrap:wrap}
+  .kpi-cell{flex:1 1 45%;border-bottom:1px solid #eef0f3}
+  table.calc-tbl{min-width:1280px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="meta-strip">
+  <div class="meta-left">
+    <span class="client-name">Petronas Chemical Group Berhad</span>
+    <span class="meta-sep">&middot;</span>
+    <span class="meta-sub">Account ID: CIF-0091 &middot; FY 2026–27 &middot; All Corporate Banking Product Lines</span>
+  </div>
+  <div class="meta-tags">
+    <span class="tag tag-gold">Account Status: Active</span>
+    <span class="tag tag-blue">Auto-populated from System</span>
+    <span class="tag tag-green">87 Products &middot; 6 Divisions</span>
+  </div>
+</div>
+
+<div class="kpi-strip" id="kpi-row"></div>
+
+<div class="banner">
+  <svg width="15" height="15" viewBox="0 0 16 16" fill="none" style="margin-top:1px"><circle cx="8" cy="8" r="7" stroke="#856404" stroke-width="1.3"/><path d="M8 7v4.2M8 5v.01" stroke="#856404" stroke-width="1.3" stroke-linecap="round"/></svg>
+  <span><strong>FY 2025–26 Actual</strong> and <strong>NII Actual</strong> are read-only, auto-filled from the finance system for products currently held &mdash; others show a dash (&mdash;). <strong>FY 2026–27 Target</strong>, <strong>NII Target</strong> and <strong>Remarks</strong> are editable, pre-filled with AI-suggested values you can adjust.</span>
+</div>
+
+<div class="controls-bar">
+  <span class="ctl-label">Filter</span>
+  <button class="filter-btn on" data-filter="all" onclick="setFilter('all',this)">All Products (87)</button>
+  <button class="filter-btn" data-filter="Credit" onclick="setFilter('Credit',this)">Credit</button>
+  <button class="filter-btn" data-filter="Cash Management" onclick="setFilter('Cash Management',this)">Cash Management</button>
+  <button class="filter-btn" data-filter="Trade Finance" onclick="setFilter('Trade Finance',this)">Trade Finance</button>
+  <button class="filter-btn" data-filter="Treasury & FX" onclick="setFilter('Treasury & FX',this)">Treasury &amp; FX</button>
+  <button class="filter-btn" data-filter="Investment Banking" onclick="setFilter('Investment Banking',this)">Investment Banking</button>
+  <button class="filter-btn" data-filter="Securities Services" onclick="setFilter('Securities Services',this)">Securities</button>
+  <input class="search-input" id="searchBox" placeholder="Search product..." oninput="renderTable()"/>
+  <div class="toggle-wrap">
+    <span class="toggle-label">Held only</span>
+    <div class="toggle-switch" id="heldToggle" onclick="toggleHeldOnly()"><div class="knob"></div></div>
+  </div>
+</div>
+
+<div class="table-outer">
+  <div class="table-scroll">
+    <table class="calc-tbl">
+      <colgroup>
+        <col class="col-type"><col class="col-prod"><col class="col-region"><col class="col-entity">
+        <col class="col-actual"><col class="col-niiA"><col class="col-target"><col class="col-niiT"><col class="col-remarks">
+      </colgroup>
+      <thead>
+        <tr>
+          <th class="h-type">Product Type</th>
+          <th class="h-prod">Product</th>
+          <th class="h-region">Region</th>
+          <th class="h-entity">Booking Entity</th>
+          <th class="h-actual">FY 2025–26 Actual</th>
+          <th class="h-niiA">NII Actual (M)</th>
+          <th class="h-target">FY 2026–27 Target</th>
+          <th class="h-niiT">NII Target (M)</th>
+          <th class="h-remarks">Remarks</th>
+        </tr>
+      </thead>
+      <tbody id="tbl-body"></tbody>
+      <tfoot id="tbl-foot"></tfoot>
+    </table>
+  </div>
+  <div class="legend-row">
+    <span class="legend-item"><span class="held-dot"></span>Existing holding &mdash; actuals auto-filled</span>
+    <span class="legend-item"><span class="unheld-dot"></span>No current holding &mdash; whitespace, target fully editable</span>
+    <span class="legend-item" style="color:#92400e;font-style:italic">Italic amber = AI-suggested value (editable)</span>
+  </div>
+</div>
+
+</div>
+
+<script id="product-data" type="application/json">
+[{"type": "Credit", "showType": true, "typeSpan": 7, "product": "Short-Term Revolving Credit (STRC / Islamic)", "region": "APAC", "entity": "Bank", "actual": "210M", "niiA": "3.6", "noiA": "0.6", "rwaA": "1.8%", "target": "260M", "niiT": "4.3", "noiT": "0.7", "rwaT": "1.9%", "remarks": "Downstream expansion drives higher utilisation H2.", "held": true}, {"type": "Credit", "showType": false, "typeSpan": 7, "product": "Overdraft / Cash Line (Islamic)", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "30M", "niiT": "0.4", "noiT": "0.1", "rwaT": "1.5%", "remarks": "Working capital buffer — propose at next review.", "held": false}, {"type": "Credit", "showType": false, "typeSpan": 7, "product": "Bridging Loan", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "No active bridging requirement identified.", "held": false}, {"type": "Credit", "showType": false, "typeSpan": 7, "product": "Term Loan / Commodity Financing (Islamic)", "region": "APAC", "entity": "Bank", "actual": "1,320M", "niiA": "9.85", "noiA": "—", "rwaA": "2.1%", "target": "1,600M", "niiT": "11.8", "noiT": "0.3", "rwaT": "2.2%", "remarks": "Expand utilisation with feedstock requirements.", "held": true}, {"type": "Credit", "showType": false, "typeSpan": 7, "product": "Lease Term Financing (Islamic)", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "150M", "niiT": "1.1", "noiT": "0.1", "rwaT": "2.0%", "remarks": "Capex asset financing — plant upgrade cycle FY27.", "held": false}, {"type": "Credit", "showType": false, "typeSpan": 7, "product": "Syndication Loan / Syndicated Facility (Islamic)", "region": "Global", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "No syndication mandate currently — monitor M&A financing need.", "held": false}, {"type": "Credit", "showType": false, "typeSpan": 7, "product": "Project Finance / Structured Financing (Islamic)", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Potential trigger if regional expansion proceeds.", "held": false}, {"type": "Cash Management", "showType": true, "typeSpan": 16, "product": "Corporate Current Account / Current Account (Islamic)", "region": "APAC", "entity": "Bank", "actual": "48M", "niiA": "—", "noiA": "0.18", "rwaA": "—", "target": "65M", "niiT": "—", "noiT": "0.25", "rwaT": "—", "remarks": "Regional treasury centralisation opportunity.", "held": true}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "Regional Cash Platform", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "0.15", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "0.22", "rwaT": "—", "remarks": "Onboard regional entities onto unified platform.", "held": true}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "Multi-bank Account Reporting (MT940)", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "0.08", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "0.10", "rwaT": "—", "remarks": "Consolidate visibility across group entities.", "held": true}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "Working Capital Positioning", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Offer as value-add with account growth.", "held": false}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "Domestic Payments (RENTAS/DuitNow Corporate)", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "0.20", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "0.28", "rwaT": "—", "remarks": "Payment volume growing with capex programme.", "held": true}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "Cross-border Payments (SWIFT)", "region": "APAC/EMEA", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "0.30", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "0.42", "rwaT": "—", "remarks": "Regional expansion adds cross-border payment flow.", "held": true}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "Payroll Distribution Service", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "0.06", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "0.08", "rwaT": "—", "remarks": "8,600 employees — payroll wallet opportunity.", "held": false}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "ERP Host-to-Host Payment Processing", "region": "APAC", "entity": "Bank", "actual": "720M", "niiA": "—", "noiA": "0.22", "rwaA": "—", "target": "850M", "niiT": "—", "noiT": "0.30", "rwaT": "—", "remarks": "ERP migration enables direct integration.", "held": true}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "Virtual Account (E-Collections)", "region": "APAC", "entity": "Bank", "actual": "120", "niiA": "—", "noiA": "0.04", "rwaA": "—", "target": "200", "niiT": "—", "noiT": "0.07", "rwaT": "—", "remarks": "Expand coverage to all operating entities.", "held": true}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "Direct Debit / Automated Payment", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Not relevant — B2B collections only.", "held": false}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "Cheque / Cash Collections", "region": "APAC", "entity": "Bank", "actual": "850M", "niiA": "—", "noiA": "0.10", "rwaA": "—", "target": "950M", "niiT": "—", "noiT": "0.13", "rwaT": "—", "remarks": "Receivables and collections growing steadily.", "held": true}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "Notional Pooling (Islamic)", "region": "APAC", "entity": "Bank", "actual": "180M", "niiA": "—", "noiA": "0.45", "rwaA": "—", "target": "300M", "niiT": "—", "noiT": "0.75", "rwaT": "—", "remarks": "Regional treasury centralisation — regional entities to join.", "held": true}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "Zero Balance / Sweeping", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "100M", "niiT": "—", "noiT": "0.15", "rwaT": "—", "remarks": "Propose alongside notional pooling rollout.", "held": false}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "Money Market Placement (Islamic)", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "200M", "niiT": "1.8", "noiT": "—", "rwaT": "1.2%", "remarks": "Surplus cash placement — propose post Q2 capex review.", "held": false}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "Fixed Deposit / Investment (Islamic)", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Client prefers liquid placements — monitor.", "held": false}, {"type": "Cash Management", "showType": false, "typeSpan": 16, "product": "Regional Cross-border Liquidity Platform", "region": "ASEAN", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Bundle with notional pooling expansion FY27.", "held": false}, {"type": "Trade Finance", "showType": true, "typeSpan": 22, "product": "LC Import / LC Import (Islamic)", "region": "APAC", "entity": "Bank", "actual": "650M", "niiA": "—", "noiA": "3.98", "rwaA": "3.5%", "target": "780M", "niiT": "—", "noiT": "5.20", "rwaT": "3.6%", "remarks": "New export corridors — H1 pipeline confirmed.", "held": true}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Post-Import Financing (Islamic)", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "120M", "niiT": "1.0", "noiT": "0.4", "rwaT": "3.0%", "remarks": "Post-import financing window for raw materials.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Shipping Guarantee (Islamic)", "region": "APAC", "entity": "Bank", "actual": "120M", "niiA": "—", "noiA": "0.35", "rwaA": "—", "target": "160M", "niiT": "—", "noiT": "0.48", "rwaT": "—", "remarks": "Increase coverage for shipping corridors.", "held": true}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Inward Bills for Collection (Islamic)", "region": "APAC", "entity": "Bank", "actual": "380M", "niiA": "—", "noiA": "0.55", "rwaA": "—", "target": "450M", "niiT": "—", "noiT": "0.68", "rwaT": "—", "remarks": "Documentary collections expanding with import volume.", "held": true}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Overseas Credit Line Import", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Not currently utilised — explore for capex imports.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "LC Export / LC Export (Islamic)", "region": "EMEA", "entity": "Bank", "actual": "25M", "niiA": "—", "noiA": "0.80", "rwaA": "3.8%", "target": "60M", "niiT": "—", "noiT": "1.6", "rwaT": "3.8%", "remarks": "Export corridor opening FY27.", "held": true}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Transferable LC", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Not relevant to current export structure.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Bills Discounting (Islamic)", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "50M", "niiT": "0.3", "noiT": "0.2", "rwaT": "3.2%", "remarks": "Export bills discounting — propose with new corridor.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Outward Bills Collection (Islamic)", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Bundle with export LC growth.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Overseas Credit Line Export", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Monitor — relevant to acquisition flows.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Bank Guarantee (Islamic)", "region": "APAC", "entity": "Bank", "actual": "450M", "niiA": "—", "noiA": "1.2", "rwaA": "—", "target": "550M", "niiT": "—", "noiT": "1.5", "rwaT": "—", "remarks": "Regional JV — est. USD 25M BG required Q2 2026.", "held": true}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Standby LC (SBLC)", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "80M", "niiT": "—", "noiT": "0.35", "rwaT": "—", "remarks": "Cross-sell alongside performance bond renewal.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Bankers' Acceptance (Islamic)", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Not currently active — review with treasury team.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Trade Loan (Islamic)", "region": "APAC", "entity": "Bank", "actual": "1,200M", "niiA": "—", "noiA": "2.1", "rwaA": "3.2%", "target": "1,500M", "niiT": "—", "noiT": "2.8", "rwaT": "3.3%", "remarks": "Increase corridors across key markets.", "held": true}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Invoice Financing (Islamic)", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "100M", "niiT": "—", "noiT": "0.6", "rwaT": "3.5%", "remarks": "Receivables financing — pair with supply chain rollout.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Receivables Purchase / Discounting", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Evaluate against existing receivables programme.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Supplier Finance (Islamic)", "region": "APAC", "entity": "Bank", "actual": "780M", "niiA": "—", "noiA": "1.45", "rwaA": "4.1%", "target": "1,100M", "niiT": "—", "noiT": "2.1", "rwaT": "4.5%", "remarks": "Onboard top suppliers — CFO champion confirmed.", "held": true}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Dynamic Discounting", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Bundle with supplier finance programme.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Commodity Warehousing Financing", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Relevant if feedstock storage financing required.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Pre-export Financing", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Monitor — relevant to acquisition flows.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "International Market Solutions", "region": "Global", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "150M", "niiT": "—", "noiT": "0.5", "rwaT": "3.0%", "remarks": "Increase corridors across key markets.", "held": false}, {"type": "Trade Finance", "showType": false, "typeSpan": 22, "product": "Trade Credit Insurance", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Discuss with trade team if corridor scales.", "held": false}, {"type": "Treasury & FX", "showType": true, "typeSpan": 21, "product": "FX Spot (Islamic)", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "0.30", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "0.40", "rwaT": "—", "remarks": "Captured within FX forward programme — track separately FY27.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "FX Forward (Islamic)", "region": "APAC", "entity": "Bank", "actual": "550M", "niiA": "—", "noiA": "1.84", "rwaA": "4.5%", "target": "800M", "niiT": "—", "noiT": "2.7", "rwaT": "4.6%", "remarks": "Regional expansion adds FX exposure significantly.", "held": true}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "FX Swap (Islamic)", "region": "APAC", "entity": "Bank", "actual": "120M", "niiA": "—", "noiA": "0.25", "rwaA": "—", "target": "160M", "niiT": "—", "noiT": "0.34", "rwaT": "—", "remarks": "Liquidity bridging for regional subsidiaries.", "held": true}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "FX Options", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Propose as hedging alternative for volatile corridors.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Non-Deliverable Forward (NDF)", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Not required — no non-convertible currency exposure currently.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Structured FX / Target Forward", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Offer as alternative to vanilla forward post Q2 review.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Interest Rate Swap (Islamic)", "region": "APAC", "entity": "Bank", "actual": "100M IRS", "niiA": "—", "noiA": "0.4", "rwaA": "5.0%", "target": "300M IRS", "niiT": "—", "noiT": "1.2", "rwaT": "5.2%", "remarks": "New cross-sell opportunity.", "held": true}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Cross-Currency Swap (Islamic)", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Relevant if foreign currency loan drawn for acquisition.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Forward Rate Agreement (FRA)", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Not currently active.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Interest Rate Cap / Floor / Collar", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Alternative hedge structure — discuss with treasury.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Swaption", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Not currently relevant to hedging needs.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Repo / Short-term Placement (Islamic)", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Short-dated surplus placement — propose if cash builds.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Negotiable Instrument of Deposit (Islamic)", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Not currently held.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Government Securities", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Treasury investment — not active currently.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Corporate Bonds / Commercial Papers", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Covered under investment banking — see section below.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Commodity Hedging", "region": "APAC", "entity": "Bank", "actual": "180M", "niiA": "—", "noiA": "0.55", "rwaA": "—", "target": "230M", "niiT": "—", "noiT": "0.70", "rwaT": "—", "remarks": "Feedstock price volatility hedging — active programme.", "held": true}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Foreign Currency Fixed Deposit", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Not held — client retains FX in operating accounts.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Dual Currency Investment", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Not suitable for treasury risk profile.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Structured / Digital Deposits", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Not currently active.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Range Accrual Notes", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Not currently active.", "held": false}, {"type": "Treasury & FX", "showType": false, "typeSpan": 21, "product": "Money Market Deposit", "region": "APAC", "entity": "Bank", "actual": "180M", "niiA": "1.84", "noiA": "—", "rwaA": "—", "target": "260M", "niiT": "2.6", "noiT": "—", "rwaT": "—", "remarks": "Surplus liquidity — capture short-dated placements.", "held": true}, {"type": "Investment Banking", "showType": true, "typeSpan": 14, "product": "Bond / Sukuk Origination", "region": "Global", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Monitor for refinancing window post FY26 results.", "held": false}, {"type": "Investment Banking", "showType": false, "typeSpan": 14, "product": "Green / Sustainable Sukuk", "region": "Global", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "500M", "niiT": "—", "noiT": "1.5", "rwaT": "—", "remarks": "Position sustainability-linked facility.", "held": false}, {"type": "Investment Banking", "showType": false, "typeSpan": 14, "product": "Hybrid / Quasi-equity", "region": "Global", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Not currently relevant to capital structure.", "held": false}, {"type": "Investment Banking", "showType": false, "typeSpan": 14, "product": "Fixed Income Syndication", "region": "Global", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "No active mandate.", "held": false}, {"type": "Investment Banking", "showType": false, "typeSpan": 14, "product": "Syndicated Loan / Bookrunner Services", "region": "Global", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Monitor for large capex financing requirement.", "held": false}, {"type": "Investment Banking", "showType": false, "typeSpan": 14, "product": "Leveraged Finance / LBO", "region": "Global", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Relevant only if M&A financed via leverage — monitor.", "held": false}, {"type": "Investment Banking", "showType": false, "typeSpan": 14, "product": "Agency & Trustee Services", "region": "Global", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Not active — no existing bond programme.", "held": false}, {"type": "Investment Banking", "showType": false, "typeSpan": 14, "product": "IPO / Islamic IPO Services", "region": "Regional", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Not applicable — client already listed.", "held": false}, {"type": "Investment Banking", "showType": false, "typeSpan": 14, "product": "Rights Issue / Secondary Placement", "region": "Regional", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Not currently applicable.", "held": false}, {"type": "Investment Banking", "showType": false, "typeSpan": 14, "product": "Equity & Commodity Derivatives", "region": "Global", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Relevant for commodity price hedging — coordinate with team.", "held": false}, {"type": "Investment Banking", "showType": false, "typeSpan": 14, "product": "M&A Advisory", "region": "Global", "entity": "Bank", "actual": "1.5M fee", "niiA": "—", "noiA": "1.5", "rwaA": "—", "target": "2.0M fee", "niiT": "—", "noiT": "2.0", "rwaT": "—", "remarks": "Acquisition advisory — pitch by 30 Jun 2026.", "held": true}, {"type": "Investment Banking", "showType": false, "typeSpan": 14, "product": "Project Finance Advisory", "region": "APAC", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Monitor for expansion financing.", "held": false}, {"type": "Investment Banking", "showType": false, "typeSpan": 14, "product": "ESG / Sustainability Advisory", "region": "Global", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "300K fee", "niiT": "—", "noiT": "0.3", "rwaT": "—", "remarks": "Sustainability compliance gap — advisory opportunity.", "held": false}, {"type": "Investment Banking", "showType": false, "typeSpan": 14, "product": "Strategic & Sector Advisory", "region": "Global", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "No active mandate.", "held": false}, {"type": "Securities Services", "showType": true, "typeSpan": 7, "product": "Institutional Broking", "region": "ASEAN", "entity": "Securities Division", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Not applicable to corporate treasury relationship.", "held": false}, {"type": "Securities Services", "showType": false, "typeSpan": 7, "product": "Prime Broking", "region": "ASEAN", "entity": "Securities Division", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Not applicable.", "held": false}, {"type": "Securities Services", "showType": false, "typeSpan": 7, "product": "Custodian Services", "region": "ASEAN", "entity": "Trustee Services", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Not currently required.", "held": false}, {"type": "Securities Services", "showType": false, "typeSpan": 7, "product": "Clearing & Settlement", "region": "Regional", "entity": "Securities Division", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Not applicable.", "held": false}, {"type": "Securities Services", "showType": false, "typeSpan": 7, "product": "Equity Research", "region": "ASEAN", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Provided as relationship value-add — non-revenue.", "held": false}, {"type": "Securities Services", "showType": false, "typeSpan": 7, "product": "Unit Trust / Islamic Fund Distribution", "region": "Regional", "entity": "Asset Management", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Not applicable to corporate treasury.", "held": false}, {"type": "Securities Services", "showType": false, "typeSpan": 7, "product": "Private Equity Solutions", "region": "ASEAN", "entity": "Bank", "actual": "—", "niiA": "—", "noiA": "—", "rwaA": "—", "target": "—", "niiT": "—", "noiT": "—", "rwaT": "—", "remarks": "Monitor if client explores PE-backed JV structures.", "held": false}]
+</script>
+<script>
+const PRODUCTS = JSON.parse(document.getElementById('product-data').textContent);
+
+const TYPE_ORDER = ['Credit','Cash Management','Trade Finance','Treasury & FX','Investment Banking','Securities Services'];
+
+let state = { filter: 'all', heldOnly: false };
+
+function parseNum(v) {
+  if (v === undefined || v === null) return null;
+  const s = String(v).trim();
+  if (s === '—' || s === '-' || s === '') return null;
+  const cleaned = s.replace(/,/g,'').replace(/%/g,'').replace(/M\s*(IRS|fee|notional)?/gi,'').replace(/K\s*(fee)?/gi,'').trim();
+  const num = parseFloat(cleaned);
+  if (isNaN(num)) return null;
+  if (/K/i.test(s) && !/M/i.test(s)) return num / 1000;
+  return num;
+}
+
+function renderKPIs() {
+  let totalNiiA = 0, totalNiiT = 0, heldCount = 0, totalProducts = PRODUCTS.length;
+  PRODUCTS.forEach(p => {
+    if (p.held) heldCount++;
+    const a = parseNum(p.niiA);
+    if (a !== null) totalNiiA += a;
+  });
+  document.querySelectorAll('.cell-input[data-field="niiT"]').forEach(inp => {
+    const v = parseNum(inp.value);
+    if (v !== null) totalNiiT += v;
+  });
+  const growth = totalNiiA > 0 ? (((totalNiiT - totalNiiA) / totalNiiA) * 100).toFixed(0) : null;
+  const kpiHtml = `
+    <div class="kpi-cell"><div class="lbl">Total Products</div><div class="val">${totalProducts}</div><div class="sub mut">${TYPE_ORDER.length} divisions</div></div>
+    <div class="kpi-cell"><div class="lbl">Active Holdings</div><div class="val">${heldCount}</div><div class="sub up">${((heldCount/totalProducts)*100).toFixed(0)}% penetration</div></div>
+    <div class="kpi-cell"><div class="lbl">NII Actual FY25–26</div><div class="val">USD ${totalNiiA.toFixed(1)}M</div><div class="sub mut">Across held products</div></div>
+    <div class="kpi-cell"><div class="lbl">NII Target FY26–27</div><div class="val" style="color:#0C447C">USD ${totalNiiT.toFixed(1)}M</div><div class="sub up">${growth !== null ? (growth>=0?'+':'') + growth + '% YoY target' : 'Enter targets'}</div></div>
+    <div class="kpi-cell"><div class="lbl">Whitespace</div><div class="val am">${totalProducts - heldCount}</div><div class="sub am">Cross-sell opportunity</div></div>
+  `;
+  document.getElementById('kpi-row').innerHTML = kpiHtml;
+}
+
+function setFilter(f, btn) {
+  state.filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  renderTable();
+}
+
+function toggleHeldOnly() {
+  state.heldOnly = !state.heldOnly;
+  document.getElementById('heldToggle').classList.toggle('on', state.heldOnly);
+  renderTable();
+}
+
+function escAttr(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+}
+
+function currentFilteredList() {
+  const search = document.getElementById('searchBox').value.trim().toLowerCase();
+  return PRODUCTS.filter(p => {
+    if (state.filter !== 'all' && p.type !== state.filter) return false;
+    if (state.heldOnly && !p.held) return false;
+    if (search && !p.product.toLowerCase().includes(search)) return false;
+    return true;
+  });
+}
+
+function renderTable() {
+  const filtered = currentFilteredList();
+  const groups = {};
+  filtered.forEach(p => { (groups[p.type] = groups[p.type] || []).push(p); });
+
+  let html = '';
+  let rowIdx = 0;
+  TYPE_ORDER.forEach(type => {
+    const items = groups[type];
+    if (!items || !items.length) return;
+    items.forEach((p, i) => {
+      const dashRowClass = p.held ? '' : ' class="dash-row"';
+      const dot = p.held ? '<span class="held-dot"></span>' : '<span class="unheld-dot"></span>';
+      const typeCell = i === 0 ? `<td class="c-type" rowspan="${items.length}">${escAttr(type)}<span class="type-count">${items.length} products</span></td>` : '';
+      const targetSuggested = p.target !== '—';
+      const niiTSuggested = p.niiT !== '—';
+      const remarksSuggested = p.remarks && p.remarks.length > 0;
+      html += `<tr${dashRowClass} data-idx="${rowIdx}">
+        ${typeCell}
+        <td class="c-prod">${dot}${escAttr(p.product)}</td>
+        <td class="c-region">${escAttr(p.region)}</td>
+        <td class="c-entity">${escAttr(p.entity)}</td>
+        <td class="c-actual">${escAttr(p.actual)}</td>
+        <td class="c-niiA">${escAttr(p.niiA)}</td>
+        <td class="c-target"><input class="cell-input${targetSuggested && !p.held ? ' ai-suggested':''}" data-field="target" data-idx="${rowIdx}" value="${escAttr(p.target)}" oninput="onEdit(this)"/></td>
+        <td class="c-niiT"><input class="cell-input${niiTSuggested && !p.held ? ' ai-suggested':''}" data-field="niiT" data-idx="${rowIdx}" value="${escAttr(p.niiT)}" oninput="onEdit(this)"/></td>
+        <td class="c-remarks"><textarea class="cell-input${!p.held && remarksSuggested ? ' ai-suggested':''}" data-field="remarks" data-idx="${rowIdx}" oninput="onEdit(this)">${escAttr(p.remarks)}</textarea></td>
+      </tr>`;
+      rowIdx++;
+    });
+  });
+
+  document.getElementById('tbl-body').innerHTML = html || '<tr><td colspan="9" style="text-align:center;padding:30px;color:#9ca3af">No products match this filter.</td></tr>';
+  renderTotals(filtered);
+  renderKPIs();
+}
+
+function onEdit(el) {
+  if (el.classList.contains('ai-suggested')) el.classList.remove('ai-suggested');
+  renderTotals(currentFilteredList());
+  renderKPIs();
+}
+
+function renderTotals(filtered) {
+  let totalNiiA = 0, totalNiiT = 0, heldInView = 0;
+  filtered.forEach(p => {
+    const a = parseNum(p.niiA);
+    if (a !== null) totalNiiA += a;
+    if (p.held) heldInView++;
+  });
+  document.querySelectorAll('#tbl-body input[data-field="niiT"]').forEach(inp => {
+    const v = parseNum(inp.value);
+    if (v !== null) totalNiiT += v;
+  });
+  const growthPct = totalNiiA > 0 ? (((totalNiiT - totalNiiA) / totalNiiA) * 100).toFixed(0) : null;
+  const growthText = growthPct !== null ? (growthPct >= 0 ? '+' + growthPct + '% YoY growth target' : growthPct + '% YoY') : 'Enter targets to see growth';
+
+  document.getElementById('tbl-foot').innerHTML = `
+    <tr class="total-row">
+      <td colspan="4" class="total-label">TOTAL FY TARGETS — ${filtered.length} product${filtered.length===1?'':'s'} in view (${heldInView} held)</td>
+      <td style="text-align:center">—</td>
+      <td style="text-align:center">${totalNiiA.toFixed(1)}</td>
+      <td style="text-align:center">—</td>
+      <td style="text-align:center"><span class="total-arrow">${totalNiiA.toFixed(1)} → <strong>${totalNiiT.toFixed(1)}</strong></span></td>
+      <td style="font-size:11.5px;color:#856404;font-weight:600">${growthText}</td>
+    </tr>
+  `;
+}
+
+renderTable();
+</script>
+</body>
+</html>
