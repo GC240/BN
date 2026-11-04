@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Outbound Campaign · New Credit Card — Agent Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --page:#efefef;--card:#ffffff;--soft:#f6f7f9;--line:#e4e6ea;--line2:#f0f1f3;
+  --ink:#1b1f29;--muted:#6b7280;--faint:#9ca3af;
+  --bar:#000000;--on-bar:#ffffff;--pill:#000000;--on-pill:#ffffff;
+  --teal:#3fbcd4;--pink:#e94b7a;--yellow:#fbbf24;--blue:#0a5fb4;--lime:#c8dc2c;--green:#1f9d4c;--red:#d93a3a;
+  --teal-s:#e3f6fa;--pink-s:#fde8ef;--yellow-s:#fff5da;--blue-s:#e5eff9;--green-s:#e6f5ec;--red-s:#fdeaea;
+  color-scheme:light;box-sizing:border-box;padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --page:#0e1116;--card:#171b22;--soft:#1d222b;--line:#2b313c;--line2:#222833;--ink:#e8ebf0;--muted:#a1a9b6;--faint:#7a8494;
+  --pill:#e8ebf0;--on-pill:#0e1116;--teal-s:#13303a;--pink-s:#3a1823;--yellow-s:#352a10;--blue-s:#14263b;--green-s:#13281c;--red-s:#331717;color-scheme:dark}}
+:root[data-theme="dark"]{--page:#0e1116;--card:#171b22;--soft:#1d222b;--line:#2b313c;--line2:#222833;--ink:#e8ebf0;--muted:#a1a9b6;--faint:#7a8494;
+  --pill:#e8ebf0;--on-pill:#0e1116;--teal-s:#13303a;--pink-s:#3a1823;--yellow-s:#352a10;--blue-s:#14263b;--green-s:#13281c;--red-s:#331717;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--page);color:var(--ink);font-size:13px;line-height:1.45;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+/* shell */
+.top{position:sticky;top:0;z-index:20;height:56px;background:var(--bar);color:var(--on-bar);display:flex;align-items:center;gap:16px;padding:0 18px;padding-top:env(safe-area-inset-top,0px);box-sizing:content-box}
+.logo{font-weight:800;line-height:.9;font-size:17px;letter-spacing:.2px}
+.top .sp{flex:1}
+.cti{display:flex;align-items:center;gap:8px;color:#fff;background:#1d2129;border-radius:20px;padding:5px 6px 5px 12px;font-size:12px}
+.cti .st{display:inline-flex;align-items:center;gap:6px}
+.cti .led{width:8px;height:8px;border-radius:50%;background:#4ade80}
+.cti select{background:#2a2f39;border:0;border-radius:14px;padding:3px 8px;color:#fff;font-size:12px}
+.av{width:34px;height:34px;border-radius:50%;background:#2a2f39;display:grid;place-items:center;font-weight:600;font-size:12px;color:#fff;flex-shrink:0}
+.shell{display:flex;min-height:100%;padding-top:env(safe-area-inset-top,0px)}
+.rail{width:52px;background:var(--bar);flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:20px;padding-top:16px}
+.rail span{width:18px;height:18px;border:1.6px solid #9aa0aa;border-radius:4px;display:block}
+.rail span:nth-child(3n){border-radius:50%}
+.main{flex:1;min-width:0;background:var(--page)}
+.head{background:var(--card);padding:10px 16px;font-weight:600;font-size:15px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.head .ht{flex:1;min-width:240px}
+.head .camp{font-size:12px;font-weight:400;color:var(--muted)}
+.body{padding:12px}
+.tabs{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:var(--card);border-radius:6px;padding:6px 12px;font-size:12.5px}
+.tab.on{background:var(--pill);color:var(--on-pill);border-color:var(--pill);font-weight:500}
+.tab .ct{background:var(--pink);color:#fff;border-radius:10px;font-size:10.5px;padding:0 6px;margin-left:6px}
+
+/* cards */
+.card{background:var(--card);border-radius:10px;padding:14px}
+.card h3{font-size:14px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.card h3 small{font-size:11.5px;font-weight:400;color:var(--muted)}
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-bottom:12px}
+.kpi{background:var(--card);border-radius:10px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.kpi .k{font-size:12px;color:var(--muted)}
+.kpi .v{font-size:17px;font-weight:500;margin-top:2px;font-variant-numeric:tabular-nums}
+.kpi .ic{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;font-size:15px}
+.desk{display:grid;grid-template-columns:300px minmax(0,1fr) 340px;gap:12px;align-items:stretch;height:max(640px,calc(100vh - 190px))}
+.col{min-height:0;overflow-y:auto;scrollbar-width:thin}
+.col-q{display:flex;flex-direction:column;overflow:hidden}
+.col-r{display:flex;flex-direction:column;gap:12px}
+.col-r>.card:last-child{flex:1}
+.col-c{display:flex;flex-direction:column;gap:12px}
+.col-c>.card:last-child{flex:1}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.mt{margin-top:12px}
+.mut{color:var(--muted)}
+.tag{display:inline-block;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:10px;white-space:nowrap}
+.t-teal{background:var(--teal-s);color:#137a8f}.t-pink{background:var(--pink-s);color:#b8285a}.t-yel{background:var(--yellow-s);color:#9a6b00}.t-blue{background:var(--blue-s);color:var(--blue)}.t-green{background:var(--green-s);color:var(--green)}.t-red{background:var(--red-s);color:var(--red)}.t-n{background:var(--soft);color:var(--muted);border:1px solid var(--line)}
+@media (prefers-color-scheme:dark){.t-teal{color:#7fd8ea}.t-pink{color:#f59ab8}.t-yel{color:#f8cf63}}
+
+/* queue */
+.qlist{flex:1;min-height:0;overflow-y:auto;margin-right:-6px;padding-right:6px}
+.qfilter{flex-shrink:0;display:flex;gap:6px;margin-bottom:10px}
+.qfilter input{flex:1;border:1px solid var(--line);border-radius:6px;padding:6px 9px;background:var(--card);min-width:0}
+.q{border:1px solid var(--line2);border-radius:8px;padding:10px;margin-bottom:8px;cursor:pointer;background:var(--card);text-align:left;width:100%;display:block}
+.q:hover{border-color:var(--teal)}
+.q.on{border-color:var(--blue);background:var(--blue-s)}
+.q .r1{display:flex;justify-content:space-between;align-items:center;gap:6px}
+.q .nm{font-weight:600}
+.q .r2{font-size:11.5px;color:var(--muted);margin-top:3px;display:flex;justify-content:space-between}
+.prop{height:5px;border-radius:3px;background:var(--line2);margin-top:7px;overflow:hidden}
+.prop i{display:block;height:100%;background:var(--teal)}
+.q.done{opacity:.55}
+
+/* call bar */
+.callbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--soft);border-radius:8px;padding:10px 12px;margin-bottom:12px}
+.callbar .who{flex:1;min-width:180px}
+.callbar .who b{font-size:14.5px}
+.timer{font-variant-numeric:tabular-nums;font-weight:600;font-size:16px;min-width:56px}
+.cbtn{border:1px solid var(--line);background:var(--card);border-radius:20px;padding:6px 14px;font-size:12.5px;font-weight:500}
+.cbtn.dial{background:var(--green);color:#fff;border-color:var(--green)}
+.cbtn.end{background:var(--red);color:#fff;border-color:var(--red)}
+.cbtn.on{background:var(--yellow);border-color:var(--yellow);color:#1b1f29}
+.cbtn:disabled{opacity:.45;cursor:not-allowed}
+.status{font-size:11.5px;display:inline-flex;align-items:center;gap:5px}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--faint)}
+.status.live i{background:var(--green);animation:pulse 1.2s infinite}
+.status.ring i{background:var(--yellow)}
+@keyframes pulse{50%{opacity:.3}}
+@media (prefers-reduced-motion:reduce){.status.live i{animation:none}}
+
+/* brief */
+.brief{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px 14px}
+.brief .k{font-size:11px;color:var(--muted)}
+.brief .v{font-weight:500;font-size:12.5px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.flag{display:flex;gap:8px;align-items:flex-start;font-size:12px;padding:7px 10px;border-radius:6px;margin-top:10px}
+.hl{background:var(--teal-s);border-radius:8px;padding:10px 12px;margin-top:10px;font-size:12.5px}
+.hl b{color:var(--blue)}
+
+/* script */
+.steps{display:flex;gap:4px;margin-bottom:10px;overflow-x:auto}
+.stp{flex:1 0 auto;border:0;background:var(--soft);border-radius:6px;padding:6px 10px;font-size:11.5px;font-weight:500;color:var(--muted);white-space:nowrap}
+.stp.on{background:var(--blue);color:#fff}
+.stp.ok{background:var(--green-s);color:var(--green)}
+.say{border-left:3px solid var(--teal);background:var(--soft);border-radius:0 8px 8px 0;padding:10px 12px;font-size:13px;margin-bottom:8px}
+.say .lbl{font-size:10.5px;color:var(--muted);font-weight:600;margin-bottom:3px}
+.say.ar{direction:rtl;text-align:right;border-left:0;border-right:3px solid var(--yellow);border-radius:8px 0 0 8px}
+.tip{font-size:12px;color:var(--muted);margin-bottom:8px}
+.ben{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:8px}
+.ben div{border:1px solid var(--line);border-radius:8px;padding:9px;font-size:12px}
+.ben b{display:block;font-size:13px;margin-bottom:2px}
+.obj{border:1px solid var(--line);border-radius:8px;margin-bottom:6px}
+.obj summary{padding:8px 10px;cursor:pointer;font-weight:500;font-size:12.5px;display:flex;gap:8px;align-items:center}
+.obj summary input{accent-color:var(--pink)}
+.obj p{padding:0 12px 10px 32px;font-size:12.5px}
+.snav{display:flex;justify-content:space-between;margin-top:10px}
+
+/* script timeline */
+.sh{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px}
+.sh b{font-size:14px}
+.sh .mut{font-size:12px}
+.sstats{display:grid;grid-template-columns:repeat(4,1fr);background:var(--blue-s);border-radius:8px;padding:10px 6px;margin-bottom:6px;text-align:center}
+.sstats .n{width:34px;height:34px;border-radius:50%;background:var(--card);display:grid;place-items:center;margin:0 auto 4px;font-weight:600;font-size:12.5px;font-variant-numeric:tabular-nums}
+.sstats .l{font-size:10px;color:var(--muted);letter-spacing:.3px}
+.tl{position:relative}
+.tli{position:relative;padding-left:48px}
+.tli::before{content:"";position:absolute;left:17px;top:0;bottom:0;border-left:1.5px dashed var(--line)}
+.tli:first-child::before{top:22px}.tli:last-child::before{bottom:calc(100% - 22px)}
+.tic{position:absolute;left:0;top:6px;width:36px;height:36px;border-radius:50%;background:var(--pink-s);display:grid;place-items:center;color:var(--ink);z-index:1}
+.tli.ok .tic{background:var(--green-s);color:var(--green)}
+.tli.cur .tic{background:var(--blue);color:#fff}
+.tlh{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line2);padding:8px 0 10px}
+.tlh .tt{font-size:13px;font-weight:500;display:flex;gap:8px;align-items:center}
+.tlh .td{font-size:11.5px;color:var(--muted)}
+.tlb{padding:10px 0 12px;border-bottom:1px solid var(--line2)}
+.kq{font-weight:600;font-size:12.5px;margin:8px 0 5px}
+.lf{font-size:11.5px;color:var(--muted);margin:6px 0}
+.lf b{color:var(--ink)}
+.avoid{font-size:11.5px;color:var(--red);margin-top:6px}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:16px;padding:4px 11px;font-size:12px}
+.chip.on{background:var(--pill);color:var(--on-pill);border-color:var(--pill)}
+.chip.g{border-color:var(--green);color:var(--green)}.chip.r{border-color:var(--pink);color:#b8285a}
+.vchk{display:flex;gap:8px;align-items:center;font-size:12.5px;padding:3px 0}
+.vchk input{accent-color:var(--green);width:15px;height:15px}
+
+/* forms */
+.f{display:grid;gap:10px}
+.f label{font-size:11.5px;color:var(--muted);display:block;margin-bottom:3px}
+.inp{width:100%;border:1px solid var(--line);border-radius:6px;padding:7px 9px;background:var(--card);min-height:34px}
+textarea.inp{resize:vertical;min-height:70px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{border:1px solid var(--line);background:var(--card);border-radius:16px;padding:4px 11px;font-size:12px}
+.seg button.on{background:var(--pill);color:var(--on-pill);border-color:var(--pill)}
+.b{border-radius:20px;padding:7px 18px;font-weight:500;border:1px solid var(--line);background:var(--card)}
+.b-lime{background:var(--lime);border-color:var(--lime);color:#1b1f29}
+.b-blue{background:var(--blue);border-color:var(--blue);color:#fff}
+.b:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.note{font-size:12px;border-radius:6px;padding:7px 10px}
+.n-y{background:var(--yellow-s);color:#8a5f00}.n-g{background:var(--green-s);color:var(--green)}.n-r{background:var(--red-s);color:var(--red)}.n-b{background:var(--blue-s);color:var(--blue)}
+@media (prefers-color-scheme:dark){.n-y{color:#f8cf63}}
+
+/* ai */
+.ai{border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:12.5px}
+.ai h4{font-size:12px;font-weight:600;margin:8px 0 3px}
+.ai h4:first-child{margin-top:0}
+.ai ul{padding-left:16px}
+.sent{display:flex;gap:4px;margin-top:4px}
+.sent i{flex:1;height:6px;border-radius:3px;background:var(--line2)}
+
+/* charts */
+.chart svg{width:100%;height:auto;max-height:230px;display:block;margin:0 auto}
+.axis{font-size:10px;fill:var(--muted)}
+.lg{display:flex;justify-content:center;gap:14px;font-size:11px;color:var(--muted);margin-top:6px;flex-wrap:wrap}
+.lg i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle}
+.donut{width:150px;height:150px;border-radius:50%;margin:6px auto;position:relative}
+.donut::after{content:"";position:absolute;inset:34px;border-radius:50%;background:var(--card)}
+.donut b{position:absolute;inset:0;display:grid;place-items:center;z-index:1;font-size:16px}
+.lb{display:grid;grid-template-columns:20px 1fr auto auto;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line2);font-size:12.5px}
+.lb.me{background:var(--blue-s);border-radius:6px;padding:6px;font-weight:600}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:620px}
+th{text-align:left;font-weight:600;padding:8px;background:var(--yellow-s);white-space:nowrap}
+td{padding:8px;border-top:1px solid var(--line2)}
+.funnel div{height:30px;margin:0 auto 4px;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:600;color:#fff;border-radius:3px}
+.foot{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);padding:10px 14px;flex-wrap:wrap;gap:6px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#1d2129;color:#fff;padding:9px 16px;border-radius:6px;font-size:12.5px;z-index:50;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+.empty{text-align:center;color:var(--muted);padding:30px 10px;font-size:12.5px}
+
+@media (max-width:1180px){.desk{grid-template-columns:280px minmax(0,1fr);height:auto}.col{overflow:visible}.col-q{max-height:80vh}.col-q .qlist{max-height:none}.desk>.col-r{grid-column:1/-1}.kpis{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:760px){.rail{display:none}.desk,.grid2,.grid3{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}.brief{grid-template-columns:repeat(2,1fr)}.ben{grid-template-columns:1fr}.cti select{display:none}.main,.head{border-radius:0}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <main class="main">
+    <div class="head"><div class="ht">Home <span class="camp">Campaign: Visa Cashback Card launch · Retail Non-Affluent · Outbound · Agent Dana Haddad, Amman Contact Centre</span></div>
+      <div class="av" title="Dana Haddad">DH</div></div>
+    <div class="body">
+      <div class="tabs" role="tablist">
+        <button class="tab on" data-t="desk" onclick="tab('desk')">Agent Desk</button>
+        <button class="tab" data-t="ovr" onclick="tab('ovr')">Campaign Overview</button>
+        <button class="tab" data-t="fu" onclick="tab('fu')">My Follow-ups<span class="ct" id="fuCt">0</span></button>
+        <button class="tab" data-t="card" onclick="tab('card')">Product Sheet</button>
+      </div>
+      <div class="kpis" id="kpis"></div>
+      <section id="v-desk"></section>
+      <section id="v-ovr" hidden></section>
+      <section id="v-fu" hidden></section>
+      <section id="v-card" hidden></section>
+    </div>
+    <div class="foot"><span>© Copyright 2026, All rights reserved.</span><span>Calling window 09:00–20:00, Sun–Thu (campaign policy)</span><span>powered by BusinessNext</span></div>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ DATA (demo) ============ */
+const CARD={name:'Visa Cashback Card',fee:'First year free, then JOD 25/yr (waived with JOD 1,500 annual spend)',
+  cb:[['3% cashback','Groceries & fuel, capped JOD 15/month'],['1% cashback','All other purchases'],['0% instalments','3–12 months at partner merchants']],
+  extras:'Contactless, mobile wallet ready, SMS alerts on every transaction',
+  docs:'Civil ID; salary certificate only if salary is not transferred to the bank'};
+const CUST=[
+ {id:'C1',name:'Ahmad Al-Zoubi',cif:'00418820',mob:'+962 79 *** 4412',age:34,city:'Amman – Tla’ Al-Ali',emp:'Private sector · Payroll',sal:780,tenure:'6 yrs',lang:'Arabic',limit:2000,prop:86,grocery:210,fuel:90,
+  prods:['Payroll account','Debit card','Personal loan'],last:'Branch visit 12/10/2026 (statement request)',pref:'WhatsApp',best:'17:00–19:00',dnc:false,cards:0,flags:['Personal loan EMI JOD 140/month: check affordability before quoting full limit'],seg:'Payroll'},
+ {id:'C2',name:'Rana Khalil',cif:'00377105',mob:'+962 77 *** 9031',age:29,city:'Irbid',emp:'Teacher · Payroll',sal:620,tenure:'4 yrs',lang:'Arabic',limit:1500,prop:78,grocery:160,fuel:60,
+  prods:['Payroll account','Debit card'],last:'Mobile app login 2 days ago',pref:'SMS',best:'15:00–18:00',dnc:false,cards:0,flags:[],seg:'Payroll'},
+ {id:'C3',name:'Omar Haddad',cif:'00502231',mob:'+962 78 *** 2276',age:41,city:'Zarqa',emp:'Self-employed · Retail shop',sal:900,tenure:'9 yrs',lang:'Arabic',limit:2500,prop:71,grocery:240,fuel:140,
+  prods:['Current account','Debit card','Savings account'],last:'Call centre, card PIN reset 03/09/2026',pref:'Call',best:'11:00–13:00',dnc:false,cards:1,flags:['Holds another bank’s card (bureau)','Income verification needed: not payroll'],seg:'Self-employed'},
+ {id:'C4',name:'Sara Nasser',cif:'00611984',mob:'+962 79 *** 6650',age:26,city:'Amman – Khalda',emp:'Private sector · Payroll',sal:520,tenure:'2 yrs',lang:'English',limit:1000,prop:64,grocery:120,fuel:0,
+  prods:['Payroll account','Debit card'],last:'Complaint closed 20/10/2026 (ATM cash)',pref:'Email',best:'18:00–20:00',dnc:false,cards:0,flags:['Recent complaint: acknowledge first'],seg:'Payroll'},
+ {id:'C5',name:'Khaled Mansour',cif:'00290047',mob:'+962 77 *** 1189',age:52,city:'Salt',emp:'Government · Payroll',sal:690,tenure:'12 yrs',lang:'Arabic',limit:1800,prop:58,grocery:190,fuel:110,
+  prods:['Payroll account','Debit card','Fixed deposit'],last:'No contact in 6 months',pref:'Call',best:'10:00–12:00',dnc:false,cards:0,flags:[],seg:'Payroll'},
+ {id:'C6',name:'Lina Qasem',cif:'00733412',mob:'+962 78 *** 3307',age:31,city:'Aqaba',emp:'Hospitality · Payroll',sal:560,tenure:'3 yrs',lang:'Arabic',limit:1200,prop:52,grocery:130,fuel:40,
+  prods:['Payroll account'],last:'Do-not-call registered 01/08/2026',pref:'SMS',best:'—',dnc:true,cards:0,flags:[],seg:'Payroll'},
+ {id:'C7',name:'Hamza Obeidat',cif:'00528841',mob:'+962 79 *** 7720',age:38,city:'Amman – Marka',emp:'Private sector · Payroll',sal:850,tenure:'7 yrs',lang:'Arabic',limit:2200,prop:82,grocery:230,fuel:120,
+  prods:['Payroll account','Debit card','Savings account'],last:'Mobile app: viewed card offers 01/11/2026',pref:'WhatsApp',best:'16:00–18:00',dnc:false,cards:0,flags:[],seg:'Payroll'},
+ {id:'C8',name:'Noor Al-Shami',cif:'00644207',mob:'+962 77 *** 5518',age:27,city:'Amman – Jubeiha',emp:'Nurse · Payroll',sal:600,tenure:'3 yrs',lang:'English',limit:1400,prop:75,grocery:150,fuel:70,
+  prods:['Payroll account','Debit card'],last:'Website card-page visit 30/10/2026',pref:'Email',best:'19:00–20:00',dnc:false,cards:0,flags:['Works shifts: call only in evening slot'],seg:'Payroll'},
+ {id:'C9',name:'Mohammad Bataineh',cif:'00315562',mob:'+962 78 *** 8834',age:45,city:'Irbid',emp:'Government · Payroll',sal:740,tenure:'11 yrs',lang:'Arabic',limit:1900,prop:69,grocery:200,fuel:100,
+  prods:['Payroll account','Debit card','Car loan'],last:'Branch visit 18/09/2026',pref:'Call',best:'14:00–16:00',dnc:false,cards:0,flags:['Car loan EMI JOD 210/month: check affordability before quoting full limit'],seg:'Payroll'},
+ {id:'C10',name:'Aya Hijazi',cif:'00702219',mob:'+962 79 *** 3046',age:24,city:'Amman – Sweileh',emp:'Private sector · Payroll',sal:480,tenure:'2 yrs',lang:'English',limit:900,prop:66,grocery:110,fuel:30,
+  prods:['Payroll account','Debit card'],last:'Mobile app login yesterday',pref:'SMS',best:'18:00–20:00',dnc:false,cards:0,flags:['First credit product: explain interest-free period clearly'],seg:'Payroll'},
+ {id:'C11',name:'Firas Al-Tal',cif:'00466135',mob:'+962 77 *** 6612',age:36,city:'Madaba',emp:'Self-employed · Workshop',sal:820,tenure:'5 yrs',lang:'Arabic',limit:1800,prop:61,grocery:180,fuel:160,
+  prods:['Current account','Debit card'],last:'Cheque book request 22/10/2026',pref:'Call',best:'12:00–14:00',dnc:false,cards:0,flags:['Income verification needed: not payroll'],seg:'Self-employed'},
+ {id:'C12',name:'Reem Saleh',cif:'00589903',mob:'+962 78 *** 2291',age:33,city:'Amman – Abdoun',emp:'Private sector · Payroll',sal:950,tenure:'6 yrs',lang:'English',limit:2500,prop:59,grocery:260,fuel:90,
+  prods:['Payroll account','Debit card','Personal loan'],last:'No contact in 4 months',pref:'Email',best:'17:00–19:00',dnc:false,cards:1,flags:['Holds another bank’s card (bureau)'],seg:'Payroll'},
+ {id:'C13',name:'Bilal Khasawneh',cif:'00274418',mob:'+962 79 *** 9957',age:49,city:'Mafraq',emp:'Military · Payroll',sal:710,tenure:'14 yrs',lang:'Arabic',limit:1700,prop:55,grocery:220,fuel:130,
+  prods:['Payroll account','Debit card','Fixed deposit'],last:'ATM only, no other contact in 8 months',pref:'Call',best:'10:00–12:00',dnc:false,cards:0,flags:[],seg:'Payroll'},
+ {id:'C14',name:'Dima Abu-Ghazaleh',cif:'00651170',mob:'+962 77 *** 4483',age:30,city:'Amman – Shmeisani',emp:'Private sector · Payroll',sal:690,tenure:'3 yrs',lang:'English',limit:1500,prop:48,grocery:140,fuel:80,
+  prods:['Payroll account','Debit card','Personal loan'],last:'Complaint open 01/11/2026 (transfer delay)',pref:'Email',best:'17:00–19:00',dnc:false,cards:0,flags:['Open complaint: resolve or acknowledge before pitching'],seg:'Payroll'},
+ {id:'C15',name:'Tamer Rawashdeh',cif:'00398420',mob:'+962 78 *** 1175',age:43,city:'Karak',emp:'Teacher · Payroll',sal:560,tenure:'8 yrs',lang:'Arabic',limit:1100,prop:44,grocery:170,fuel:90,
+  prods:['Payroll account','Debit card','Personal loan'],last:'Loan top-up enquiry 15/10/2026',pref:'SMS',best:'15:00–17:00',dnc:false,cards:0,flags:['Personal loan EMI JOD 180/month: affordability tight'],seg:'Payroll'}
+];
+CUST.sort((a,b)=>(a.dnc-b.dnc)||(b.prop-a.prop));
+const OBJ=[
+ ['fee','Annual fee','The first year is free. After that it’s JOD 25, and it’s waived when you spend JOD 1,500 in the year, about JOD 125 a month, which most customers reach through groceries and fuel alone.'],
+ ['interest','Worried about interest / debt','Pay the full statement by the due date and you pay no interest. I can set up auto-pay from your payroll account so you never miss it.'],
+ ['have','Already has a card','Many customers keep this one for groceries and fuel because of the 3% back, and use their other card for everything else.'],
+ ['time','Not now / busy','I understand. When is a better time? I can also send the details on your preferred channel.'],
+ ['trust','Wants to visit branch','Of course. I’ll book a slot at your nearest branch and note that you’re pre-approved, so the visit is short.']
+];
+const HOURS=['9–11','11–13','13–15','15–17','17–20'];
+const TEAM=[['Rehmat Khan',14],['Dana Haddad',0,'me'],['John Karen',9],['Mais Abu-Ali',8],['Tareq Saleh',6]];
+
+/* ============ STATE ============ */
+const S={sel:null,call:'idle',t0:0,timer:null,mute:false,hold:false,sc:null,objs:new Set(),
+  disp:{out:'',mode:'',next:'',date:'',time:'',notes:'',consent:false},ai:null,
+  done:{},fu:[],agent:'Available',
+  k:{dial:38,conn:21,int:7,sales:3,talk:4380,fu:0},
+  hourly:[[6,3,1],[8,4,1],[5,2,0],[4,3,1],[0,0,0]], /* connected, no-answer, converted */
+  outcomes:{Interested:4,'Sale – application':3,'Call back':5,'Not interested':9,'No answer':17}};
+
+/* ============ HELPERS ============ */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const mmss=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+const cust=()=>CUST.find(c=>c.id===S.sel);
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2600)}
+function cashback(c){const cat=Math.min((c.grocery+c.fuel)*.03,15);return {m:cat,y:cat*12}}
+function dbr(c){const m=(c.flags.join(' ').match(/EMI JOD (\d+)/)||[])[1];const emi=m?+m:0;const card=c.limit*.05;return Math.round((emi+card)/c.sal*100)}
+function nextWorkDay(add){const d=new Date(Date.UTC(2026,10,4));let n=0;while(n<add){d.setUTCDate(d.getUTCDate()+1);const w=d.getUTCDay();if(w!==5&&w!==6)n++}return d.toISOString().slice(0,10)}
+const dmy=s=>s?s.split('-').reverse().join('/'):'—';
+
+/* ============ KPIs ============ */
+function kpis(){
+  const k=S.k,aht=k.conn?Math.round(k.talk/k.conn):0;
+  const items=[
+    ['Calls dialled',k.dial,'☎','var(--teal-s)'],
+    ['Contact rate',Math.round(k.conn/k.dial*100)+'%','◔','var(--blue-s)'],
+    ['Interested',k.int,'♥','var(--pink-s)'],
+    ['Applications',`${k.sales} / 6`,'✓','var(--green-s)'],
+    ['AHT',`${Math.floor(aht/60)}:${String(aht%60).padStart(2,'0')} min`,'⏱','var(--yellow-s)'],
+    ['Follow-ups due',S.fu.length+2,'↻','var(--soft)']];
+  $('kpis').innerHTML=items.map(i=>`<div class="kpi"><div><div class="k">${i[0]}</div><div class="v">${i[1]}</div></div><div class="ic" style="background:${i[3]}" aria-hidden="true">${i[2]}</div></div>`).join('');
+  $('fuCt').textContent=S.fu.length+2;
+}
+
+/* ============ DESK ============ */
+function renderDesk(){
+  const keep=[...document.querySelectorAll('#v-desk .col, #v-desk .qlist')].map(e=>e.scrollTop);
+  $('v-desk').innerHTML=`<div class="desk">
+    <div class="card col col-q"><h3>Call queue <small>${CUST.length-Object.keys(S.done).length} pending</small></h3>
+      <div class="qfilter"><input placeholder="Search name or CIF" oninput="qf(this.value)" aria-label="Search queue"></div>
+      <div id="queue" class="qlist">${queueHTML('')}</div>
+      <p class="mut" style="font-size:11px">Sorted by AI propensity to buy. Customers on the do-not-call list cannot be dialled.</p>
+    </div>
+    <div class="col col-c">${centerHTML()}</div>
+    <div class="col col-r">${rightHTML()}</div>
+  </div>`;
+  [...document.querySelectorAll('#v-desk .col, #v-desk .qlist')].forEach((e,i)=>{if(keep[i]!=null)e.scrollTop=keep[i]});
+}
+function queueHTML(f){
+  return CUST.filter(c=>!f||c.name.toLowerCase().includes(f)||c.cif.includes(f)).map(c=>{
+    const d=S.done[c.id];
+    return `<button class="q ${S.sel===c.id?'on':''} ${d?'done':''}" onclick="pick('${c.id}')">
+      <div class="r1"><span class="nm">${c.name}</span>${c.dnc?'<span class="tag t-red">DNC</span>':d?`<span class="tag t-green">${esc(d)}</span>`:`<span class="tag t-teal">${c.prop}%</span>`}</div>
+      <div class="r2"><span>${c.cif} · ${c.seg}</span><span>Limit JOD ${c.limit.toLocaleString()}</span></div>
+      <div class="prop"><i style="width:${c.prop}%;${c.dnc?'background:var(--faint)':''}"></i></div></button>`}).join('');
+}
+function qf(v){$('queue').innerHTML=queueHTML(v.trim().toLowerCase())}
+function centerHTML(){
+  const c=cust();
+  if(!c) return `<div class="card"><div class="empty">Pick a customer from the queue to see the call brief and script.</div></div>`;
+  const cb=cashback(c), d=dbr(c);
+  return `<div class="card">
+    <div class="callbar">
+      <div class="av" style="background:var(--blue)">${c.name.split(' ').map(x=>x[0]).join('')}</div>
+      <div class="who"><b>${c.name}</b><div class="mut" style="font-size:11.5px">${c.mob} · ${c.lang} · best time ${c.best}</div></div>
+      <span class="tag t-teal">Propensity ${c.prop}%</span>${S.done[c.id]?`<span class="tag t-green">${esc(S.done[c.id])}</span>`:''}
+    </div>
+    ${c.dnc?`<div class="note n-r">Customer is on the do-not-call list. Do not call; skip to the next customer.</div>`:''}
+    <h3>Customer brief <small>Single customer view · CIF ${c.cif}</small></h3>
+    <div class="brief">
+      <div><div class="k">Age · City</div><div class="v">${c.age} · ${c.city}</div></div>
+      <div><div class="k">Employment</div><div class="v">${c.emp}</div></div>
+      <div><div class="k">Monthly salary</div><div class="v">JOD ${c.sal}</div></div>
+      <div><div class="k">Relationship</div><div class="v">${c.tenure}</div></div>
+      <div><div class="k">Pre-approved limit</div><div class="v" style="color:var(--blue)">JOD ${c.limit.toLocaleString()}</div></div>
+      <div><div class="k">Debt burden after card</div><div class="v" style="color:${d>40?'var(--red)':'var(--green)'}">${d}%</div></div>
+      <div><div class="k">Preferred channel</div><div class="v">${c.pref}</div></div>
+      <div><div class="k">Last interaction</div><div class="v">${c.last}</div></div>
+    </div>
+    <div class="row mt"><span class="mut" style="font-size:11.5px">Holdings</span><div class="chips">${c.prods.map(p=>`<span class="tag t-n">${p}</span>`).join('')}</div></div>
+    ${c.flags.map(f=>`<div class="flag" style="background:var(--yellow-s)">⚠ <span>${f}</span></div>`).join('')}
+    <div class="hl">Pitch angle: spends about <b>JOD ${c.grocery+c.fuel}/month</b> on groceries and fuel, so 3% back is worth roughly <b>JOD ${cb.m.toFixed(2)}/month</b> or <b>JOD ${cb.y.toFixed(0)}/year</b>. Lead with that number.</div>
+  </div>
+  <div class="card">${scriptHTML(c)}</div>`;
+}
+const IC={
+ phone:'<path d="M5 3h3l1.5 4-2 1.2a10 10 0 0 0 5.3 5.3l1.2-2 4 1.5v3a2 2 0 0 1-2 2A15 15 0 0 1 3 5a2 2 0 0 1 2-2z"/>',
+ shield:'<path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/>',
+ ask:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5V14M12 17h.01"/>',
+ card:'<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 15h4"/>',
+ chat:'<path d="M4 5h16v11H9l-5 4z"/><path d="M8 10h8M8 13h5"/>',
+ close:'<circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/>',
+ doc:'<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 15h5M10 18h3"/>'};
+const AR={Ahmad:'أحمد',Rana:'رنا',Omar:'عمر',Sara:'سارة',Khaled:'خالد',Lina:'لينا',Hamza:'حمزة',Noor:'نور',Mohammad:'محمد',Aya:'آية',Firas:'فراس',Reem:'ريم',Bilal:'بلال',Dima:'ديما',Tamer:'تامر'};
+const icon=k=>`<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[k]}</svg>`;
+const SSTEPS=[
+ {t:'Opening & permission',i:'phone',d:'~20 sec'},
+ {t:'Verify identity',i:'shield',d:'~20 sec'},
+ {t:'Discovery questions',i:'ask',d:'~40 sec'},
+ {t:'Tailored pitch',i:'card',d:'~60 sec'},
+ {t:'Handle objections',i:'chat',d:'as needed'},
+ {t:'Close & agree next step',i:'close',d:'~30 sec'},
+ {t:'Compliance & wrap-up',i:'doc',d:'~30 sec'}];
+function freshSc(){return {done:new Set(),times:{},open:0,started:null,v:{name:false,dob:false},hasCard:null,focus:null}}
+function nowT(){return new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',second:'2-digit'})}
+function scriptHTML(c){
+  const sc=S.sc, done=sc.done.size, pct=Math.round(done/SSTEPS.length*100);
+  const el=sc.started?Math.max(0,Math.floor((Date.now()-sc.startedMs)/60000)):0;
+  return `<div class="sh"><div><b>Card Sell Script · ${CARD.name}</b><div class="mut">Started: ${sc.started||'—'}</div></div>
+      <button class="b" onclick="S.sc=Object.assign(freshSc(),{started:S.sc.started,startedMs:S.sc.startedMs});renderDesk()">Restart</button></div>
+    <div class="sstats"><div><div class="n">${SSTEPS.length}</div><div class="l">STEPS</div></div><div><div class="n">${el}</div><div class="l">MINS</div></div><div><div class="n">${done}</div><div class="l">COMPLETED</div></div><div><div class="n">${pct}%</div><div class="l">PROGRESS</div></div></div>
+    <div class="tl">${SSTEPS.map((st,i)=>{const ok=sc.done.has(i),cur=i===sc.open;
+      return `<div class="tli ${ok?'ok':''} ${cur?'cur':''}"><span class="tic">${ok?icon('close'):icon(st.i)}</span>
+        <button class="tlh" aria-expanded="${cur}" onclick="S.sc.open=${cur?-1:i};renderDesk()"><span class="tt">${st.t}${ok?'<span class="tag t-green">Done</span>':''}</span><span class="td">${ok?'Completed '+sc.times[i]:st.d}</span></button>
+        ${cur?`<div class="tlb">${stepBody(i,c)}</div>`:''}</div>`}).join('')}</div>`;
+}
+function stepBody(i,c){
+  const sc=S.sc, first=c.name.split(' ')[0], cb=cashback(c);
+  const nxt=`<div style="margin-top:10px"><button class="b b-blue" onclick="markStep(${i})">Mark done & next</button></div>`;
+  switch(i){
+  case 0: return `<div class="say ar"><div class="lbl">عربي</div>مرحبا ${AR[first]||first}، معك دانا من البنك. اتصلت لأن عندك عرض خاص كعميل مميز. هل الوقت مناسب لدقيقتين؟</div>
+    <div class="say"><div class="lbl">English</div>Hello ${first}, this is Dana from the bank. I’m calling because you have a special offer as a valued customer. Is now a good time for two minutes?</div>
+    ${c.flags.some(f=>/complaint/i.test(f))?'<div class="note n-y" style="margin-bottom:8px">Open with the complaint: “Before anything else, I can see your recent issue with us. Is it resolved to your satisfaction?”</div>':''}
+    <div class="kq">Customer says…</div><div class="row">
+      <button class="chip g" onclick="markStep(0)">Yes, go ahead</button>
+      <button class="chip" onclick="branch('busy')">Busy now</button>
+      <button class="chip r" onclick="branch('no')">Not interested</button></div>
+    <p class="avoid">Don’t start the pitch before permission. Say the bank name clearly.</p>`;
+  case 1: return `<div class="say"><div class="lbl">Say</div>For your security, may I confirm your full name and date of birth?</div>
+    <label class="vchk"><input type="checkbox" ${sc.v.name?'checked':''} onchange="S.sc.v.name=this.checked;renderDesk()"> Full name matches: ${c.name}</label>
+    <label class="vchk"><input type="checkbox" ${sc.v.dob?'checked':''} onchange="S.sc.v.dob=this.checked;renderDesk()"> Date of birth matches record (age ${c.age})</label>
+    <p class="avoid">Never ask for card number, PIN, OTP or online banking password.</p>
+    <div style="margin-top:10px"><button class="b b-blue" ${sc.v.name&&sc.v.dob?'':'disabled'} onclick="markStep(1)">Verified · next</button> <button class="chip r" onclick="branch('fail')">Can’t verify</button></div>`;
+  case 2: return `<div class="kq">1. Do you use a credit card today?</div><div class="row">
+      ${['Yes, another bank','No'].map(o=>`<button class="chip ${sc.hasCard===o?'on':''}" onclick="S.sc.hasCard='${o}';${o==='No'?"S.objs.delete('have')":"S.objs.add('have')"};renderDesk()">${o}</button>`).join('')}</div>
+    <div class="kq">2. Where does most of your monthly spending go?</div><div class="row">
+      ${[['grocery','Groceries'],['fuel','Fuel & car'],['online','Online & bills'],['mixed','Not sure']].map(o=>`<button class="chip ${sc.focus===o[0]?'on':''}" onclick="S.sc.focus='${o[0]}';renderDesk()">${o[1]}</button>`).join('')}</div>
+    <p class="lf">From records: groceries <b>JOD ${c.grocery}</b>, fuel <b>JOD ${c.fuel}</b> a month. Bureau: ${c.cards?'<b>holds 1 card elsewhere</b>':'no other card'}.</p>
+    <p class="lf">Listen for: travel, school fees, big purchases coming up. These are hooks for 0% instalments.</p>${nxt}`;
+  case 3: {const f=sc.focus||'grocery';
+    const line={grocery:`You spend about JOD ${c.grocery} a month on groceries. With 3% back that’s JOD ${Math.min(c.grocery*.03,15).toFixed(2)} back every month, without changing anything you do.`,
+      fuel:`Fuel is a big part of your month, about JOD ${c.fuel}. 3% back on fuel and groceries together gives you around JOD ${cb.m.toFixed(2)} a month.`,
+      online:`For online shopping and bills you get 1% back on everything, and bigger purchases can be split over 3 to 12 months at 0% with our partners.`,
+      mixed:`Based on your usual spending you’d get around JOD ${cb.m.toFixed(2)} back a month, about JOD ${cb.y.toFixed(0)} a year.`}[f];
+    return `<div class="say"><div class="lbl">Say</div>You’re pre-approved for our new ${CARD.name} with a limit of up to JOD ${c.limit.toLocaleString()}. Nothing to fill in to check eligibility; it’s already done.</div>
+    <div class="say" style="border-left-color:var(--pink)"><div class="lbl">Key line for ${first}</div>${line}</div>
+    <div class="ben">${CARD.cb.map((b,j)=>`<div style="${(f==='online'&&j>0)||(f!=='online'&&j===0)?'border-color:var(--teal);background:var(--teal-s)':''}"><b>${b[0]}</b>${b[1]}</div>`).join('')}</div>
+    <div class="say"><div class="lbl">Then</div>And the first year is completely free.${sc.hasCard==='Yes, another bank'?' Many customers keep their current card and use this one just for groceries and fuel to get the cashback.':''}</div>
+    <p class="avoid">Don’t promise a higher limit than pre-approved, or guaranteed approval.</p>${nxt}`;}
+  case 4: return `<p class="lf">Tick what the customer raises. Acknowledge first (“I understand”), then answer, then check (“Does that help?”).</p>
+    ${OBJ.map(o=>`<details class="obj" ${S.objs.has(o[0])?'open':''}><summary><input type="checkbox" ${S.objs.has(o[0])?'checked':''} onclick="event.stopPropagation();togObj('${o[0]}',this.checked)" aria-label="${o[1]} raised">${o[1]}</summary><p>${o[2]}</p></details>`).join('')}
+    <div style="margin-top:10px"><button class="b b-blue" onclick="markStep(4)">${S.objs.size?'Handled · next':'No objections · next'}</button></div>`;
+  case 5: return `<div class="say"><div class="lbl">Ask</div>Shall I start your application now? It takes two minutes on this call, and the card reaches your branch or home within 5 working days.</div>
+    <p class="lf">Documents: ${CARD.docs}.${c.seg==='Self-employed'?' <b>Not on payroll: income proof required.</b>':''}</p>
+    <div class="kq">Customer decides…</div><div class="row">
+      <button class="chip g" onclick="branch('apply')">Apply now</button>
+      <button class="chip" onclick="branch('details')">Send me details</button>
+      <button class="chip" onclick="branch('later')">Call me later</button>
+      <button class="chip r" onclick="branch('no')">Not interested</button></div>`;
+  case 6: return `<div class="say"><div class="lbl">Read out</div>The annual fee after the first year is JOD 25. Interest applies to any balance not paid by the due date. Full terms will be sent to you by ${S.disp.mode||c.pref}. Do you agree to proceed?</div>
+    <label class="vchk"><input type="checkbox" ${S.disp.consent?'checked':''} onchange="S.disp.consent=this.checked;renderDesk()"> Customer gave verbal consent (recorded on CTI)</label>
+    <div class="say"><div class="lbl">Close</div>Thank you ${first}. ${S.disp.date?`I’ll call you on ${dmy(S.disp.date)} at ${S.disp.time}. `:''}Is there anything else I can help you with today?</div>
+    <div style="margin-top:10px"><button class="b b-blue" onclick="markStep(6)">Finish script</button></div>`;
+  }
+}
+function markStep(i){
+  const sc=S.sc;sc.done.add(i);sc.times[i]=nowT();
+  let n=i+1;while(n<SSTEPS.length&&sc.done.has(n))n++;
+  sc.open=n<SSTEPS.length?n:-1;renderDesk();
+  if(sc.open===-1)toast('Script complete. Save the outcome.');
+}
+function branch(k){
+  const sc=S.sc;
+  if(k==='busy'){sc.done.add(0);sc.times[0]=nowT();setD('out','Call back');sc.open=6;toast('Callback set for the customer’s best time');}
+  else if(k==='no'){setD('out','Not interested');sc.open=6;toast('Close politely and end the call');}
+  else if(k==='fail'){toast('Identity not verified: do not discuss the offer. End politely.');setD('out','Call back');sc.open=-1;}
+  else if(k==='apply'){sc.done.add(5);sc.times[5]=nowT();setD('out','Sale – application');sc.open=6;}
+  else if(k==='details'){sc.done.add(5);sc.times[5]=nowT();S.disp.next='Send product details';setD('out','Interested');sc.open=6;}
+  else if(k==='later'){sc.done.add(5);sc.times[5]=nowT();setD('out','Call back');sc.open=6;}
+  renderDesk();
+}
+function rightHTML(){
+  const c=cust(), D=S.disp;
+  const outs=['Sale – application','Interested','Call back','Not interested','No answer','Wrong number'];
+  const modes=['Call','SMS','WhatsApp','Email','Branch visit'];
+  const needFU=['Interested','Call back'].includes(D.out);
+  const canSave=c&&D.out&&!c.dnc;
+  return `<div class="card"><h3>Call outcome</h3>
+    ${!c?'<p class="mut" style="font-size:12.5px">Select a customer to record the outcome.</p>':`
+    <div class="f">
+      <div><label>Disposition *</label><div class="seg">${outs.map(o=>`<button class="${D.out===o?'on':''}" onclick="setD('out','${o}')">${o}</button>`).join('')}</div></div>
+      <div><label>Preferred mode of communication</label><div class="seg">${modes.map(o=>`<button class="${(D.mode||c.pref)===o?'on':''}" onclick="setD('mode','${o}')">${o}</button>`).join('')}</div></div>
+      <div><label>Agreed next step</label><select class="inp" onchange="S.disp.next=this.value">${['','Send product details','Call back to complete application','Book branch appointment','Collect salary certificate','Courier card application'].map(o=>`<option ${D.next===o?'selected':''} value="${o}">${o||'Select…'}</option>`).join('')}</select></div>
+      ${needFU?`<div class="grid2"><div><label>Follow-up date (auto)</label><input type="date" class="inp" value="${D.date}" min="2026-11-05" onchange="setD('date',this.value)"></div>
+        <div><label>Time</label><select class="inp" onchange="S.disp.time=this.value">${['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00'].map(t=>`<option ${D.time===t?'selected':''}>${t}</option>`).join('')}</select></div></div>
+        ${D.date&&[5,6].includes(new Date(D.date+'T00:00:00Z').getUTCDay())?'<div class="note n-y">Friday/Saturday is outside the calling window. Pick Sunday to Thursday.</div>':''}
+        <div class="note n-b">Auto-scheduled for the customer’s best time (${c.best}), next working day.</div>`:''}
+      <div><label>Call notes</label><textarea class="inp" placeholder="What did the customer say?" oninput="S.disp.notes=this.value">${esc(D.notes)}</textarea></div>
+      ${D.out==='Sale – application'&&!D.consent?'<div class="note n-y">Read the compliance statement and capture consent (script step 6) before saving a sale.</div>':''}
+      <div class="row"><button class="b b-lime" ${canSave?'':'disabled'} onclick="saveCall()">Save outcome</button><button class="b" ${c&&!c.dnc?'':'disabled'} onclick="genAI()">Generate AI insight</button></div>
+    </div>`}
+  </div>
+  <div class="card"><h3>AI conversation insight <small>${S.ai?'from call notes & transcript':''}</small></h3>${aiHTML()}</div>`;
+}
+function aiHTML(){
+  const a=S.ai;
+  if(!a) return '<p class="mut" style="font-size:12.5px">After the call, generate an insight from the notes, objections ticked and call duration.</p>';
+  const sc={Positive:['var(--green)',5],Neutral:['var(--yellow)',3],Negative:['var(--red)',1]}[a.sent];
+  return `<div class="ai">
+    <h4>Summary</h4><p>${esc(a.sum)}</p>
+    <h4>Sentiment · ${a.sent}</h4><div class="sent">${[1,2,3,4,5].map(i=>`<i style="${i<=sc[1]?'background:'+sc[0]:''}"></i>`).join('')}</div>
+    <h4>Buying signals</h4><ul>${a.sig.map(s=>`<li>${esc(s)}</li>`).join('')||'<li>None detected</li>'}</ul>
+    <h4>Objections</h4><ul>${a.obj.map(s=>`<li>${esc(s)}</li>`).join('')||'<li>None raised</li>'}</ul>
+    <h4>Next best action</h4><p>${esc(a.nba)}</p>
+    <h4>Updated propensity</h4><p>${a.p0}% → <b>${a.p1}%</b></p>
+    <p class="mut" style="font-size:11px;margin-top:8px">AI-generated. Check before acting.</p></div>`;
+}
+
+/* ============ CALL ACTIONS ============ */
+function pick(id){
+  S.sel=id;S.sc=freshSc();S.sc.started=nowT();S.sc.startedMs=Date.now();S.objs=new Set();S.ai=null;
+  const c=cust();S.disp={out:'',mode:c.pref,next:'',date:'',time:c.best.split('–')[0]||'10:00',notes:'',consent:false};
+  renderDesk();
+}
+function togObj(k,on){on?S.objs.add(k):S.objs.delete(k)}
+function setD(k,v){
+  S.disp[k]=v;
+  if(k==='out'&&['Interested','Call back'].includes(v)&&!S.disp.date){S.disp.date=nextWorkDay(1);S.disp.next=S.disp.next||(v==='Interested'?'Call back to complete application':'Send product details')}
+  renderDesk();
+}
+function saveCall(){
+  const c=cust(),D=S.disp;
+  if(S.done[c.id]){toast('Outcome already saved for this customer.');return}
+  if(D.out==='Sale – application'&&!D.consent){toast('Capture consent before saving a sale.');return}
+  if(['Interested','Call back'].includes(D.out)){
+    if(!D.date){toast('Pick a follow-up date.');return}
+    const w=new Date(D.date+'T00:00:00Z').getUTCDay();if(w===5||w===6){toast('Follow-up must be Sunday to Thursday.');return}
+    S.fu.push({c,date:D.date,time:D.time,mode:D.mode||c.pref,next:D.next||'Follow up',out:D.out});
+  }
+  const hIdx=4;S.lastDur=Math.floor((Date.now()-(S.sc.startedMs||Date.now()))/1000);S.k.dial++;
+  if(!['No answer','Wrong number'].includes(D.out)){S.k.conn++;S.k.talk+=Math.max(S.lastDur,60)}
+  if(D.out==='No answer'||D.out==='Wrong number'){S.hourly[hIdx][1]++}else{S.hourly[hIdx][0]++}
+  if(D.out==='Sale – application'){S.k.sales++;S.k.int++;S.hourly[hIdx][2]++}
+  if(D.out==='Interested')S.k.int++;
+  S.outcomes[D.out==='Wrong number'?'No answer':D.out]=(S.outcomes[D.out==='Wrong number'?'No answer':D.out]||0)+1;
+  TEAM[1][1]=S.k.sales+S.k.int;
+  S.done[c.id]=D.out;
+  if(!S.ai&&D.out!=='No answer'&&D.out!=='Wrong number')genAI(true);
+  toast(`Outcome saved${S.fu.length&&['Interested','Call back'].includes(D.out)?` · follow-up ${dmy(D.date)} ${D.time} via ${D.mode||c.pref}`:''}`);
+  kpis();renderDesk();renderOvr();renderFU();
+}
+function genAI(silent){
+  const c=cust(),D=S.disp,n=(D.notes||'').toLowerCase();
+  const out=D.out||'Undecided';
+  const pos=['Sale – application','Interested'].includes(out)||/interest|yes|good|like|send/.test(n);
+  const neg=out==='Not interested'||/no |not interested|angry|stop|complain/.test(n);
+  const sent=neg?'Negative':pos?'Positive':'Neutral';
+  const sig=[];
+  if(/cashback|grocer|fuel/.test(n)||S.sc.done.has(3))sig.push('Engaged with the cashback-on-groceries pitch');
+  if(/limit|how much/.test(n))sig.push('Asked about the credit limit');
+  if(/when|deliver|how long/.test(n))sig.push('Asked about timelines, a sign of intent');
+  if(out==='Interested'||out==='Sale – application')sig.push('Agreed to a next step');
+  const obj=[...S.objs].map(k=>OBJ.find(o=>o[0]===k)[1]);
+  const dur=mmss(S.lastDur||Math.floor((Date.now()-(S.sc.startedMs||Date.now()))/1000));
+  const sum=`${dur} call with ${c.name} (${c.lang}). Pitched ${CARD.name} with a pre-approved limit of JOD ${c.limit.toLocaleString()} and an estimated JOD ${cashback(c).y.toFixed(0)} a year in cashback. Outcome: ${out}.${obj.length?' Raised: '+obj.join(', ').toLowerCase()+'.':''}${D.notes?' Agent note: “'+D.notes.slice(0,140)+'”':''}`;
+  let nba='Close the record; re-target in the next campaign wave after 90 days.';
+  if(out==='Sale – application')nba=c.seg==='Self-employed'?'Request income proof by '+(D.mode||c.pref)+' today; application stays pending until received.':'Send application confirmation and card delivery timeline by '+(D.mode||c.pref)+'.';
+  else if(out==='Interested'||out==='Call back')nba=`Call back on ${dmy(D.date)} at ${D.time}${S.objs.has('fee')?', open with the fee-waiver threshold':''}${S.objs.has('interest')?', offer auto-pay from payroll':''}. Send the product sheet by ${D.mode||c.pref} first.`;
+  else if(out==='Not interested'&&S.objs.has('have'))nba='Suppress from this campaign; flag for balance-transfer offer if launched.';
+  const delta=out==='Sale – application'?14:out==='Interested'?8:out==='Call back'?2:out==='Not interested'?-30:-5;
+  S.ai={sum,sent,sig,obj,nba,p0:c.prop,p1:Math.max(1,Math.min(99,c.prop+delta))};
+  if(!silent){renderDesk();toast('AI insight generated')}
+}
+
+/* ============ OVERVIEW ============ */
+function renderOvr(){
+  const H=S.hourly,max=Math.max(...H.map(h=>h[0]+h[1]))+2;
+  const W=560,Ht=200,bw=60,gap=(W-40-bw*5)/5;
+  const bars=H.map((h,i)=>{const x=40+gap/2+i*(bw+gap);let y=Ht-20;const seg=[[h[1],'var(--yellow)'],[h[0]-h[2],'var(--teal)'],[h[2],'var(--pink)']];
+    return seg.map(s=>{const hh=s[0]/max*(Ht-40);y-=hh;return `<rect x="${x}" y="${y}" width="${bw}" height="${hh}" fill="${s[1]}"/>`}).join('')+`<text class="axis" x="${x+bw/2}" y="${Ht-5}" text-anchor="middle">${HOURS[i]}</text>`}).join('');
+  const grid=[0,.25,.5,.75,1].map(f=>{const y=Ht-20-f*(Ht-40);return `<line x1="40" x2="${W}" y1="${y}" y2="${y}" stroke="var(--line)"/><text class="axis" x="32" y="${y+3}" text-anchor="end">${Math.round(f*max)}</text>`}).join('');
+  const O=S.outcomes,tot=Object.values(O).reduce((a,b)=>a+b,0),cols=['var(--teal)','var(--blue)','var(--yellow)','var(--pink)','#c9ccd2'];
+  let acc=0;const cg=Object.entries(O).map(([k,v],i)=>{const a=acc;acc+=v/tot*360;return `${cols[i]} ${a}deg ${acc}deg`}).join(',');
+  const conv=Math.round(S.k.sales/Math.max(1,S.k.conn)*100);
+  const ang=-90+Math.min(S.k.sales/6,1)*180;
+  const days=['Sun','Mon','Tue','Wed','Thu','Sun','Mon','Tue','Wed','Thu'],wk=[2,4,3,5,6,4,7,5,8,S.k.sales+S.k.int];
+  const pts=wk.map((v,i)=>[40+i*56,170-v*14]);const path=pts.map((p,i)=>(i?'L':'M')+p[0]+' '+p[1]).join(' ');
+  const T=[...TEAM].sort((a,b)=>b[1]-a[1]);
+  $('v-ovr').innerHTML=`<div class="grid2">
+    <div class="card chart"><h3>Calls by time slot <small>today</small></h3><svg viewBox="0 0 ${W} ${Ht}" role="img" aria-label="Calls by time slot">${grid}${bars}</svg>
+      <div class="lg"><span><i style="background:var(--teal)"></i>Connected</span><span><i style="background:var(--pink)"></i>Converted</span><span><i style="background:var(--yellow)"></i>No answer</span></div></div>
+    <div class="card chart"><h3>Daily application target <small>${S.k.sales} of 6</small></h3>
+      <svg viewBox="0 0 300 170" role="img" aria-label="Target gauge"><path d="M40 150 A110 110 0 0 1 260 150" fill="none" stroke="var(--line2)" stroke-width="26"/>
+      <path d="M40 150 A110 110 0 0 1 113 46" fill="none" stroke="var(--pink)" stroke-width="26"/><path d="M113 46 A110 110 0 0 1 220 72" fill="none" stroke="var(--yellow)" stroke-width="26"/><path d="M220 72 A110 110 0 0 1 260 150" fill="none" stroke="var(--teal)" stroke-width="26"/>
+      <line x1="150" y1="150" x2="${150+90*Math.cos((ang-90)*Math.PI/180)}" y2="${150+90*Math.sin((ang-90)*Math.PI/180)}" stroke="#137a8f" stroke-width="5" stroke-linecap="round"/><circle cx="150" cy="150" r="7" fill="#137a8f"/>
+      <text x="150" y="128" text-anchor="middle" font-size="13" fill="var(--yellow)">Conversion ${conv}%</text></svg>
+      <div class="lg"><span>Behind</span><span>On track</span><span>Achieved</span></div></div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card"><h3>Call outcomes</h3><div class="donut" style="background:conic-gradient(${cg})"><b>${tot}</b></div>
+      <div class="lg">${Object.keys(O).map((k,i)=>`<span><i style="background:${cols[i]}"></i>${k} ${O[k]}</span>`).join('')}</div></div>
+    <div class="card"><h3>Sales pipeline <small>campaign, this week</small></h3><div class="funnel">
+      <div style="width:100%;background:var(--teal)">Eligible · 1,240</div><div style="width:78%;background:var(--blue)">Contacted · 612</div><div style="width:52%;background:var(--yellow);color:#1b1f29">Interested · 148</div><div style="width:30%;background:var(--pink)">Applied · ${61+S.k.sales}</div><div style="width:18%;background:#137a8f">Activated · 22</div></div></div>
+    <div class="card"><h3>Team leaderboard <small>interested + applications</small></h3>${T.map((t,i)=>`<div class="lb ${t[2]?'me':''}"><span>${i+1}</span><span>${t[0]}${t[2]?' (you)':''}</span><span>${t[1]}</span><span>${i<3?'🏆':''}</span></div>`).join('')}</div>
+  </div>
+  <div class="card mt chart"><h3>Agent trend <small>last 10 working days · interested + applications</small></h3>
+    <svg viewBox="0 0 580 190" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Agent trend">${[0,4,8].map(v=>`<line x1="40" x2="560" y1="${170-v*14}" y2="${170-v*14}" stroke="var(--line)"/><text class="axis" x="32" y="${173-v*14}" text-anchor="end">${v}</text>`).join('')}
+    <path d="${path} L${pts[pts.length-1][0]} 170 L40 170Z" fill="var(--teal-s)"/><path d="${path}" fill="none" stroke="var(--teal)" stroke-width="2"/>
+    ${pts.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="var(--teal)"/><text class="axis" x="${p[0]}" y="186" text-anchor="middle">${i===9?'Today':days[i]}</text>`).join('')}</svg></div>`;
+}
+
+/* ============ FOLLOW-UPS ============ */
+function renderFU(){
+  const base=[{c:{name:'Hiba Saadeh',cif:'00451190'},date:'2026-11-05',time:'17:00',mode:'WhatsApp',next:'Call back to complete application',out:'Interested'},
+              {c:{name:'Yousef Abbadi',cif:'00398772'},date:'2026-11-08',time:'12:00',mode:'Call',next:'Collect salary certificate',out:'Call back'}];
+  const all=[...base,...S.fu].sort((a,b)=>a.date.localeCompare(b.date));
+  $('v-fu').innerHTML=`<div class="card"><h3>My follow-ups <small>auto-scheduled to the customer’s best time, Sun–Thu only</small></h3>
+  <div class="tw"><table><thead><tr><th>Date</th><th>Time</th><th>Customer</th><th>CIF</th><th>Outcome</th><th>Next step</th><th>Channel</th></tr></thead>
+  <tbody>${all.map(f=>`<tr><td>${dmy(f.date)}</td><td>${f.time}</td><td>${f.c.name}</td><td>${f.c.cif}</td><td><span class="tag ${f.out==='Interested'?'t-pink':'t-yel'}">${f.out}</span></td><td>${esc(f.next)}</td><td>${f.mode}</td></tr>`).join('')}</tbody></table></div></div>`;
+  kpis();
+}
+function renderCard(){
+  $('v-card').innerHTML=`<div class="grid2"><div class="card"><h3>${CARD.name} <small>launch offer</small></h3>
+    <div class="ben" style="grid-template-columns:1fr">${CARD.cb.map(b=>`<div><b>${b[0]}</b>${b[1]}</div>`).join('')}</div>
+    <p style="font-size:12.5px"><b>Fees:</b> ${CARD.fee}</p><p style="font-size:12.5px;margin-top:6px"><b>Features:</b> ${CARD.extras}</p><p style="font-size:12.5px;margin-top:6px"><b>Documents:</b> ${CARD.docs}</p></div>
+    <div class="card"><h3>Eligibility for this campaign</h3><ul style="padding-left:16px;font-size:12.5px;line-height:1.9">
+    <li>Retail Non-Affluent segment, salary JOD 450–1,000</li><li>Relationship of 2+ years, no arrears in the last 12 months</li><li>Debt burden including the new card within the policy cap</li><li>Not on the do-not-call list; marketing consent on file</li></ul>
+    <p class="mut" style="font-size:11.5px;margin-top:8px">Product terms are demo values. Replace with the approved product sheet before go-live.</p></div></div>`;
+}
+
+/* ============ TABS + INIT ============ */
+function tab(t){document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));['desk','ovr','fu','card'].forEach(v=>$('v-'+v).hidden=v!==t)}
+kpis();renderDesk();renderOvr();renderFU();renderCard();pick('C1');
+</script>
+</body>
+</html>
