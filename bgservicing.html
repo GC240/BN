@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BG Validity Extension — Apollo Tyres Amman</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --page:#ffffff;--surface:#ffffff;--soft:#f7f8fa;--line:#e3e6eb;--line2:#eef0f3;
+  --ink:#1b2130;--muted:#6b7280;--faint:#9aa1ad;
+  --blue:#1a73e8;--blue-soft:#e8f1fd;--blue-ink:#0c4a9e;
+  --green:#1f9d4c;--green-soft:#e6f5ec;--amber:#b7791f;--amber-soft:#fff6e0;--red:#c62828;--red-soft:#fdecec;
+  --lime:#c8dc2c;--lime-ink:#1b2130;--yellow:#fcc419;--black:#000000;--on-black:#ffffff;
+  --step-off:#ececee;--step-unl:#dbe8fb;
+  color-scheme:light;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --page:#0f1218;--surface:#161a22;--soft:#1c212b;--line:#2b313d;--line2:#232934;
+    --ink:#e8ebf1;--muted:#a0a8b6;--faint:#768092;
+    --blue:#5b9cf5;--blue-soft:#18263d;--blue-ink:#9cc2f8;
+    --green:#4cc27a;--green-soft:#15291e;--amber:#e0a84a;--amber-soft:#2b2312;--red:#ef6b6b;--red-soft:#2d1717;
+    --lime:#c8dc2c;--yellow:#fcc419;--black:#e8ebf1;--on-black:#0f1218;
+    --step-off:#232934;--step-unl:#1d2c44;color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --page:#0f1218;--surface:#161a22;--soft:#1c212b;--line:#2b313d;--line2:#232934;
+  --ink:#e8ebf1;--muted:#a0a8b6;--faint:#768092;
+  --blue:#5b9cf5;--blue-soft:#18263d;--blue-ink:#9cc2f8;
+  --green:#4cc27a;--green-soft:#15291e;--amber:#e0a84a;--amber-soft:#2b2312;--red:#ef6b6b;--red-soft:#2d1717;
+  --black:#e8ebf1;--on-black:#0f1218;--step-off:#232934;--step-unl:#1d2c44;color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--page);color:var(--ink);font-size:13.5px;line-height:1.45;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding:16px 18px 120px}
+
+/* stepper */
+.stepper{display:flex;gap:2px;overflow-x:auto;padding-bottom:4px}
+.step{flex:1 0 150px;min-width:150px;position:relative;display:flex;align-items:center;gap:9px;padding:8px 22px 8px 26px;background:var(--step-off);color:var(--muted);border:0;text-align:left;
+  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 50%,calc(100% - 16px) 100%,0 100%,16px 50%)}
+.step:first-child{padding-left:16px;border-radius:22px 0 0 22px;clip-path:polygon(0 0,calc(100% - 16px) 0,100% 50%,calc(100% - 16px) 100%,0 100%)}
+.step:last-child{border-radius:0 22px 22px 0;clip-path:polygon(0 0,100% 0,100% 100%,0 100%,16px 50%)}
+.step .t{font-size:13px;font-weight:500;color:var(--ink);display:block;line-height:1.2}
+.step .s{font-size:11px;display:block}
+.step svg{flex-shrink:0}
+.step.current{background:var(--blue);color:#fff}.step.current .t{color:#fff}
+.step.done{background:var(--green-soft)}.step.done .s{color:var(--green);font-weight:500}
+.step.unl{background:var(--step-unl)}
+.step:disabled{cursor:default}
+.legend{display:flex;justify-content:flex-end;gap:16px;font-size:11px;color:var(--muted);margin:6px 0 14px;flex-wrap:wrap}
+.legend i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle}
+
+/* case strip */
+.case{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-top:12px;border-top:1px solid var(--line2)}
+.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:20px;padding:5px 12px;font-size:12px;background:var(--surface)}
+.pill.id{background:var(--blue);color:#fff;border-color:var(--blue);font-weight:600}
+.pill b{font-variant-numeric:tabular-nums}
+.pill .sla{color:var(--amber);font-weight:600}
+.case .sp{flex:1}
+.btn-o{border:1px solid var(--line);background:var(--surface);border-radius:20px;padding:6px 14px;font-size:12.5px;display:inline-flex;align-items:center;gap:6px}
+.btn-o:hover{border-color:var(--blue)}
+.meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;border:1px solid var(--line);border-radius:8px;background:var(--soft);padding:12px 16px;margin-top:12px}
+.meta .k{font-size:11.5px;color:var(--muted)}
+.meta .v{font-size:13px;font-weight:500;margin-top:2px}
+.meta a{color:var(--blue)}
+.powered{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin:8px 0 14px;flex-wrap:wrap;gap:6px}
+
+/* tabs */
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:12px 0;border-top:1px solid var(--line2)}
+.tab{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:7px 14px;white-space:nowrap;display:inline-flex;align-items:center;gap:7px;font-size:13px}
+.tab.on{background:var(--black);color:var(--on-black);border-color:var(--black);font-weight:500}
+.tab:disabled{opacity:.45;cursor:not-allowed}
+.subtabs{display:flex;gap:8px;flex-wrap:wrap;padding:4px 0 12px;border-bottom:1px solid var(--line2);margin-bottom:12px}
+.sub{border:1px solid var(--line);background:var(--surface);border-radius:20px;padding:5px 13px;font-size:12px;font-weight:500}
+.sub.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.sub .ck{color:var(--green);margin-left:4px}
+.sub.on .ck{color:#fff}
+.src{text-align:right;font-size:11.5px;color:var(--muted);margin-bottom:10px}
+
+/* form */
+.form{display:grid;grid-template-columns:1fr 1fr;gap:12px 36px}
+.fr{display:grid;grid-template-columns:150px 1fr;align-items:center;gap:10px}
+.fr label{text-align:right;font-size:12.5px;color:var(--muted);line-height:1.25}
+.fr label .rq{color:var(--red)}
+.inp{width:100%;border:1px solid var(--line);border-radius:5px;padding:7px 10px;background:var(--surface);min-height:34px}
+.inp[readonly],.inp:disabled{background:var(--soft);color:var(--muted)}
+textarea.inp{resize:vertical;min-height:64px}
+.full{grid-column:1/-1}
+.full.fr{grid-template-columns:150px 1fr}
+
+/* cards */
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{border:1px solid var(--line);border-radius:8px;background:var(--surface);padding:14px}
+.card h3{font-size:14px;font-weight:600;margin-bottom:8px}
+.card h4{font-size:12.5px;font-weight:600;margin:10px 0 6px}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px}
+.kv .k{font-size:11.5px;color:var(--muted)}
+.kv .v{font-weight:500}
+.stat{border:1px solid var(--line);border-radius:8px;padding:11px 13px;background:var(--surface)}
+.stat .k{font-size:11.5px;color:var(--muted)}
+.stat .v{font-size:18px;font-weight:600;margin-top:2px;font-variant-numeric:tabular-nums}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:12px}
+.ok{color:var(--green)}.warn{color:var(--amber)}.bad{color:var(--red)}.mut{color:var(--muted)}
+ul.pl{list-style:none;font-size:12.5px}
+ul.pl li{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px dashed var(--line2)}
+.insight{border:1px solid var(--line);border-left:3px solid var(--blue);border-radius:6px;padding:10px 12px;margin-bottom:8px;background:var(--soft)}
+.insight b{display:block;font-size:12.5px;margin-bottom:3px}
+.insight p{font-size:12px;color:var(--muted)}
+.insight .a{margin-top:6px}
+.lnk{background:none;border:0;color:var(--blue);font-size:12px;font-weight:500;padding:0}
+.lnk:hover{text-decoration:underline}
+.sig{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line2)}
+.av{width:34px;height:34px;border-radius:50%;background:var(--blue-soft);color:var(--blue-ink);display:grid;place-items:center;font-weight:600;font-size:12px;flex-shrink:0}
+.sig .n{font-weight:500;color:var(--blue)}
+.sig .r{font-size:11.5px;color:var(--muted)}
+.tag{display:inline-block;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:10px;white-space:nowrap}
+.tg-g{background:var(--green-soft);color:var(--green)}.tg-a{background:var(--amber-soft);color:var(--amber)}.tg-r{background:var(--red-soft);color:var(--red)}.tg-b{background:var(--blue-soft);color:var(--blue-ink)}.tg-n{background:var(--soft);color:var(--muted);border:1px solid var(--line)}
+.score{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.ring{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-weight:600;flex-shrink:0}
+
+/* table */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:640px}
+th{background:var(--amber-soft);text-align:left;padding:8px 10px;font-weight:600;white-space:nowrap}
+td{padding:8px 10px;border-top:1px solid var(--line2);font-variant-numeric:tabular-nums}
+td.n,th.n{text-align:right}
+.tcap{font-size:11.5px;color:var(--muted);margin:6px 2px 0}
+
+/* checks */
+.chk{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line2)}
+.chk:last-child{border-bottom:0}
+.dot{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px}
+.d-ok{background:var(--green-soft);color:var(--green)}.d-w{background:var(--amber-soft);color:var(--amber)}.d-x{background:var(--red-soft);color:var(--red)}
+.chk .t{font-weight:500}
+.chk .d{font-size:12px;color:var(--muted)}
+.opt{display:block;border:1.5px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:10px;cursor:pointer;background:var(--surface)}
+.opt.on{border-color:var(--blue);background:var(--blue-soft)}
+.opt input{margin-right:8px}
+.opt .t{font-weight:600}
+.opt .d{font-size:12px;color:var(--muted);margin:4px 0 0 22px}
+.note{border-radius:6px;padding:9px 12px;font-size:12.5px;margin-bottom:12px;border:1px solid}
+.n-a{background:var(--amber-soft);border-color:#f2d58a;color:var(--amber)}
+.n-b{background:var(--blue-soft);border-color:var(--blue-soft);color:var(--blue-ink)}
+.n-g{background:var(--green-soft);border-color:var(--green-soft);color:var(--green)}
+.n-r{background:var(--red-soft);border-color:var(--red-soft);color:var(--red)}
+.cb{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--line2)}
+.cb input{margin-top:3px;width:16px;height:16px;accent-color:var(--blue)}
+.cb .d{font-size:11.5px;color:var(--muted)}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:12px;white-space:pre-wrap;line-height:1.55}
+
+/* actions */
+.acts{display:flex;justify-content:center;gap:10px;padding:16px 0;border-top:1px solid var(--line2);margin-top:16px}
+.b{border-radius:20px;padding:8px 20px;font-weight:500;border:1px solid var(--line);background:var(--surface)}
+.b-lime{background:var(--lime);border-color:var(--lime);color:var(--lime-ink)}
+.b-yel{background:var(--yellow);border-color:var(--yellow);color:#1b2130}
+.b-blue{background:var(--blue);border-color:var(--blue);color:#fff}
+.b-sm{padding:5px 12px;font-size:12px}
+.b:disabled{opacity:.45;cursor:not-allowed}
+.foot{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);display:flex;justify-content:center;gap:10px;padding:12px 12px calc(12px + env(safe-area-inset-bottom,0px));z-index:20}
+.demo{position:fixed;left:14px;bottom:calc(74px + env(safe-area-inset-bottom,0px));background:#1f2633;color:#fff;border-radius:8px;padding:8px 12px;font-size:12px;font-weight:600;display:flex;gap:8px;align-items:center;z-index:21;border:0}
+.demo span{background:#3a3320;color:var(--yellow);font-size:10.5px;padding:2px 6px;border-radius:4px}
+.demo-menu{position:fixed;left:14px;bottom:calc(118px + env(safe-area-inset-bottom,0px));background:var(--surface);border:1px solid var(--line);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.15);padding:6px;z-index:22;display:none;min-width:230px}
+.demo-menu.open{display:block}
+.demo-menu button{display:block;width:100%;text-align:left;background:none;border:0;padding:8px 10px;border-radius:5px;font-size:12.5px}
+.demo-menu button:hover{background:var(--soft)}
+
+/* drawer + modal */
+.scrim{position:fixed;inset:0;background:rgba(10,14,22,.45);z-index:30;display:none}
+.scrim.open{display:block}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);background:var(--surface);z-index:31;transform:translateX(100%);transition:transform .2s;padding:calc(18px + env(safe-area-inset-top,0px)) 18px 18px;overflow-y:auto;border-left:1px solid var(--line)}
+.drawer.open{transform:none}
+.modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,94vw);max-height:88vh;overflow-y:auto;background:var(--surface);border-radius:10px;z-index:32;padding:18px;display:none;border:1px solid var(--line)}
+.modal.open{display:block}
+.mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.mh h2{font-size:16px;font-weight:600}
+.x{background:none;border:0;font-size:20px;line-height:1;color:var(--muted)}
+.mf{display:grid;gap:10px}
+.mf label{font-size:12px;color:var(--muted);display:block;margin-bottom:3px}
+.att{display:flex;flex-wrap:wrap;gap:6px}
+.att label{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:16px;padding:4px 10px;font-size:12px;color:var(--ink);margin:0;cursor:pointer}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#1f2633;color:#fff;padding:9px 16px;border-radius:6px;font-size:12.5px;z-index:40;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw}
+.toast.show{opacity:1}
+.tl{border-left:2px solid var(--line);margin-left:6px;padding-left:14px}
+.tl div{position:relative;padding:5px 0;font-size:12px}
+.tl div::before{content:"";position:absolute;left:-19px;top:10px;width:8px;height:8px;border-radius:50%;background:var(--blue)}
+.tl .tm{color:var(--muted);font-size:11px}
+.bar{height:6px;border-radius:4px;background:var(--line2);overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--blue)}
+.done-wrap{text-align:center;padding:30px 10px}
+.done-wrap .big{width:64px;height:64px;border-radius:50%;background:var(--green-soft);color:var(--green);display:grid;place-items:center;font-size:30px;margin:0 auto 12px}
+
+@media (max-width:860px){
+  .meta,.grid3,.grid2,.form{grid-template-columns:1fr}
+  .fr,.full.fr{grid-template-columns:1fr}
+  .fr label{text-align:left}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="stepper" id="stepper" role="list"></div>
+  <div class="legend"><span><i style="background:var(--blue)"></i>Current stage</span><span><i style="background:var(--green)"></i>Completed</span><span><i style="background:#b9d2f6"></i>Unlocked</span><span><i style="background:#d6d7db"></i>Not active</span></div>
+
+  <div class="case">
+    <span class="pill id">BGX-2026-0094</span>
+    <span class="pill">Due: <b>25/11/2026</b></span>
+    <span class="pill" title="5 working-day servicing SLA">SLA: <span class="sla" id="sla"></span></span>
+    <span class="pill" id="prio"><span class="tag tg-r">High priority</span> BG expires 30/11/2026</span>
+    <span class="sp"></span>
+    <button class="btn-o" onclick="openDrawer()">RM productivity</button>
+    <button class="btn-o" onclick="openNote()">Note</button>
+  </div>
+  <div class="meta">
+    <div><div class="k">Category</div><div class="v">Trade &amp; Guarantee Servicing</div></div>
+    <div><div class="k">Sub category</div><div class="v">BG validity extension</div></div>
+    <div><div class="k">Instrument</div><div class="v">Performance BG · Holding 00100094</div></div>
+    <div><div class="k">Contact email</div><div class="v"><a href="#" onclick="return false">*****otyresamman@gmail.com</a></div></div>
+  </div>
+  <div class="powered"><span>BG Servicing v1.0 powered by AutoFlow</span><span>Confidentiality governance applied · Asia/Amman (UTC+3) · Working week Sun–Thu</span></div>
+
+  <div class="tabs" id="tabs"></div>
+  <div class="subtabs" id="subtabs"></div>
+  <div id="panel"></div>
+  <div class="acts" id="acts"></div>
+</div>
+
+<div class="foot"><button class="b" onclick="resetAll()">Cancel</button><button class="b b-yel" id="finishBtn" onclick="finish()" disabled>Finish</button></div>
+
+<button class="demo" onclick="toggleDemo()">Demo controls <span>04/11/2026</span></button>
+<div class="demo-menu" id="demoMenu">
+  <button onclick="demoFill()">Auto-complete current stage</button>
+  <button onclick="demoApprove()">Simulate approver decision</button>
+  <button onclick="demoJump(5)">Jump to closure</button>
+  <button onclick="resetAll()">Reset journey</button>
+</div>
+
+<div class="scrim" id="scrim" onclick="closeAll()"></div>
+<aside class="drawer" id="drawer" aria-label="RM productivity"></aside>
+<div class="modal" id="modal" role="dialog" aria-modal="true"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===================== DATA (from Corporate 360 recording + case screenshot) ===================== */
+const TODAY = new Date(Date.UTC(2026,10,4));
+const C = {
+  name:'Apollo Tyres Amman', cif:'00001715', cifJo:'CIF-JO-10457', parent:'Apollo Tyres Global (CIF 00001700)',
+  country:'Jordan (JO)', legal:'Private Shareholding Company', cr:'JO-COMM-2015-88491', tax:'100928374',
+  industry:'Automotive & Tyre Distribution', rm:'Rania Saleh (RM, Amman CIB)', email:'*****otyresamman@gmail.com',
+  since:'17/04/2015', incorp:'10/10/2015', band:'Diamond', rating:'4 / 5', employees:'200–500', priority:'High', tenure:'9 years',
+  branch:'Amman', ltAgency:'ICRA (group)', ltRating:'LAAA', stAgency:'CRISIL (group)', stRating:'P5', risk:'A'
+};
+const SIGS = [
+  {n:'Omar Al-Khatib',r:'Regional Managing Director',cls:'A'},
+  {n:'Lina Al-Masri',r:'Country General Manager',cls:'A'},
+  {n:'Ahmad Al-Haddad',r:'Finance Director',cls:'B'},
+  {n:'Yazan Al-Najjar',r:'Supply Chain & Operations Director',cls:'B'},
+  {n:'Satish Sharma',r:'Chief Financial Officer',cls:'A'}
+];
+const BG = {
+  holding:'00100094', ref:'PBG/AMM/2024/00100094', acct:'ACC-JO-NF-003', type:'BG – Performance',
+  facLimit:2500000, facOut:1500000, facStart:'2024-10-15', facMat:'2027-10-15',
+  amount:1500000, issue:'2024-10-15', expiry:'2026-11-30',
+  beneficiary:'Levant Fleet Services Co. (demo beneficiary)', benCountry:'Jordan',
+  purpose:'Guarantee performance obligations under tyre supply contracts',
+  collateral:'Assignment of receivables', covenant:'Current ratio ≥ 1.25', pricing:'Fixed', rules:'URDG 758',
+  commission:1.25
+};
+const DEPOSITS = [
+  ['298765432252','Corporate Current Account','70100058252001','JOD 1,850 M','8 Years','0'],
+  ['398765432252','Corporate Multi-Currency Account','70100058252002','JOD 920 M','6 Years','JOD 18 M'],
+  ['498765432252','Trade Settlement Account','70100058252003','JOD 640 M','5 Years','JOD 12 M'],
+  ['598765432252','Treasury Investment Account','70100058252004','JOD 1,450 M','4 Years','JOD 85 M'],
+  ['698765432252','Fixed Deposit Account','70100058252005','JOD 2,800 M','3 Years','JOD 210 M']
+];
+const CARDS = [
+  ['276589173621','Visa Platinum Business Card – Jordan','XXXX-4821','JOD 80,000'],
+  ['286478193738','Corporate Cashback Business Card','XXXX-2745','JOD 70,000'],
+  ['294583193746','Premium Corporate Business Credit Card','XXXX-1927','JOD 100,000']
+];
+const RATIOS = [
+  ['Revenue growth (%)','6.33','6.76','7.60','8.57','—'],
+  ['EBITDA margin (%)','9.05','8.86','8.42','7.89','6.98'],
+  ['EBIT margin (%)','7.38','7.34','6.79','6.43','5.40']
+];
+const HISTORY = [
+  ['15/10/2024','Facility sanctioned','BG facility 00100094','JOD 2,500,000','Credit Committee approval'],
+  ['15/10/2024','Guarantee issued','PBG/AMM/2024/00100094','JOD 1,500,000','Expiry 30/11/2026, URDG 758'],
+  ['15/01/2025','Commission debited','Q1 2025','JOD 4,687.50','Paid on due date'],
+  ['15/04/2025','Commission debited','Q2 2025','JOD 4,687.50','Paid on due date'],
+  ['15/07/2025','Commission debited','Q3 2025','JOD 4,687.50','Paid 6 days late'],
+  ['15/10/2025','Commission debited','Q4 2025','JOD 4,687.50','Paid on due date'],
+  ['15/01/2026','Commission debited','Q1 2026','JOD 4,687.50','Paid on due date'],
+  ['15/04/2026','Commission debited','Q2 2026','JOD 4,687.50','Paid 4 days late'],
+  ['15/07/2026','Commission debited','Q3 2026','JOD 4,687.50','Paid on due date'],
+  ['15/10/2026','Commission debited','Q4 2026','JOD 4,687.50','Paid on due date'],
+  ['12/03/2023','Guarantee released','Bid bond BB/AMM/2023/0412','JOD 250,000','Returned by beneficiary, no claim'],
+  ['30/06/2022','Guarantee released','Advance payment APG/AMM/2022/0188','JOD 400,000','Reduced to nil, no claim']
+];
+const STAGES = [
+  {k:'Initiation',subs:['Customer Details','Request Details','Guarantee Snapshot']},
+  {k:'Relationship 360',subs:['Snapshot','Product Holdings','Financials','Behaviour & Risk','Transaction History']},
+  {k:'Eligibility & Limits',subs:['Eligibility Checks','Extension Option']},
+  {k:'Pricing & Documents',subs:['Pricing','Document Checklist']},
+  {k:'Compliance & Approval',subs:['Screening','Approval']},
+  {k:'Closure',subs:['Amendment Issued','Next Best Actions']}
+];
+const TAB_ICONS=['◷','◎','✓','▤','⛨','⚑'];
+const NBAS = [
+  {id:'renew',p:'High',t:'BG facility renewal ahead of 15/10/2027 maturity',d:'Facility matures before the customer-requested expiry. Start renewal paper now to avoid a second amendment next year.',who:['Satish Sharma','Ahmad Al-Haddad'],agenda:'BG facility 00100094 renewal: limit review, tenor to Oct 2028, collateral refresh (receivables assignment).',val:2500000},
+  {id:'health',p:'High',t:'Financial health review meeting',d:'Financial health score is 5 (critical). Drivers are behavioural: 3 late payments, DSO 68 days, cash deposits reducing, working capital −12%.',who:['Satish Sharma','Ahmad Al-Haddad'],agenda:'Working capital review: DSO 68 days, late payments, cash deposit trend, repayment capacity.',val:0},
+  {id:'capex',p:'Medium',t:'Term loan for capex programme',d:'High capex funding requirement detected: plant modernisation and infrastructure upgrades. Capex status is delayed.',who:['Omar Al-Khatib','Satish Sharma'],agenda:'Capex funding need: term loan structure, tenor and pricing.',val:0},
+  {id:'td',p:'Medium',t:'Term deposit for idle cash',d:'Excess liquidity detected across business accounts. Propose short-term placement.',who:['Ahmad Al-Haddad'],agenda:'Idle cash optimisation: term deposit ladder, 3–12 months.',val:0},
+  {id:'eng',p:'Low',t:'Widen relationship coverage',d:'Engagement covers 5 contacts; target is 10.',who:['Yazan Al-Najjar','Lina Al-Masri'],agenda:'Introduce trade & supply chain team; map remaining decision makers.',val:0}
+];
+
+/* ===================== STATE ===================== */
+let S;
+function fresh(){
+  return {stage:0, sub:[0,0,0,0,0,0], done:new Set(), unl:new Set([0]), subDone:STAGES.map(()=>new Set()),
+    req:{channel:'Customer letter via RM', requested:'2027-11-30', reason:'Supply contract with beneficiary extended by 12 months; performance obligations continue.', claimDays:'30'},
+    option:null, waiver:0, waiverWhy:'', debit:'70100058252001',
+    docs:{req:false,ben:false,text:false,ci:true,br:true}, signers:new Set(),
+    screening:'none', hits:{'Ahmad Al-Haddad':''},
+    approval:'none', approvalNote:'', amendRef:null,
+    meetings:[], nbaDone:new Set(), opps:[], notes:[],
+    log:[{t:stamp(),m:'Case BGX-2026-0094 created from customer request'}],
+    started:Date.now(), stageStart:{0:Date.now()}, stageDur:{}, finished:false, lastInteraction:47};
+}
+function stamp(){const d=new Date();return d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}
+
+/* ===================== HELPERS ===================== */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const D=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(Date.UTC(y,m-1,d))};
+const days=(a,b)=>Math.round((D(b)-D(a))/864e5);
+const dmy=s=>{if(!s)return '—';const [y,m,d]=s.split('-');return `${d}/${m}/${y}`};
+const jod=n=>'JOD '+Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const jod0=n=>'JOD '+Number(n).toLocaleString('en-US');
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2600)}
+function log(m){S.log.unshift({t:stamp(),m})}
+function newExpiry(){
+  if(S.option==='A') return BG.facMat;
+  return S.req.requested;
+}
+function needsRenewal(){return S.req.requested && D(S.req.requested)>D(BG.facMat)}
+function pricing(){
+  const ne=newExpiry(); const d=ne?Math.max(0,days(BG.expiry,ne)):0;
+  const gross=BG.amount*BG.commission/100*d/360;
+  const amend=50, courier=25;
+  const waiverAmt=gross*S.waiver/100;
+  return {d,gross,waiverAmt,net:gross-waiverAmt,amend,courier,total:gross-waiverAmt+amend+courier,ne};
+}
+function approver(){
+  const a=[];
+  if(S.option==='B') a.push('Credit Committee (facility renewal + tenor beyond facility maturity)');
+  else a.push('Unit Head, Corporate Banking Amman (within delegated authority)');
+  if(S.waiver>25) a.push('Head of Corporate Banking (fee concession above 25%)');
+  else if(S.waiver>0) a.push('Unit Head pricing sign-off (concession up to 25%)');
+  return a;
+}
+function signersOk(){
+  const a=[...S.signers].filter(n=>SIGS.find(s=>s.n===n).cls==='A').length;
+  const b=[...S.signers].filter(n=>SIGS.find(s=>s.n===n).cls==='B').length;
+  return a>=2 || (a>=1 && b>=1);
+}
+
+/* ===================== RENDER: CHROME ===================== */
+function renderStepper(){
+  $('stepper').innerHTML=STAGES.map((s,i)=>{
+    const cls=i===S.stage?'current':S.done.has(i)?'done':S.unl.has(i)?'unl':'';
+    const st=i===S.stage?(S.finished?'Completed':'Running'):S.done.has(i)?'Completed':S.unl.has(i)?'Unlocked':'Not active';
+    const can=S.done.has(i)||S.unl.has(i);
+    const ic=i===S.stage?'<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 14V2.5h8.5l-1.5 3 1.5 3H3" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>'
+      :S.done.has(i)?'<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill="var(--green)"/><path d="M5 8.2l2 2 4-4.2" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      :'<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="5" r="3"/><path d="M2.5 15c0-3.3 2.4-5.5 5.5-5.5s5.5 2.2 5.5 5.5z"/></svg>';
+    return `<button class="step ${cls}" role="listitem" ${can?'':'disabled'} onclick="goStage(${i})">${ic}<span><span class="t">${s.k}</span><span class="s">${st}</span></span></button>`;
+  }).join('');
+}
+function renderTabs(){
+  $('tabs').innerHTML=STAGES.map((s,i)=>{
+    const can=S.done.has(i)||S.unl.has(i);
+    return `<button class="tab ${i===S.stage?'on':''}" ${can?'':'disabled'} onclick="goStage(${i})"><span aria-hidden="true">${TAB_ICONS[i]}</span>${s.k}</button>`;
+  }).join('');
+  const st=STAGES[S.stage];
+  $('subtabs').innerHTML=st.subs.map((n,j)=>`<button class="sub ${j===S.sub[S.stage]?'on':''}" onclick="goSub(${j})">${n}${S.subDone[S.stage].has(j)?'<span class="ck">✓</span>':''}</button>`).join('');
+}
+function renderSLA(){
+  const rem=Math.max(0,5*1440-Math.floor((Date.now()-S.started)/60000));
+  $('sla').textContent=S.finished?'Met':`${Math.floor(rem/1440)} D ${Math.floor(rem%1440/60)} H ${rem%60} M`;
+}
+function renderActs(){
+  const last=S.sub[S.stage]===STAGES[S.stage].subs.length-1;
+  const isEnd=S.stage===5&&last;
+  $('acts').innerHTML=S.finished?'':`${isEnd?'':'<button class="b" onclick="save()">Save</button>'}
+    <button class="b b-lime" onclick="proceed()">${isEnd?'Save':'Save and Proceed'}</button>
+    <button class="b" onclick="goSub(Math.max(0,S.sub[S.stage]-1))">Back</button>`;
+  $('finishBtn').disabled=S.stage!==5 || S.finished;
+}
+function render(){
+  renderStepper();renderTabs();renderSLA();
+  const fn=PANELS[S.stage][S.sub[S.stage]];
+  $('panel').innerHTML=S.finished?finishedView():fn();
+  renderActs();
+}
+
+/* ===================== PANELS ===================== */
+const ro=(l,v,rq)=>`<div class="fr"><label>${esc(l)}${rq?' <span class="rq">*</span>':''}</label><input class="inp" value="${esc(v)}" readonly></div>`;
+
+function p_customer(){
+  return `<div class="src">Legal entity master records · Corporate 360</div>
+  <div class="form">
+    ${ro('Customer (entity) name',C.name,1)}${ro('CIF No.',C.cif,1)}
+    ${ro('Group / parent account',C.parent)}${ro('Legal form',C.legal,1)}
+    ${ro('Country of booking',C.country,1)}${ro('Commercial registration',C.cr,1)}
+    ${ro('Tax number',C.tax,1)}${ro('Business activity / industry',C.industry,1)}
+    ${ro('Relationship manager',C.rm,1)}${ro('Client email',C.email)}
+    ${ro('Customer since',C.since)}${ro('Internal risk rating',C.risk)}
+  </div>
+  <div class="note n-a" style="margin-top:14px">KYC periodic review KYC-2026-0150 is open and due 19/11/2026. KYC remains valid until then, so the extension can proceed; the review must close before the due date.</div>`;
+}
+function p_request(){
+  const r=S.req;
+  const eop=r.channel==='Beneficiary "extend or pay" demand';
+  return `<div class="src">Request captured by ${esc(C.rm.split(' (')[0])}</div>
+  <div class="form">
+    <div class="fr"><label>Request channel <span class="rq">*</span></label><select class="inp" onchange="S.req.channel=this.value;render()">
+      ${['Customer letter via RM','Customer email to RM','Beneficiary "extend or pay" demand','Branch walk-in'].map(o=>`<option ${o===r.channel?'selected':''}>${o}</option>`).join('')}</select></div>
+    <div class="fr"><label>Guarantee</label><input class="inp" value="${BG.ref}" readonly></div>
+    <div class="fr"><label>Current expiry</label><input class="inp" value="${dmy(BG.expiry)} (${days(TODAY.toISOString().slice(0,10),BG.expiry)} days left)" readonly></div>
+    <div class="fr"><label>Requested new expiry <span class="rq">*</span></label><input type="date" class="inp" value="${r.requested}" min="2026-12-01" onchange="S.req.requested=this.value;S.option=null;render()"></div>
+    <div class="fr"><label>Guarantee amount</label><input class="inp" value="${jod0(BG.amount)} (unchanged)" readonly></div>
+    <div class="fr"><label>Claim period after expiry</label><select class="inp" onchange="S.req.claimDays=this.value">${['0','15','30'].map(o=>`<option ${o===r.claimDays?'selected':''} value="${o}">${o} days</option>`).join('')}</select></div>
+    <div class="fr full"><label>Reason for extension <span class="rq">*</span></label><textarea class="inp" oninput="S.req.reason=this.value">${esc(r.reason)}</textarea></div>
+  </div>
+  ${eop?`<div class="note n-r" style="margin-top:12px">Extend-or-pay demand. If the guarantee is subject to URDG 758, the bank can suspend payment for up to 30 calendar days while the customer decides (Art. 23). Treat as same-day priority.</div>`:''}
+  ${needsRenewal()?`<div class="note n-a" style="margin-top:12px">Requested expiry ${dmy(r.requested)} is after the facility maturity of ${dmy(BG.facMat)}. Eligibility will offer two options.</div>`:''}`;
+}
+function p_bgsnap(){
+  const util=BG.facOut/BG.facLimit*100;
+  return `<div class="src">Non-funded products · Holding ${BG.holding}</div>
+  <div class="stats">
+    <div class="stat"><div class="k">Sanctioned limit</div><div class="v">${jod0(BG.facLimit)}</div></div>
+    <div class="stat"><div class="k">Outstanding</div><div class="v">${jod0(BG.facOut)}</div><div class="bar"><i style="width:${util}%"></i></div></div>
+    <div class="stat"><div class="k">Available</div><div class="v ok">${jod0(BG.facLimit-BG.facOut)}</div></div>
+    <div class="stat"><div class="k">Days to BG expiry</div><div class="v bad">${days(TODAY.toISOString().slice(0,10),BG.expiry)}</div></div>
+  </div>
+  <div class="grid2">
+    <div class="card"><h3>Guarantee</h3><div class="kv">
+      <div><div class="k">Reference</div><div class="v">${BG.ref}</div></div><div><div class="k">Type</div><div class="v">${BG.type}</div></div>
+      <div><div class="k">Beneficiary</div><div class="v">${BG.beneficiary}</div></div><div><div class="k">Governing rules</div><div class="v">${BG.rules}</div></div>
+      <div><div class="k">Issue date</div><div class="v">${dmy(BG.issue)}</div></div><div><div class="k">Expiry date</div><div class="v bad">${dmy(BG.expiry)}</div></div>
+      <div class="full" style="grid-column:1/-1"><div class="k">Purpose</div><div class="v">${BG.purpose}</div></div>
+    </div></div>
+    <div class="card"><h3>Facility</h3><div class="kv">
+      <div><div class="k">Account ID</div><div class="v">${BG.acct}</div></div><div><div class="k">Product category</div><div class="v">Non-funded</div></div>
+      <div><div class="k">Start date</div><div class="v">${dmy(BG.facStart)}</div></div><div><div class="k">Facility maturity</div><div class="v">${dmy(BG.facMat)}</div></div>
+      <div><div class="k">Collateral</div><div class="v">${BG.collateral}</div></div><div><div class="k">Covenant</div><div class="v">${BG.covenant}</div></div>
+      <div><div class="k">Pricing</div><div class="v">${BG.pricing}, ${BG.commission}% p.a.</div></div><div><div class="k">Status</div><div class="v ok">Active</div></div>
+    </div></div>
+  </div>`;
+}
+function p_snapshot(){
+  return `<div class="src">Corporate 360 · Customer information</div>
+  <div class="grid3">
+    <div class="card"><div style="display:flex;gap:10px;align-items:center;margin-bottom:10px"><div class="av" style="background:#4b1d6e;color:#fff">AT</div><div><b>${C.name}</b><div class="mut" style="font-size:12px">${C.cif}</div></div></div>
+      <div class="kv">
+        <div><div class="k">Customer since</div><div class="v">${C.since}</div></div><div><div class="k">Customer band</div><div class="v">${C.band}</div></div>
+        <div><div class="k">Status</div><div class="v ok">Active</div></div><div><div class="k">Hierarchy</div><div class="v">Apollo Tyres Global</div></div>
+        <div><div class="k">Customer rating</div><div class="v">★★★★☆</div></div><div><div class="k">Employees</div><div class="v">${C.employees}</div></div>
+        <div><div class="k">Priority</div><div class="v">${C.priority}</div></div><div><div class="k">Tenure</div><div class="v">${C.tenure}</div></div>
+        <div><div class="k">Group LT rating</div><div class="v">${C.ltRating} (${C.ltAgency})</div></div><div><div class="k">Group ST rating</div><div class="v">${C.stRating} (${C.stAgency})</div></div>
+      </div></div>
+    <div class="card"><h3>Insight</h3>
+      <div class="insight" style="border-left-color:var(--amber)"><b>Term loan · High capex funding requirement</b><p>Expansion, plant modernisation and infrastructure upgrades indicate a long-term funding need.</p><div class="a"><button class="lnk" onclick="createOpp('Term loan – capex programme')">Create an opportunity</button></div></div>
+      <div class="insight"><b>Term deposit · Idle cash optimisation</b><p>Excess liquidity across business accounts; short-term investment opportunity.</p><div class="a"><button class="lnk" onclick="createOpp('Term deposit – idle cash')">Create an opportunity</button></div></div>
+      <div class="insight" style="border-left-color:var(--green)"><b>Next best action</b><p>Increase engagement to 10 contacts. RM last interacted ${S.lastInteraction} days ago.</p></div>
+    </div>
+    <div class="card"><h3>Assigned signatories</h3>
+      ${SIGS.map(s=>`<div class="sig"><div class="av">${s.n.split(' ').map(x=>x[0]).join('').slice(0,2)}</div><div style="flex:1"><div class="n">${s.n}</div><div class="r">${s.r} · Mandate class ${s.cls}</div></div></div>`).join('')}
+    </div>
+  </div>
+  <div class="card" style="margin-top:12px"><h3>RM briefing for this request</h3>
+    <p style="font-size:12.5px">Long-standing Diamond-band client (since 2015) with clean guarantee history: two prior guarantees released without claim, zero claims on the current one. Commission paid on all 8 quarters, 2 of them late by 4–6 days. Extension is low credit risk; the open issues are the facility maturity mismatch and a weakening cash/working-capital trend worth raising in the same conversation.</p></div>`;
+}
+function p_holdings(){
+  return `<div class="src">Product holdings</div>
+  <div class="grid3" style="margin-bottom:12px">
+    <div class="card"><span class="tag tg-b">Funded</span><h4>CASA – Corporate Current Account</h4><div class="mut" style="font-size:12px">Holding 00100100 · Assigned to Mr. James Thomas</div></div>
+    <div class="card"><span class="tag tg-b">Funded</span><h4>Term Loan</h4><div class="mut" style="font-size:12px">Holding 00100098 · Assigned to Mr. James Thomas</div></div>
+    <div class="card" style="border-color:var(--blue)"><span class="tag tg-a">Non-funded · this request</span><h4>Performance Bank Guarantee for Tyre Supply</h4><div class="mut" style="font-size:12px">Holding 00100094</div></div>
+  </div>
+  <h4>Customer deposits</h4>
+  <div class="tw"><table><thead><tr><th>Holding number</th><th>Product</th><th>Account</th><th class="n">Available balance</th><th>Term</th><th class="n">Interest payable</th></tr></thead>
+  <tbody>${DEPOSITS.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td class="n">${r[3]}</td><td>${r[4]}</td><td class="n">${r[5]}</td></tr>`).join('')}</tbody></table></div>
+  <p class="tcap">Balances as shown in Corporate 360 source feed.</p>
+  <h4 style="margin-top:14px">Business cards</h4>
+  <div class="tw"><table><thead><tr><th>Holding number</th><th>Product</th><th>Card number</th><th class="n">Card limit</th></tr></thead>
+  <tbody>${CARDS.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td class="n">${r[3]}</td></tr>`).join('')}</tbody></table></div>`;
+}
+function p_fin(){
+  const k=[['Return on assets','1.8%'],['Return on equity','18%'],['D/E ratio','0.48'],['Interest cover','6.5x'],['Current ratio','1.8'],['Quick ratio','1.3'],['WC turnover','3.2']];
+  return `<div class="src">Financials · Audited FY statements</div>
+  <div class="stats">${k.map(x=>`<div class="stat"><div class="k">${x[0]}</div><div class="v">${x[1]}</div></div>`).join('')}</div>
+  <div class="tw"><table><thead><tr><th>Financial ratios</th><th class="n">FY 2025</th><th class="n">FY 2024</th><th class="n">FY 2023</th><th class="n">FY 2022</th><th class="n">FY 2021</th></tr></thead>
+  <tbody>${RATIOS.map(r=>`<tr><td>${r[0]}</td>${r.slice(1).map(v=>`<td class="n">${v}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
+  <div class="note n-b" style="margin-top:12px">Covenant test: current ratio 1.8 against a floor of 1.25 — headroom 44%. Revenue growth is slowing (8.57% → 6.33% over four years) while margins improve.</div>`;
+}
+function p_risk(){
+  const ring=(v,c)=>`<div class="ring" style="border:4px solid ${c}">${v}</div>`;
+  return `<div class="src">Predictive alerts · Credit &amp; risk</div>
+  <div class="grid3">
+    <div class="card"><div class="score">${ring(5,'var(--red)')}<div><b>Financial health status</b><div class="mut" style="font-size:12px">Critical range</div></div></div>
+      <h4 class="ok">Positive</h4><ul class="pl"><li>Liquidity ratio<b>1.18</b></li><li>DSCR<b>1.22</b></li><li>Working capital<b>42</b></li></ul>
+      <h4 class="bad">Negative</h4><ul class="pl"><li>Late payments<b class="bad">3</b></li><li>DSO<b class="bad">68 days</b></li><li>Cash deposit trend<b class="bad">Reduced</b></li><li>WC change<b class="bad">−12.00%</b></li><li>Covenant breach<b class="ok">No</b></li></ul>
+      <div style="margin-top:10px"><button class="b b-sm" style="background:var(--black);color:var(--on-black);border-color:var(--black)" onclick="openMeeting('health')">Schedule meeting</button></div></div>
+    <div class="card"><div class="score">${ring(94,'var(--red)')}<div><b>Collateral adequacy score</b><div class="mut" style="font-size:12px">Realign facility to need</div></div></div>
+      <h4 class="ok">Positive levers</h4><ul class="pl"><li>Utilisation<b>82.00</b></li><li>Unused amount<b>13.50</b></li><li>Collateral amount<b>75</b></li></ul>
+      <h4 class="bad">Risk indicators</h4><ul class="pl"><li>Capex status<b class="warn">Delayed</b></li><li>Cash growth factor<b class="bad">0.85</b></li><li>RM last interacted<b class="bad">${S.lastInteraction} days</b></li><li>Cash balance<b>8.40</b></li></ul>
+      <div style="margin-top:10px"><button class="b b-sm" onclick="logCall()">Log advisory call</button></div></div>
+    <div class="card"><div class="score">${ring(100,'var(--green)')}<div><b>Market dynamics risk index</b><div class="mut" style="font-size:12px">Favourable</div></div></div>
+      <h4 class="ok">Growth enablers</h4><ul class="pl"><li>Sector growth<b class="ok">4.20%</b></li><li>New regulation impact<b class="ok">3.00%</b></li></ul>
+      <h4 class="bad">Risk signals</h4><ul class="pl"><li>Cost impact<b class="bad">6.50%</b></li><li>Revenue impact<b class="bad">−5.00%</b></li></ul>
+      <h4>Risk distribution</h4><ul class="pl"><li>Standard<b>78%</b></li><li>Enhanced<b>17%</b></li><li>High risk<b>5%</b></li></ul></div>
+  </div>
+  <div class="grid2" style="margin-top:12px">
+    <div class="card"><h3>Risk indicators</h3><ul class="pl"><li>Country risk exposure<b class="warn">Medium</b></li><li>Credit limits utilised<b>68%</b></li><li>Sanctions screening<b class="ok">Clear</b></li></ul></div>
+    <div class="card"><h3>Internal rating trend</h3><ul class="pl"><li>Q1 2023 · Moderate<b class="mut">Baseline</b></li><li>Q4 2023 · Low/Moderate<b class="ok">Improved</b></li><li>Q2 2024 · Low<b class="ok">Further improved</b></li></ul></div>
+  </div>
+  <div class="note n-a" style="margin-top:12px">Read the health score with care: it is driven by payment behaviour and cash trend, while balance-sheet ratios and the rating trend are stable or improving. It does not block the extension but belongs on the meeting agenda.</div>`;
+}
+function p_hist(){
+  return `<div class="src">Guarantee transaction history · Facility ${BG.holding}</div>
+  <div class="stats">
+    <div class="stat"><div class="k">Guarantees issued (lifetime)</div><div class="v">3</div></div>
+    <div class="stat"><div class="k">Claims / invocations</div><div class="v ok">0</div></div>
+    <div class="stat"><div class="k">Commission on time</div><div class="v">6 of 8</div></div>
+    <div class="stat"><div class="k">Prior amendments</div><div class="v">0</div></div>
+  </div>
+  <div class="tw"><table><thead><tr><th>Date</th><th>Event</th><th>Reference</th><th class="n">Amount</th><th>Remarks</th></tr></thead>
+  <tbody>${HISTORY.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td class="n">${r[3]}</td><td class="${/late/.test(r[4])?'warn':''}">${r[4]}</td></tr>`).join('')}</tbody></table></div>
+  <p class="tcap">Commission rows: ${jod0(BG.amount)} × ${BG.commission}% p.a. ÷ 4 = JOD 4,687.50 per quarter. Sample records for the demo; connect to the trade finance core for live data.</p>`;
+}
+function checks(){
+  const util=(BG.facOut/BG.facLimit*100).toFixed(0);
+  return [
+    ['ok','Facility active and in limit',`Outstanding ${jod0(BG.facOut)} of ${jod0(BG.facLimit)} (${util}%). Extension does not change exposure amount.`],
+    [needsRenewal()?'w':'ok','New expiry within facility tenor',needsRenewal()?`Requested ${dmy(S.req.requested)} is ${days(BG.facMat,S.req.requested)} days after facility maturity ${dmy(BG.facMat)}. Choose an option in the next tab.`:`Requested ${dmy(S.req.requested)} is within facility maturity ${dmy(BG.facMat)}.`],
+    ['ok','Financial covenant','Current ratio 1.8 against required ≥ 1.25.'],
+    ['ok','Collateral in place',`${BG.collateral}; collateral adequacy score 94.`],
+    ['ok','No claims or overdue on guarantee','Zero invocations; all commissions settled (2 paid late, now current).'],
+    ['w','KYC status','Periodic review KYC-2026-0150 open, due 19/11/2026. Valid today; condition added to approval.'],
+    ['ok','Internal risk rating',`Rating ${C.risk}; trend improving since Q1 2023.`],
+    ['w','Behavioural signals','Health score 5: late payments, DSO 68 days, cash deposits reducing. Flag to approver, discuss with CFO.']
+  ];
+}
+function p_elig(){
+  const cs=checks();
+  const nOk=cs.filter(c=>c[0]==='ok').length;
+  return `<div class="src">Automated eligibility · ${nOk} of ${cs.length} passed, ${cs.length-nOk} with conditions</div>
+  <div class="card">${cs.map(c=>`<div class="chk"><div class="dot ${c[0]==='ok'?'d-ok':c[0]==='w'?'d-w':'d-x'}">${c[0]==='ok'?'✓':'!'}</div><div><div class="t">${c[1]}</div><div class="d">${c[2]}</div></div></div>`).join('')}</div>`;
+}
+function p_option(){
+  if(!needsRenewal()){
+    if(!S.option) S.option='S';
+    return `<div class="note n-g">Requested expiry ${dmy(S.req.requested)} sits within the facility tenor. Standard extension under delegated authority.</div>`;
+  }
+  const dA=days(BG.expiry,BG.facMat), dB=days(BG.expiry,S.req.requested);
+  return `<div class="src">Select how to handle the tenor mismatch</div>
+  <label class="opt ${S.option==='A'?'on':''}"><input type="radio" name="opt" ${S.option==='A'?'checked':''} onchange="S.option='A';render()"><span class="t">Option A · Extend to facility maturity ${dmy(BG.facMat)}</span> <span class="tag tg-g">Recommended</span>
+    <div class="d">${dA} days. Within delegated authority, same-week turnaround, meets the BG expiry deadline. Facility renewal runs in parallel as a next best action; a second amendment to ${dmy(S.req.requested)} follows once renewed.</div></label>
+  <label class="opt ${S.option==='B'?'on':''}"><input type="radio" name="opt" ${S.option==='B'?'checked':''} onchange="S.option='B';render()"><span class="t">Option B · Extend to requested ${dmy(S.req.requested)} with facility renewal</span>
+    <div class="d">${dB} days. Needs Credit Committee approval for renewal and tenor beyond facility maturity. Risk: if committee approval lands after 30/11/2026 the guarantee lapses, and a beneficiary facing a pending expiry will typically send an extend-or-pay demand.</div></label>
+  <div class="note n-b">Why A is recommended: the binding constraint is the ${days(TODAY.toISOString().slice(0,10),BG.expiry)}-day window before expiry. A lapse or an extend-or-pay call is a larger client problem than a second amendment.</div>`;
+}
+function p_pricing(){
+  const p=pricing();
+  return `<div class="src">Tariff: performance guarantee commission ${BG.commission}% p.a., actual/360</div>
+  <div class="grid2">
+    <div class="card"><h3>Commission calculation</h3>
+      <ul class="pl">
+        <li>Guarantee amount<b>${jod(BG.amount)}</b></li>
+        <li>Extension period<b>${dmy(BG.expiry)} → ${dmy(p.ne)} (${p.d} days)</b></li>
+        <li>Gross commission<b>${jod(p.gross)}</b></li>
+        <li>Concession (${S.waiver}%)<b class="${S.waiver?'warn':''}">− ${jod(p.waiverAmt)}</b></li>
+        <li>Amendment fee<b>${jod(p.amend)}</b></li>
+        <li>Courier / SWIFT<b>${jod(p.courier)}</b></li>
+        <li style="border-bottom:0;padding-top:8px"><span><b>Total to debit</b></span><b>${jod(p.total)}</b></li>
+      </ul>
+      <p class="tcap">Stamp fee, if applicable, is calculated by the core system at posting per the Jordan stamp duty tariff.</p></div>
+    <div class="card"><h3>Settlement</h3>
+      <div class="mf">
+        <div><label>Debit account</label><select class="inp" onchange="S.debit=this.value">${DEPOSITS.slice(0,3).map(r=>`<option value="${r[2]}" ${S.debit===r[2]?'selected':''}>${r[1]} · ${r[2]}</option>`).join('')}</select></div>
+        <div><label>Fee concession requested (%)</label><input type="range" min="0" max="50" step="5" value="${S.waiver}" oninput="S.waiver=+this.value;render()" style="width:100%"><div class="mut" style="font-size:12px">${S.waiver}% · ${S.waiver>25?'needs Head of Corporate Banking':S.waiver>0?'Unit Head sign-off':'no concession'}</div></div>
+        ${S.waiver>0?`<div><label>Concession justification <span class="bad">*</span></label><textarea class="inp" oninput="S.waiverWhy=this.value">${esc(S.waiverWhy)}</textarea></div>`:''}
+      </div>
+      <div class="note n-b" style="margin-top:10px">Relationship context: 9-year Diamond client, zero claims. A concession above 25% is hard to justify while two commission payments ran late.</div></div>
+  </div>`;
+}
+function p_docs(){
+  const items=[['req','Extension request letter on company letterhead','Signed per board mandate (see signatories below)',1],
+    ['ben','Beneficiary confirmation of extended contract','Copy of contract addendum or beneficiary letter',1],
+    ['text','Amendment wording agreed','Validity change only; all other terms unchanged; subject to URDG 758',1],
+    ['ci','Counter-indemnity on file','Original counter-indemnity of 15/10/2024 covers amendments',1],
+    ['br','Board resolution / authorised signatory list','Valid to 31/12/2026 · from KYC file',0]];
+  return `<div class="src">Document checklist</div>
+  <div class="card">${items.map(i=>`<label class="cb"><input type="checkbox" ${S.docs[i[0]]?'checked':''} onchange="S.docs['${i[0]}']=this.checked;render()"><span><b>${i[1]}</b>${i[3]?' <span class="bad">*</span>':''}<div class="d">${i[2]}</div></span></label>`).join('')}</div>
+  <div class="card" style="margin-top:12px"><h3>Who signed the request letter?</h3>
+    <p class="mut" style="font-size:12px;margin-bottom:6px">Mandate: any two class A signatories, or one class A with one class B.</p>
+    ${SIGS.map(s=>`<label class="cb"><input type="checkbox" ${S.signers.has(s.n)?'checked':''} onchange="toggleSigner('${s.n}',this.checked)"><span>${s.n} <span class="tag tg-n">Class ${s.cls}</span><div class="d">${s.r}</div></span></label>`).join('')}
+    <div class="note ${signersOk()?'n-g':'n-a'}" style="margin:10px 0 0">${signersOk()?'Signatures satisfy the mandate.':'Mandate not yet satisfied.'}</div></div>`;
+}
+function p_screen(){
+  const parties=[['Applicant',C.name],['Beneficiary',BG.beneficiary],['Signatory','Omar Al-Khatib'],['Signatory','Lina Al-Masri'],['Signatory','Satish Sharma'],['Signatory','Ahmad Al-Haddad']];
+  if(S.screening==='none') return `<div class="src">Lists: UN Security Council, OFAC SDN, EU consolidated, Jordan local lists</div>
+    <div class="card" style="text-align:center;padding:28px"><p style="margin-bottom:12px">Screen all parties on the amendment before approval.</p><button class="b b-blue" onclick="runScreen()">Run screening</button></div>`;
+  if(S.screening==='run') return `<div class="card" style="text-align:center;padding:28px">Screening ${parties.length} parties…</div>`;
+  const disp=S.hits['Ahmad Al-Haddad'];
+  return `<div class="src">Screened ${parties.length} parties · ${stamp()}</div>
+  <div class="tw"><table><thead><tr><th>Role</th><th>Name</th><th>Result</th><th>Disposition</th></tr></thead><tbody>
+  ${parties.map(p=>p[1]==='Ahmad Al-Haddad'?`<tr><td>${p[0]}</td><td>${p[1]}</td><td><span class="tag tg-a">Potential match 62%</span></td><td><select class="inp" style="min-height:30px" onchange="S.hits['Ahmad Al-Haddad']=this.value;render()"><option value="">Select…</option><option ${disp==='fp'?'selected':''} value="fp">False positive – DOB and nationality differ</option><option ${disp==='esc'?'selected':''} value="esc">Escalate to Compliance</option></select></td></tr>`
+    :`<tr><td>${p[0]}</td><td>${p[1]}</td><td><span class="tag tg-g">No match</span></td><td class="mut">—</td></tr>`).join('')}
+  </tbody></table></div>
+  ${disp==='esc'?'<div class="note n-r" style="margin-top:12px">Escalated: the case pauses until Compliance clears the alert. For the demo, change the disposition to continue.</div>':''}
+  ${disp==='fp'?'<div class="note n-g" style="margin-top:12px">Alert discounted. Name-only match against a listed individual; date of birth and nationality do not match KYC records.</div>':''}`;
+}
+function p_appr(){
+  const p=pricing(); const ap=approver();
+  const sum=`<div class="card"><h3>Approval memo</h3><ul class="pl">
+    <li>Customer<b>${C.name} · ${C.cif}</b></li><li>Guarantee<b>${BG.ref}</b></li>
+    <li>Amount<b>${jod0(BG.amount)} (unchanged)</b></li><li>Expiry<b>${dmy(BG.expiry)} → ${dmy(p.ne)}</b></li>
+    <li>Option<b>${S.option==='A'?'A · within facility tenor':S.option==='B'?'B · with facility renewal':'Standard'}</b></li>
+    <li>Commission<b>${jod(p.net)}${S.waiver?` (${S.waiver}% concession)`:''}</b></li>
+    <li>Conditions<b>KYC review closes by 19/11/2026</b></li>
+    <li>Route to<b style="text-align:right">${ap.join('<br>')}</b></li></ul></div>`;
+  let st='';
+  if(S.approval==='none') st=`<div class="card" style="margin-top:12px"><div class="mf"><div><label>RM recommendation</label><textarea class="inp" oninput="S.approvalNote=this.value">${esc(S.approvalNote||'Recommend extension. Low credit risk: no claims in 9-year relationship, covenant met with headroom, exposure unchanged. Behavioural signals to be addressed in CFO meeting scheduled as next best action.')}</textarea></div></div><div style="margin-top:10px"><button class="b b-blue" onclick="submitAppr()">Submit for approval</button></div></div>`;
+  else if(S.approval==='pending') st=`<div class="note n-a" style="margin-top:12px">Pending with ${ap[0].split(' (')[0]}. Use Demo controls → Simulate approver decision.</div>`;
+  else st=`<div class="note n-g" style="margin-top:12px"><b>Approved</b> by Khaled Haddad, Unit Head Corporate Banking Amman · ${stamp()}. Condition: KYC-2026-0150 to close by 19/11/2026.${S.option==='B'?' Credit Committee minute CC/2026/311 attached.':''}</div>`;
+  return `<div class="src">Maker: ${C.rm.split(' (')[0]} · Checker: Trade Operations</div>${sum}${st}`;
+}
+function p_issued(){
+  const p=pricing();
+  if(!S.amendRef) S.amendRef='AMD-'+BG.holding+'-01';
+  return `<div class="src">Trade operations · Amendment issued</div>
+  <div class="stats">
+    <div class="stat"><div class="k">Amendment</div><div class="v" style="font-size:15px">${S.amendRef}</div></div>
+    <div class="stat"><div class="k">New expiry</div><div class="v ok">${dmy(p.ne)}</div></div>
+    <div class="stat"><div class="k">Fees debited</div><div class="v">${jod(p.total)}</div></div>
+    <div class="stat"><div class="k">Case TAT</div><div class="v">${tat()}</div></div>
+  </div>
+  <div class="grid2">
+    <div><h4>Guarantee amendment (simplified preview)</h4><div class="mono">Undertaking no.   : ${BG.ref}
+Amendment no.     : 01 (${S.amendRef})
+Date of amendment : ${dmy(TODAY.toISOString().slice(0,10))}
+Applicant         : ${C.name}
+Beneficiary       : ${BG.beneficiary}
+Amount            : JOD ${BG.amount.toLocaleString('en-US')}.00 (unchanged)
+Expiry date       : from ${dmy(BG.expiry)} to ${dmy(p.ne)}
+Other terms       : unchanged. Subject to ${BG.rules}.
+Delivery          : original to beneficiary by courier, Amman;
+                    MT767 only if advised through a bank</div></div>
+    <div><h4>Notifications</h4><div class="card">
+      <div class="cb"><span class="ok">✓</span><span>Customer email to Satish Sharma (CFO)<div class="d">Amendment copy and fee advice</div></span></div>
+      <div class="cb"><span class="ok">✓</span><span>Beneficiary letter dispatched<div class="d">${BG.beneficiary}</div></span></div>
+      <div class="cb"><span class="ok">✓</span><span>Core posting<div class="d">Debit ${S.debit} · ${jod(p.total)}</div></span></div>
+      <div class="cb"><span class="ok">✓</span><span>Limit system updated<div class="d">Exposure expiry moved to ${dmy(p.ne)}</div></span></div>
+    </div></div>
+  </div>
+  ${S.option==='A'?`<div class="note n-a" style="margin-top:12px">Customer asked for ${dmy(S.req.requested)}. Facility renewal is the top next best action so the second amendment can follow.</div>`:''}`;
+}
+function p_nba(){
+  return `<div class="src">Next best actions · ranked for this relationship</div>
+  ${NBAS.map(n=>{const m=S.meetings.find(x=>x.nba===n.id);return `<div class="card" style="margin-bottom:10px;display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap">
+    <div style="flex:1;min-width:240px"><span class="tag ${n.p==='High'?'tg-r':n.p==='Medium'?'tg-a':'tg-n'}">${n.p}</span> <b>${n.t}</b><p class="mut" style="font-size:12px;margin-top:4px">${n.d}</p>
+    ${m?`<p class="ok" style="font-size:12px;margin-top:6px">Meeting set · ${m.date} ${m.time} · ${m.who.join(', ')} · ${m.mode}</p>`:''}</div>
+    <div style="display:flex;gap:6px">${m?`<span class="tag tg-g">Scheduled</span>`:`<button class="b b-sm b-blue" onclick="openMeeting('${n.id}')">Schedule meeting</button>`}
+    ${n.id!=='health'&&n.id!=='eng'&&!S.opps.find(o=>o.nba===n.id)?`<button class="b b-sm" onclick="createOpp('${esc(n.t)}','${n.id}')">Log opportunity</button>`:''}</div></div>`}).join('')}
+  <div class="grid2" style="margin-top:4px">
+    <div class="card"><h3>Upcoming meetings (${S.meetings.length})</h3>${S.meetings.length?S.meetings.map(m=>`<div class="sig"><div class="av">${m.date.slice(0,2)}</div><div><div style="font-weight:500">${esc(m.title)}</div><div class="r">${m.date} ${m.time} · ${m.mode} · ${m.who.join(', ')}</div></div></div>`).join(''):'<p class="mut" style="font-size:12.5px">No meetings yet. Schedule one from the actions above.</p>'}</div>
+    <div class="card"><h3>Opportunities logged (${S.opps.length})</h3>${S.opps.length?S.opps.map(o=>`<div class="sig"><div style="flex:1"><div style="font-weight:500">${esc(o.t)}</div><div class="r">Stage: Prospecting · Owner: Rania Saleh · ${o.d}</div></div></div>`).join(''):'<p class="mut" style="font-size:12.5px">None yet.</p>'}</div>
+  </div>`;
+}
+const PANELS=[[p_customer,p_request,p_bgsnap],[p_snapshot,p_holdings,p_fin,p_risk,p_hist],[p_elig,p_option],[p_pricing,p_docs],[p_screen,p_appr],[p_issued,p_nba]];
+
+/* ===================== NAV + VALIDATION ===================== */
+function goStage(i){if(!(S.done.has(i)||S.unl.has(i)))return;S.stage=i;render();window.scrollTo({top:0})}
+function goSub(j){S.sub[S.stage]=j;render()}
+function validate(){
+  const s=S.stage,j=S.sub[s];
+  if(s===0&&j===1){
+    if(!S.req.requested) return 'Enter the requested new expiry date.';
+    if(D(S.req.requested)<=D(BG.expiry)) return 'New expiry must be after the current expiry (30/11/2026).';
+    if(!S.req.reason.trim()) return 'Add the reason for extension.';
+  }
+  if(s===2&&j===1&&!S.option) return 'Choose Option A or B.';
+  if(s===3&&j===0&&S.waiver>0&&!S.waiverWhy.trim()) return 'Add a justification for the fee concession.';
+  if(s===3&&j===1){
+    if(!S.docs.req||!S.docs.ben||!S.docs.text) return 'Tick all mandatory documents.';
+    if(!signersOk()) return 'Signatories do not satisfy the mandate (2×A, or 1×A + 1×B).';
+  }
+  if(s===4&&j===0){
+    if(S.screening!=='done') return 'Run screening first.';
+    if(S.hits['Ahmad Al-Haddad']!=='fp') return S.hits['Ahmad Al-Haddad']==='esc'?'Case is paused pending Compliance.':'Disposition the potential match.';
+  }
+  if(s===4&&j===1&&S.approval!=='approved') return S.approval==='pending'?'Waiting for approver decision.':'Submit for approval.';
+  return null;
+}
+function save(){toast('Saved');log(`Saved ${STAGES[S.stage].subs[S.sub[S.stage]]}`)}
+function proceed(){
+  const err=validate(); if(err){toast(err);return}
+  const s=S.stage,j=S.sub[s];
+  S.subDone[s].add(j);
+  if(j<STAGES[s].subs.length-1){S.sub[s]=j+1;render();return}
+  if(s<5){
+    S.done.add(s);S.unl.add(s+1);
+    S.stageDur[s]=Date.now()-(S.stageStart[s]||Date.now());
+    S.stageStart[s+1]=Date.now();
+    log(`${STAGES[s].k} completed`);
+    S.stage=s+1;toast(`${STAGES[s].k} completed`);render();window.scrollTo({top:0});
+  }else{toast('Saved');render()}
+}
+function toggleSigner(n,on){on?S.signers.add(n):S.signers.delete(n);render()}
+function runScreen(){S.screening='run';render();setTimeout(()=>{S.screening='done';log('Screening run: 6 parties, 1 potential match');render()},1200)}
+function submitAppr(){S.approval='pending';log('Submitted for approval → '+approver()[0].split(' (')[0]);render();toast('Submitted for approval')}
+function demoApprove(){toggleDemo(false);if(S.approval!=='pending'){toast('Nothing pending approval');return}S.approval='approved';log('Approved by Khaled Haddad');render();toast('Approved')}
+function createOpp(t,nba){S.opps.push({t,nba:nba||null,d:dmy(TODAY.toISOString().slice(0,10))});log('Opportunity logged: '+t);toast('Opportunity logged');render()}
+function logCall(){S.lastInteraction=0;log('Advisory call logged with Satish Sharma');toast('Advisory call logged');render()}
+function tat(){const m=Math.max(1,Math.round((Date.now()-S.started)/60000));return m<60?m+' min':Math.round(m/60)+' h'}
+
+/* ===================== MEETING MODAL ===================== */
+let curNBA=null;
+function openMeeting(id){
+  curNBA=NBAS.find(n=>n.id===id);
+  const d='2026-11-08';
+  $('modal').innerHTML=`<div class="mh"><h2>Schedule meeting</h2><button class="x" aria-label="Close" onclick="closeAll()">×</button></div>
+  <div class="mf">
+    <div><label>Title</label><input class="inp" id="mTitle" value="${esc(curNBA.t)} – ${C.name}"></div>
+    <div><label>Attendees (client)</label><div class="att">${SIGS.map(s=>`<label><input type="checkbox" value="${s.n}" ${curNBA.who.includes(s.n)?'checked':''}> ${s.n}</label>`).join('')}</div></div>
+    <div class="grid2"><div><label>Date</label><input type="date" class="inp" id="mDate" value="${d}" min="2026-11-04" oninput="chkDay()"></div>
+    <div><label>Time (Amman)</label><select class="inp" id="mTime">${['09:00','10:00','11:00','12:00','13:00','14:00','15:00'].map(t=>`<option ${t==='10:00'?'selected':''}>${t}</option>`).join('')}</select></div></div>
+    <div id="dayWarn"></div>
+    <div><label>Mode</label><select class="inp" id="mMode"><option>In person · client office, Amman</option><option>In person · bank HQ, Amman</option><option>Microsoft Teams</option></select></div>
+    <div><label>Agenda</label><textarea class="inp" id="mAgenda">${esc(curNBA.agenda)}</textarea></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end"><button class="b" onclick="closeAll()">Cancel</button><button class="b b-blue" onclick="saveMeeting()">Schedule meeting</button></div>
+  </div>`;
+  $('modal').classList.add('open');$('scrim').classList.add('open');chkDay();
+}
+function chkDay(){
+  const v=$('mDate').value; if(!v)return;
+  const wd=D(v).getUTCDay();
+  $('dayWarn').innerHTML=(wd===5||wd===6)?'<div class="note n-a" style="margin:0">That date is a Friday or Saturday — the weekend in Jordan. Pick Sunday to Thursday.</div>':'';
+}
+function saveMeeting(){
+  const v=$('mDate').value; const wd=v?D(v).getUTCDay():5;
+  if(!v||wd===5||wd===6){toast('Pick a working day (Sun–Thu).');return}
+  const who=[...document.querySelectorAll('#modal .att input:checked')].map(i=>i.value);
+  if(!who.length){toast('Select at least one attendee.');return}
+  const m={nba:curNBA.id,title:$('mTitle').value,date:dmy(v),time:$('mTime').value,mode:$('mMode').value.split(' · ')[0]==='Microsoft Teams'?'Teams':'In person',who,agenda:$('mAgenda').value};
+  S.meetings.push(m);S.nbaDone.add(curNBA.id);S.lastInteraction=0;
+  log(`Meeting scheduled: ${m.title} on ${m.date}`);
+  closeAll();toast('Meeting scheduled · invite sent to '+who.length+' attendee'+(who.length>1?'s':''));render();
+}
+
+/* ===================== DRAWER: RM PRODUCTIVITY ===================== */
+function openDrawer(){
+  const durs=STAGES.map((s,i)=>{const d=S.stageDur[i]??(i===S.stage&&!S.finished?Date.now()-(S.stageStart[i]||Date.now()):null);return [s.k,d]});
+  const fm=ms=>ms==null?'—':ms<60000?Math.max(1,Math.round(ms/1000))+'s':Math.round(ms/60000)+' min';
+  $('drawer').innerHTML=`<div class="mh"><h2>RM productivity</h2><button class="x" aria-label="Close" onclick="closeAll()">×</button></div>
+  <div style="display:flex;gap:10px;align-items:center;margin-bottom:14px"><div class="av">RS</div><div><b>Rania Saleh</b><div class="mut" style="font-size:12px">Relationship Manager · Amman CIB</div></div></div>
+  <div class="stats" style="grid-template-columns:1fr 1fr">
+    <div class="stat"><div class="k">This case TAT</div><div class="v">${tat()}</div><div class="mut" style="font-size:11px">SLA 5 working days</div></div>
+    <div class="stat"><div class="k">Meetings set (case)</div><div class="v">${S.meetings.length}</div></div>
+    <div class="stat"><div class="k">NBAs actioned</div><div class="v">${S.nbaDone.size+S.opps.filter(o=>o.nba).length} / ${NBAS.length}</div></div>
+    <div class="stat"><div class="k">Days since last interaction</div><div class="v ${S.lastInteraction>30?'bad':'ok'}">${S.lastInteraction}</div></div>
+  </div>
+  <h4>Month to date · November 2026</h4>
+  <ul class="pl" style="margin-bottom:12px"><li>Service requests closed<b>${11+(S.finished?1:0)} / 14</b></li><li>Avg. servicing TAT<b>2.6 days</b></li><li>Client meetings<b>${9+S.meetings.length} (target 16)</b></li><li>Cross-sell opportunities<b>${4+S.opps.length}</b></li><li>Portfolio clients<b>18</b></li></ul>
+  <p class="tcap" style="margin-bottom:12px">Month-to-date figures are demo values; case figures are live from this session.</p>
+  <h4>Time per stage</h4><ul class="pl" style="margin-bottom:12px">${durs.map(d=>`<li>${d[0]}<b>${fm(d[1])}</b></li>`).join('')}</ul>
+  <h4>Activity log</h4><div class="tl">${S.log.slice(0,14).map(l=>`<div><span class="tm">${l.t}</span> · ${esc(l.m)}</div>`).join('')}</div>`;
+  $('drawer').classList.add('open');$('scrim').classList.add('open');
+}
+function openNote(){
+  $('modal').innerHTML=`<div class="mh"><h2>Case note</h2><button class="x" aria-label="Close" onclick="closeAll()">×</button></div>
+  ${S.notes.map(n=>`<div class="insight"><b>${n.t}</b><p>${esc(n.m)}</p></div>`).join('')}
+  <textarea class="inp" id="noteTxt" placeholder="Add a note for the case file"></textarea>
+  <div style="display:flex;justify-content:flex-end;margin-top:10px"><button class="b b-blue" onclick="addNote()">Add note</button></div>`;
+  $('modal').classList.add('open');$('scrim').classList.add('open');
+}
+function addNote(){const v=$('noteTxt').value.trim();if(!v)return;S.notes.push({t:stamp(),m:v});log('Note added');closeAll();toast('Note added')}
+function closeAll(){['drawer','modal','scrim'].forEach(i=>$(i).classList.remove('open'))}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAll()});
+
+/* ===================== DEMO + FINISH ===================== */
+function toggleDemo(force){const m=$('demoMenu');m.classList.toggle('open',force===undefined?!m.classList.contains('open'):force)}
+function demoFill(){
+  toggleDemo(false);
+  const s=S.stage;
+  if(s===2&&!S.option) S.option=needsRenewal()?'A':'S';
+  if(s===3){S.docs={req:true,ben:true,text:true,ci:true,br:true};S.signers=new Set(['Omar Al-Khatib','Satish Sharma'])}
+  if(s===4){S.screening='done';S.hits['Ahmad Al-Haddad']='fp';if(S.approval!=='approved')S.approval='approved'}
+  if(s===5){S.subDone[5].add(0);S.subDone[5].add(1);render();return}
+  for(let j=S.sub[s];j<STAGES[s].subs.length;j++){S.sub[s]=j;if(validate()){render();toast(validate());return}S.subDone[s].add(j)}
+  S.sub[s]=STAGES[s].subs.length-1;proceed();
+}
+function demoJump(n){toggleDemo(false);let g=0;while(S.stage<n&&g++<12){demoFill()}}
+function finish(){
+  if(!S.meetings.length&&!confirm('No follow-up meeting scheduled. Finish anyway?')){S.sub[5]=1;render();return}
+  S.finished=true;S.done.add(5);S.stageDur[5]=Date.now()-(S.stageStart[5]||Date.now());log('Case closed');render();toast('Case closed');
+}
+function finishedView(){
+  const p=pricing();
+  return `<div class="done-wrap"><div class="big">✓</div><h2 style="font-size:18px;margin-bottom:6px">Case BGX-2026-0094 closed</h2>
+  <p class="mut">Guarantee ${BG.ref} extended to ${dmy(p.ne)} · ${jod(p.total)} debited · TAT ${tat()} against a 5-day SLA</p>
+  <p class="mut" style="margin-top:4px">${S.meetings.length} meeting${S.meetings.length===1?'':'s'} scheduled · ${S.opps.length} opportunit${S.opps.length===1?'y':'ies'} logged</p>
+  <div style="margin-top:16px;display:flex;gap:8px;justify-content:center"><button class="b" onclick="openDrawer()">View RM productivity</button><button class="b b-blue" onclick="resetAll()">Start new case</button></div></div>`;
+}
+function resetAll(){toggleDemo(false);closeAll();S=fresh();render();window.scrollTo({top:0})}
+
+S=fresh();render();
+</script>
+</body>
+</html>
